@@ -30,7 +30,7 @@ setup(
     description="Inclusion of Reference Information in EU Regulations using Knowledge Graphs",
     entry_points={
         'console_scripts': [
-            'inclusionreferenceskg=inclusionreferenceskg.cli:main',
+            'inclusionreferenceskg=inclusionreferenceskg.cli:src',
         ],
     },
     install_requires=requirements,

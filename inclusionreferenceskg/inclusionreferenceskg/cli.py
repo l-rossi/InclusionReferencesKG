@@ -11,7 +11,7 @@ def main():
 
     print("Arguments: " + str(args._))
     print("Replace this message by putting your code into "
-          "inclusionreferenceskg.cli.main")
+          "inclusionreferenceskg.cli.src")
     return 0
 
 
