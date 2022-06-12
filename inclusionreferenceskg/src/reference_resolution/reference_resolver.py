@@ -31,3 +31,4 @@ class ReferenceResolver:
 
     def resolve_single(self, node: Node):
         references = self.detector.detect(node.content)
+        print(references)

@@ -19,6 +19,6 @@ def test_debug():
 
     for a in pre_order(article27):
         NodePrinter.print(a)
-        print(resolver.resolve_single(a))
+        resolver.resolve_single(a)
         print("--------")
 

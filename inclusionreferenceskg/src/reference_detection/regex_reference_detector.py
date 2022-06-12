@@ -25,13 +25,13 @@ class RegexReferenceDetector(ReferenceDetector):
         alph_or_range = fr"(?:{alph}(?:\sto\s{alph})?)"
 
         # https://publications.europa.eu/code/en/en-110202.htm
-        document_numbering = r"(:?\s\(\w{2,7}\))?(?:\sNo)?\s[1-9][0-9]*(?:\/[1-9][0-9]*)?(?:\/\w{2,7})"
+        document_numbering = r"(?:\s\(\w{2,7}\))?(?:\sNo)?\s[1-9][0-9]*(?:\/[1-9][0-9]*)?(?:\/\w{2,7})"
         # TODO: This does not work if the issuing entity is integrated into the quote.
         regulation = fr"(?:(?:Commission\s)?Regulation{document_numbering})"
         # TODO: See regulation
         directive = fr"(?:(?:(?:First\s)?Council\s)?Directive{document_numbering})"
 
-        document = fr"(:?(?:this\s|that\s)?{regulation}|{directive})"
+        document = fr"(?:(?:this\s|that\s)?{regulation}|{directive})"
 
         node_name_dec = r"(?:article|paragraph|subparagraph)"
         node_name_rom = r"(?:chapter|title)"
@@ -42,7 +42,7 @@ class RegexReferenceDetector(ReferenceDetector):
 
         point = fr"(?:points?\s{alph_or_range}(?:(?:,\s{alph_or_range})*\s{conj}\s{alph_or_range})*)"
 
-        ref = fr"(?:{point}\sof\s{single})|(?:{single}|{multi}(?:\sof\s{single})*)"
+        ref = fr"(?:{point}\sof\s{single})|(?:{single}|{multi})(?:\sof\s{single})*"
 
         return re.compile(ref, re.I)
 
