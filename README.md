@@ -11,7 +11,7 @@ Simply use:
 
 ```console
 conda env create -f environment.yml
-conda activate inclusionreferenceskg
+conda activate InclusionReferencesKG
 ```
 
 to create the environment. This will install all requirements and set environment variables
