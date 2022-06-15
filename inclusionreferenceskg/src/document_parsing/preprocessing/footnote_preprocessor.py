@@ -22,7 +22,7 @@ class FootnotePreprocessor(BlockPreprocessor):
         for block in blocks:
             match = footnote_start_pattern.match(block)
             if match:
-                # We look for a number in paranthesese which is not part of a reference (paragraph):
+                # We look for a number in parentheses which is not part of a reference (paragraph):
                 footnote_reference_pattern = r"(?<!and|..,) \(" + match.group(1) + r"\)"
 
                 # Look back over the visited blocks.

@@ -23,14 +23,14 @@ class Node(ABC):
 
     @classmethod
     @abstractmethod
-    def accept_block(cls, block: str, parent: "Node") -> Tuple[bool, Optional["Node"]]:
+    def accept_block(cls: Type["Node"], block: str, parent: "Node") -> Tuple[bool, Optional["Node"]]:
         """
         Accepts a block of text, checks if it is a start token for this node and returns a node if so.
-        It is not the the responsibility of this method to set the parent
+        It is not the responsibility of this method to set the parent
 
         :param parent: The currently active parent.
         :param block: The line to be checked for a start token.
-        :return The first element of the tuple indicates if a start
+        :return: The first element of the tuple indicates if a start\
         token was detected, the second one returns the new node if applicable.
         """
         raise NotImplementedError()

@@ -12,7 +12,7 @@ class RegexReferenceDetector(ReferenceDetector):
     para = fr"(?:\({number}\))"
     ordinal = "(?:first|second|third|fourth|fifth|sixth)"
     conj = fr"(?:and|or)"
-    rom = r"(?:I?[XV]*I{0,3})"  # This is a really bad pattern and only matches the first few roman numerals and also alot of illegal ones.
+    rom = r"(?-i:[IXV]+)" # This is a really bad pattern and only matches the first few roman numerals and also alot of illegal ones.
 
     number_or_range = fr"(?:{number}(?:\sto\s{number})?)"
     para_or_range = fr"(?:{para}(?:\sto\s{para})?)"
@@ -28,7 +28,7 @@ class RegexReferenceDetector(ReferenceDetector):
 
     document = fr"(?:(?:this\s|that\s)?(?:{regulation}|{directive}|{treaty}))"
 
-    # Note, that node_name_rom may also be followed by a decimal number for to the author unknown reason.
+    # Note, that node_name_rom may also be followed by a decimal number for to the author unknown reasons.
     node_name_dec = r"(?:article|paragraph|subparagraph)"
     node_name_rom = r"(?:chapter|title)"
     node_name = fr"(?:{node_name_rom}|{node_name_dec})"

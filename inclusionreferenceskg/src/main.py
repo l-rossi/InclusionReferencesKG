@@ -1,14 +1,14 @@
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.node_printer import NodePrinter
-from inclusionreferenceskg.src.document_parsing.preprocessing.pdf_parser import PDFParser
+
 
 if __name__ == "__main__":
 
-    """with open("./resources/gdpr.txt", "r") as gdpr_file:
+    with open("./resources/gdpr.txt", "r") as gdpr_file:
         gdpr_text = gdpr_file.read()
 
     parser = DocumentTreeParser()
     gdpr = parser.parse_regulation("GDPR", gdpr_text)
-    NodePrinter.print(gdpr)"""
+    NodePrinter.print(gdpr)
 
-    print(PDFParser.parse_to_file("./resources/gdpr.pdf", "./resources/gdpr.txt"))
+    # print(PDFParser.parse_to_file("./resources/gdpr.pdf", "./resources/gdpr.txt"))
