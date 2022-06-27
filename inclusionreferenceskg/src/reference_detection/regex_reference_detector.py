@@ -1,5 +1,7 @@
 import re
+from typing import List
 
+from inclusionreferenceskg.src.reference import Reference
 from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
 
 
@@ -7,12 +9,16 @@ class RegexReferenceDetector(ReferenceDetector):
     """
     Reference detector based on regular expressions.
     """
+
+    # TODO: Move some of this to util
     number = r"(?:[1-9][0-9]*)"
     alph = r"(?:\([a-z]\))"
     para = fr"(?:\({number}\))"
     ordinal = "(?:first|second|third|fourth|fifth|sixth)"
+    rom = r"(?-i:[IXV]+)"  # This is a really bad pattern and only matches the first few roman numerals and also alot of illegal ones.
+
+    # limited conjunctions, "as well as" is present in the GDPR
     conj = fr"(?:and|or)"
-    rom = r"(?-i:[IXV]+)" # This is a really bad pattern and only matches the first few roman numerals and also alot of illegal ones.
 
     number_or_range = fr"(?:{number}(?:\sto\s{number})?)"
     para_or_range = fr"(?:{para}(?:\sto\s{para})?)"
@@ -29,16 +35,20 @@ class RegexReferenceDetector(ReferenceDetector):
     document = fr"(?:(?:this\s|that\s)?(?:{regulation}|{directive}|{treaty}))"
 
     # Note, that node_name_rom may also be followed by a decimal number for to the author unknown reasons.
-    node_name_dec = r"(?:article|paragraph|subparagraph)"
-    node_name_rom = r"(?:chapter|title)"
+    node_name_dec = r"(?:article|paragraph|subparagraph|sentence)"
+    node_name_rom = r"(?:chapter|title|section)"
     node_name = fr"(?:{node_name_rom}|{node_name_dec})"
 
-    single = fr"(?:article\s{number}{para}|this\s{node_name}|the previous\s{node_name}|{node_name}\s{number}|{node_name_rom}\s{rom}|the\s{ordinal}\s{node_name}|that\s{node_name}|{document})"  # Missing thereof
-    multi = fr"(?:{node_name}s?\s{number_or_range}(?:,\s{number_or_range})*(?:\s{conj}\s{number_or_range})*|article\s{number}{para_or_range}(?:, {para_or_range})*(?:\s{conj}\s{para_or_range})+)"
+    thereof = r"(?:\sthereof)?"
+
+    single = fr"(?:(?:article\s{number}{para}{thereof})|this\s{node_name}|the previous\s{node_name}|{node_name}\s{number}{thereof}|{node_name_rom}\s{rom}{thereof}|the\s{ordinal}\s{node_name}{thereof}|that\s{node_name}|{document})"  # Missing thereof
+    multi = fr"(?:article\s{number}{para_or_range}(?:, {para_or_range})*(?:\s{conj}\s{para_or_range})*{thereof}|" \
+            fr"{node_name}s?\s{number_or_range}(?:,\s{number_or_range})*(?:\s{conj}\s{number_or_range})*{thereof}|"\
+            fr"those\s{node_name}s)"
 
     point = fr"(?:points?\s{alph_or_range}(?:(?:,\s{alph_or_range})*\s{conj}\s{alph_or_range})*)"
 
-    ref = fr"(?:{point}\sof\s{single})|(?:{single}|{multi})(?:(?:\sof)?\s{single})*"
+    ref = fr"(?:(?:{point}(?:\sof\s{single})?)|(?:{multi}|{single}))(?:(?:\sof)?\s{single})*"
 
     def __init__(self):
         self.pattern: re.Pattern = RegexReferenceDetector._build_pattern()
@@ -47,8 +57,8 @@ class RegexReferenceDetector(ReferenceDetector):
     def _build_pattern() -> re.Pattern:
         return re.compile(RegexReferenceDetector.ref, re.I)
 
-    def detect(self, text):
-        return self.pattern.findall(text)
+    def detect(self, text) -> List[Reference]:
+        return [Reference(start=m.start(), text_content=m.group()) for m in self.pattern.finditer(text)]
 
 
 if __name__ == "__main__":

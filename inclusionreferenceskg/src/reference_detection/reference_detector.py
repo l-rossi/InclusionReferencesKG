@@ -1,6 +1,8 @@
 import typing
 from abc import abstractmethod, ABC
 
+from inclusionreferenceskg.src.reference import Reference
+
 
 class ReferenceDetector(ABC):
     """
@@ -8,5 +10,5 @@ class ReferenceDetector(ABC):
     """
 
     @abstractmethod
-    def detect(self, text: str) -> typing.List[str]:
+    def detect(self, text: str) -> typing.List[Reference]:
         raise NotImplementedError()

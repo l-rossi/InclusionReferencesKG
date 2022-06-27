@@ -1,13 +1,13 @@
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
 
 
 def _test_structure():
-    return Regulation(title="Test Regulation", children=[
+    return Document(title="Test Regulation", children=[
         Chapter(number=2, title="Principles", children=[
             Article(number=5, title="Principles relating to processing of personal data", children=[
                 Paragraph(number=1, children=[

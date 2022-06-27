@@ -1,9 +1,9 @@
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
 from inclusionreferenceskg.src.document_parsing.node.section import Section
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
 
@@ -58,9 +58,9 @@ or organisational measures (‘integrity and confidentiality’).
 """
 
     parser = DocumentTreeParser()
-    actual = parser.parse_regulation("Test Regulation", text)
+    actual = parser.parse_document("Test Regulation", text)
 
-    expected = Regulation(title="Test Regulation", children=[
+    expected = Document(title="Test Regulation", children=[
         Chapter(number=2, title="Principles", children=[
             Section(number=1, title="Fake Section Title", children=[
                 Article(number=5, title="Principles relating to processing of personal data", children=[

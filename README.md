@@ -18,6 +18,15 @@ to create the environment. This will install all requirements and set environmen
 in the conda environment.
 
 
+### NLTK
+
+NLTK may require some extra downloads. This can be achieved by opening a console and running the following:
+```python
+import nltk
+nltk.download()
+```
+
+and following the installer.
 
 
 

@@ -1,15 +1,15 @@
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.node_printer import NodePrinter
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
 
 
 def test_print():
     out = []
 
-    start_node = Regulation(title="Test Regulation", children=[
+    start_node = Document(title="Test Regulation", children=[
         Chapter(number=1, title="Test Chapter", children=[
             Article(number=1, title="Test Article", content="Art Cont", children=[
                 Paragraph(number=1, content="Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam"),

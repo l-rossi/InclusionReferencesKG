@@ -7,12 +7,12 @@ from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.section import Section
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
 from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import \
     BlockPreprocessor
-from inclusionreferenceskg.src.document_parsing.preprocessing.footnote_preprocessor import \
-    FootnotePreprocessor
+from inclusionreferenceskg.src.document_parsing.preprocessing.footnote_append_preprocessor import \
+    FootnoteAppendPreprocessor
 from inclusionreferenceskg.src.document_parsing.preprocessing.header_preprocessor import \
     HeaderPreprocessor
 
@@ -35,10 +35,10 @@ class DocumentTreeParser:
         self.node_patterns = node_patterns
 
         if preprocessors is None:
-            preprocessors = [HeaderPreprocessor, FootnotePreprocessor]
+            preprocessors = [HeaderPreprocessor, FootnoteAppendPreprocessor]
         self.preprocessors = preprocessors
 
-    def parse_regulation(self, title, text) -> Regulation:
+    def parse_document(self, title: str, text: str) -> Document:
         """
         Creates a document tree from the source text of a regulation.
 
@@ -47,7 +47,7 @@ class DocumentTreeParser:
         :return: The regulation root node of the parsed document.
         """
 
-        regulation = Regulation(title=title)
+        regulation = Document(title=title)
         node_stack: typing.List[Node] = [regulation]
 
         blocks = DocumentTreeParser._blockize(text)

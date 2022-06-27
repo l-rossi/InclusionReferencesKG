@@ -5,11 +5,11 @@ from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor
     BlockPreprocessor
 
 
-class FootnotePreprocessor(BlockPreprocessor):
+class FootnoteDeletePreprocessor(BlockPreprocessor):
     """
     Class to resolve footnotes in a EU regulation text body.
 
-    Detected footnotes are extracted and placed at the end of the block in which the reference to the footnote was made.
+    Detected footnotes aredeleted.
     """
 
     @staticmethod
@@ -26,9 +26,9 @@ class FootnotePreprocessor(BlockPreprocessor):
                 footnote_reference_pattern = r"(?<!and|..,) \(" + match.group(1) + r"\)"
 
                 # Look back over the visited blocks.
-                for i, visited_block in enumerate(visited):
+                for visited_block in visited:
                     if re.search(footnote_reference_pattern, visited_block):
-                        visited[i] += block
+                        # Only delete if we have found a reference to this footnote somewhere.
                         break
                 else:
                     visited.insert(0, block)

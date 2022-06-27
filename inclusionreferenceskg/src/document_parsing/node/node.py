@@ -15,6 +15,12 @@ class Node(ABC):
     depth: ClassVar[int]
     consumes: ClassVar[bool] = True
 
+    # Some nodes are not should be ignored when forming the full qualifier. For example, if a reference
+    # is found in Chapter I to Article 98 in Chapter XI, the reference will simply read 'Article 98'.
+    # 'Article 98' would be resolved to Article 98 of Chapter I though. We can stop this by ignoring certain
+    # types of nodes when constructing the full qualifier of a node.
+    ignore_when_forming_full_qualifier: ClassVar[bool] = False
+
     children: List["Node"] = dataclasses.field(default_factory=list)
     number: Optional[int] = None
     content: Optional[str] = ""
@@ -90,6 +96,8 @@ class Node(ABC):
         Note: This implementation breaks if the pattern contains multiple of the same type of node.
         ToDO: Fact check the statement above.
         """
+
+        # print(pattern_depth, pattern[pattern_depth], self.__class__, self.number)
 
         if pattern_depth == len(pattern) - 1 and self._pattern_match(pattern[pattern_depth]):
             return [self]

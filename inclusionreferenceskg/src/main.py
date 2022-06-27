@@ -8,7 +8,7 @@ if __name__ == "__main__":
         gdpr_text = gdpr_file.read()
 
     parser = DocumentTreeParser()
-    gdpr = parser.parse_regulation("GDPR", gdpr_text)
+    gdpr = parser.parse_document("GDPR", gdpr_text)
     NodePrinter.print(gdpr)
 
     # print(PDFParser.parse_to_file("./resources/gdpr.pdf", "./resources/gdpr.txt"))

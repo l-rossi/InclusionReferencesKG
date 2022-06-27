@@ -1,13 +1,15 @@
 import re
 import typing
 
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
 from inclusionreferenceskg.src.util.util import rom_to_dec
 
 
 class Title(Node):
-    depth = Regulation.depth + 1
+
+    depth = Document.depth + 1
+    ignore_when_forming_full_qualifier = True
     _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^Title ([IVXLCDM]+)\s*$", re.I)
 
     @classmethod

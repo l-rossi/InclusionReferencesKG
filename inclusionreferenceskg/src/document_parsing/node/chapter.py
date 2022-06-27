@@ -2,12 +2,13 @@ import re
 import typing
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.regulation import Regulation
+from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.util.util import rom_to_dec
 
 
 class Chapter(Node):
-    depth = Regulation.depth + 1
+    depth = Title.depth + 1
+    ignore_when_forming_full_qualifier = True
     _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^Chapter ([IVXLCDM]+)\s*$", re.I)
 
     @classmethod
