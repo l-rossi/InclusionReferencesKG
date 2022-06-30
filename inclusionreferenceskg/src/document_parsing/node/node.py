@@ -86,7 +86,8 @@ class Node(ABC):
         wildcard = -1
         type_match = pat is None or pat.__class__ == self.__class__
         number_match = pat is None or pat.number == self.number or pat.number == wildcard
-        return type_match and number_match
+        title_match = pat is None or pat.title == self.title or pat.title is None or pat.title == wildcard
+        return type_match and number_match and title_match
 
     def resolve_loose(self, pattern: List[Optional["Node"]], pattern_depth=0) -> List["Node"]:
         """

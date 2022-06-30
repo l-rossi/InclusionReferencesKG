@@ -121,7 +121,6 @@ class ReferenceResolver:
                 resolved.extend(specifier)
                 resolved.sort(key=lambda x: x.depth)
 
-            # print(reference, ":", patterns_translated)
             reference.reference_qualifier = patterns_translated
             patterns.extend(patterns_translated)
         return references
