@@ -1,4 +1,0 @@
-
-
-class POSNERExtractor:
-    pass

@@ -1,9 +1,7 @@
-import tika.tika
 from tika import parser
 
 
 class PDFParser:
-    tika.tika.TikaClientOnly = True
 
     def __init__(self):
         pass

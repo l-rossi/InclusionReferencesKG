@@ -18,6 +18,7 @@ from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.reference import Reference
 from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
+from inclusionreferenceskg.src.util.regex_util import RegexUtil
 from inclusionreferenceskg.src.util.util import rom_to_dec
 
 
@@ -67,17 +68,17 @@ class ReferenceResolver:
             for split_reference in split_references:
                 pattern_for_split = []
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Article, RegexReferenceDetector.number))
+                    self._extract_basic_references(split_reference, Article, RegexUtil.number))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Paragraph, RegexReferenceDetector.number))
+                    self._extract_basic_references(split_reference, Paragraph, RegexUtil.number))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Point, RegexReferenceDetector.alph))
+                    self._extract_basic_references(split_reference, Point, RegexUtil.alph))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Chapter, RegexReferenceDetector.rom))
+                    self._extract_basic_references(split_reference, Chapter, RegexUtil.rom))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Title, RegexReferenceDetector.rom))
+                    self._extract_basic_references(split_reference, Title, RegexUtil.rom))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Chapter, RegexReferenceDetector.number))
+                    self._extract_basic_references(split_reference, Chapter, RegexUtil.number))
                 pattern_for_split.extend(self._resolve_ordinal(split_reference))
 
                 pattern_for_split.extend(self._resolve_this(split_reference, node))
@@ -134,10 +135,10 @@ class ReferenceResolver:
         :return: A list of nodes corresponding to those in the reference.
         """
 
-        number_format = RegexReferenceDetector.para
+        number_format = RegexUtil.para
 
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr"article\s{RegexReferenceDetector.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexReferenceDetector.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr"article\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Paragraph)
 
@@ -157,13 +158,13 @@ class ReferenceResolver:
         to compare against the document structure
         """
 
-        if number_format not in [RegexReferenceDetector.number, RegexReferenceDetector.alph,
-                                 RegexReferenceDetector.para, RegexReferenceDetector.rom]:
+        if number_format not in [RegexUtil.number, RegexUtil.alph,
+                                 RegexUtil.para, RegexUtil.rom]:
             raise ValueError(f"number_format must be in [RegexReferenceDetector.number, RegexReferenceDetector.alph,"
                              f" RegexReferenceDetector.para, RegexReferenceDetector.rom], was: {number_format}")
 
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr"{node_type.__name__}s?\s{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexReferenceDetector.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr"{node_type.__name__}s?\s{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, node_type)
 
@@ -406,17 +407,17 @@ class ReferenceResolver:
         :return:
         """
 
-        if number_format not in [RegexReferenceDetector.number, RegexReferenceDetector.alph,
-                                 RegexReferenceDetector.para, RegexReferenceDetector.rom]:
+        if number_format not in [RegexUtil.number, RegexUtil.alph,
+                                 RegexUtil.para, RegexUtil.rom]:
             raise ValueError(f"number_format must be in [RegexReferenceDetector.number, RegexReferenceDetector.alph,"
                              f" RegexReferenceDetector.para, RegexReferenceDetector.rom], was: {number_format}")
 
-        if number_format == RegexReferenceDetector.number:
+        if number_format == RegexUtil.number:
             return int(number)
-        elif number_format == RegexReferenceDetector.alph:
+        elif number_format == RegexUtil.alph:
             return ord(number[1:-1]) - 96
-        elif number_format == RegexReferenceDetector.para:
+        elif number_format == RegexUtil.para:
             return int(number[1:-1])
-        elif number_format == RegexReferenceDetector.rom:
+        elif number_format == RegexUtil.rom:
             return rom_to_dec(number)
         return None

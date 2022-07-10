@@ -9,12 +9,14 @@ from inclusionreferenceskg.src.document_parsing.node.subparagraph import Paragra
 from inclusionreferenceskg.src.document_parsing.node.point import Point
 from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
+from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import \
     BlockPreprocessor
 from inclusionreferenceskg.src.document_parsing.preprocessing.footnote_append_preprocessor import \
     FootnoteAppendPreprocessor
 from inclusionreferenceskg.src.document_parsing.preprocessing.header_preprocessor import \
     HeaderPreprocessor
+from inclusionreferenceskg.src.document_parsing.preprocessing.initial_space_preprocessor import InitialSpacePreprocessor
 
 
 class DocumentTreeParser:
@@ -31,11 +33,11 @@ class DocumentTreeParser:
         :param preprocessors: A list of preprocessors to first be applied to the raw text. This is order dependant.
         """
         if node_patterns is None:
-            node_patterns = [Chapter, Article, Paragraph, Section, Point, Subparagraph]
+            node_patterns = [Chapter, Title, Article, Paragraph, Section, Point, Subparagraph]
         self.node_patterns = node_patterns
 
         if preprocessors is None:
-            preprocessors = [HeaderPreprocessor, FootnoteAppendPreprocessor]
+            preprocessors = [HeaderPreprocessor, InitialSpacePreprocessor, FootnoteAppendPreprocessor]
         self.preprocessors = preprocessors
 
     def parse_document(self, title: str, text: str) -> Document:

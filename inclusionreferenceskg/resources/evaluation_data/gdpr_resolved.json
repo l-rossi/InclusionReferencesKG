@@ -1,0 +1,54 @@
+[
+    {
+        "text": "This Regulation",
+        "patterns": [{
+            "title": "GDPR"
+        }]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [{
+            "title": "GDPR"
+        }]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [{
+            "title": "GDPR"
+        }]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [{
+            "title": "GDPR"
+        }]
+    },
+    {
+        "text": "Chapter 2 of Title V of the TEU",
+        "patterns": [{
+            "title": "SPECIFIC PROVISIONS ON THE COMMON FOREIGN AND SECURITY POLICY"
+        }]
+    },
+    {
+        "text": "Regulation (EC) No 45/2001"
+    },
+    {
+        "text": "Regulation (EC) No 45/2001"
+    },
+    {
+        "text": "this Regulation"
+    },
+    {
+        "text": "Article 98",
+        "patterns": [{
+            "title": "Review of other Union legal acts on data protection",
+            "number": 98
+        }]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [{
+            "title": "GDPR"
+        }]
+    }
+]

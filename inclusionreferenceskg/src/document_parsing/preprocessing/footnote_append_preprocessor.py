@@ -28,7 +28,7 @@ class FootnoteAppendPreprocessor(BlockPreprocessor):
                 # Look back over the visited blocks.
                 for i, visited_block in enumerate(visited):
                     if re.search(footnote_reference_pattern, visited_block):
-                        visited[i] += block
+                        visited[i] += " " + block
                         break
                 else:
                     visited.insert(0, block)

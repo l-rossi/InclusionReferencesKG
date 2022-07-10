@@ -7,7 +7,7 @@ from inclusionreferenceskg.src.document_parsing.node.section import Section
 
 class Article(Node):
     depth = Section.depth + 1
-    _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^Article ([1-9][0-9]*)\s*$", re.I)
+    _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^Article ([1-9][0-9]*)\s*", re.I)
 
     @classmethod
     def accept_block(cls, line: str, _) -> typing.Tuple[bool, typing.Optional["Article"]]:
@@ -22,5 +22,6 @@ class Article(Node):
 
     def finalize(self):
         split_content = [l.strip() for l in self.content.split("\n") if l.strip()]
-        self.title = split_content[0]
-        self.content = "\n".join(split_content[1:])
+        if split_content:
+            self.title = split_content[0]
+            self.content = "\n".join(split_content[1:])

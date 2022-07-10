@@ -3,6 +3,7 @@ from typing import List
 
 from inclusionreferenceskg.src.reference import Reference
 from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
+from inclusionreferenceskg.src.util.regex_util import RegexUtil
 
 
 class RegexReferenceDetector(ReferenceDetector):
@@ -10,19 +11,9 @@ class RegexReferenceDetector(ReferenceDetector):
     Reference detector based on regular expressions.
     """
 
-    # TODO: Move some of this to util
-    number = r"(?:[1-9][0-9]*)"
-    alph = r"(?:\([a-z]\))"
-    para = fr"(?:\({number}\))"
-    ordinal = "(?:first|second|third|fourth|fifth|sixth)"
-    rom = r"(?-i:[IXV]+)"  # This is a really bad pattern and only matches the first few roman numerals and also alot of illegal ones.
-
-    # limited conjunctions, "as well as" is present in the GDPR
-    conj = fr"(?:and|or)"
-
-    number_or_range = fr"(?:{number}(?:\sto\s{number})?)"
-    para_or_range = fr"(?:{para}(?:\sto\s{para})?)"
-    alph_or_range = fr"(?:{alph}(?:\sto\s{alph})?)"
+    number_or_range = fr"(?:{RegexUtil.number}(?:\sto\s{RegexUtil.number})?)"
+    para_or_range = fr"(?:{RegexUtil.para}(?:\sto\s{RegexUtil.para})?)"
+    alph_or_range = fr"(?:{RegexUtil.alph}(?:\sto\s{RegexUtil.alph})?)"
 
     # https://publications.europa.eu/code/en/en-110202.htm
     document_numbering = r"(?:(?:\s\(\w{2,7}\))?(?:\sNo)?\s[1-9][0-9]*(?:\/[1-9][0-9]*)?(?:\/\w{2,7}))"
@@ -41,14 +32,14 @@ class RegexReferenceDetector(ReferenceDetector):
 
     thereof = r"(?:\sthereof)?"
 
-    single = fr"(?:(?:article\s{number}{para}{thereof})|this\s{node_name}|the previous\s{node_name}|{node_name}\s{number}{thereof}|{node_name_rom}\s{rom}{thereof}|the\s{ordinal}\s{node_name}{thereof}|that\s{node_name}|{document})"  # Missing thereof
-    multi = fr"(?:article\s{number}{para_or_range}(?:, {para_or_range})*(?:\s{conj}\s{para_or_range})*{thereof}|" \
-            fr"{node_name}s?\s{number_or_range}(?:,\s{number_or_range})*(?:\s{conj}\s{number_or_range})*{thereof}|"\
+    single = fr"(?:(?:article\s{RegexUtil.number}{RegexUtil.para}{thereof})|this\s{node_name}|the previous\s{node_name}|{node_name}\s{RegexUtil.number}{thereof}|{node_name_rom}\s{RegexUtil.rom}{thereof}|the\s{RegexUtil.ordinal}\s{node_name}{thereof}|that\s{node_name}|{document})"  # Missing thereof
+    multi = fr"(?:article\s{RegexUtil.number}{para_or_range}(?:, {para_or_range})*(?:\s{RegexUtil.conj}\s{para_or_range})*{thereof}|" \
+            fr"{node_name}s?\s{number_or_range}(?:,\s{number_or_range})*(?:\s{RegexUtil.conj}\s{number_or_range})*{thereof}|" \
             fr"those\s{node_name}s)"
 
-    point = fr"(?:points?\s{alph_or_range}(?:(?:,\s{alph_or_range})*\s{conj}\s{alph_or_range})*)"
+    point = fr"(?:points?\s{alph_or_range}(?:(?:,\s{alph_or_range})*\s{RegexUtil.conj}\s{alph_or_range})*)"
 
-    ref = fr"(?:(?:{point}(?:\sof\s{single})?)|(?:{multi}|{single}))(?:(?:\sof)?\s{single})*"
+    ref = fr"(?i)(?:(?:{point}(?:\sof\s{single})?)|(?:{multi}|{single}))(?:(?:\sof)?\s{single})*"
 
     def __init__(self):
         self.pattern: re.Pattern = RegexReferenceDetector._build_pattern()
