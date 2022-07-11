@@ -1,0 +1,11 @@
+1b2a3514-895f-46b2-9975-2032d856fbff 26.36 26.67 925 956 the processing of personal data
+d6c05f7e-8705-4c98-8fb2-09743044c85d 22.104 24.23 742 886 the processing other than by automated means of personal data which form part of a filing system or are intended to form part of a filing system
+21138222-09d6-46ed-aded-86bf2ce31e44 22.29 22.96 667 734 the processing of personal data wholly or partly by automated means
+427a016a-b786-4a6a-952a-ebea90f280fc 15.63 16.95 467 608 neither restricted nor prohibited for reasons connected with the protection of natural persons with regard to the processing of personal data
+b9da764c-a776-40c2-8a37-3d5bd8aac3d9 15.2 15.53 406 457 The free movement of personal data within the Union
+6ccfecd2-c24f-4b0f-bc44-6d0d00e483d7 12.102 13.27 361 401 right to the protection of personal data
+85ae0360-9a45-42f6-af9b-25f7a32ff407 12.27 12.77 286 336 fundamental rights and freedoms of natural persons
+eba8101f-0dbd-4f53-8741-9aeb4ce6ed7a 9.28 10.70 101 256 rules relating to the protection of natural persons with regard to the processing of personal data and rules relating to the free movement of personal data
+d15fad37-ee00-459d-ad60-c3b2af7b62f5 38.6 38.37 1501 1532 the processing of personal data
+1a0e3461-7b47-4d85-b64d-74de41114c62 30.8 30.25 1046 1063 the Member States
+5f0f2228-259c-4760-bfe6-b8c9411a6b28 30.44 30.54 1082 1092 activities
