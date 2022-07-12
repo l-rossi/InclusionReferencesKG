@@ -14,5 +14,17 @@ class Document(Node):
     def accept_block(cls, *_) -> typing.Tuple[bool, typing.Optional["Document"]]:
         return False, None
 
+    def _pattern_match(self, pat: "Node"):
+        wildcard = -1
+        type_match = pat is None or pat.__class__ == self.__class__
+        number_match = pat is None or pat.number == self.number or pat.number == wildcard
+
+        # We are more lenient when matching the title of a regulation. Normalization of the title may also be
+        # feasible.
+        title_match = pat is None or pat.title == self.title or pat.title is None or pat.title == wildcard or \
+                      pat.title.lower() in self.title.lower() or self.title.lower() in pat.title.lower()
+
+        return type_match and number_match and title_match
+
     def finalize(self):
         pass

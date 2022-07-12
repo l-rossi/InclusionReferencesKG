@@ -1,54 +1,391 @@
 [
     {
         "text": "This Regulation",
-        "patterns": [{
-            "title": "GDPR"
-        }]
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
     },
     {
         "text": "This Regulation",
-        "patterns": [{
-            "title": "GDPR"
-        }]
+        "patterns": [
+            {
+                "title": "GDPR"
+            }
+        ]
     },
     {
         "text": "This Regulation",
-        "patterns": [{
-            "title": "GDPR"
-        }]
+        "patterns": [
+            {
+                "title": "GDPR"
+            }
+        ]
     },
     {
         "text": "This Regulation",
-        "patterns": [{
-            "title": "GDPR"
-        }]
+        "patterns": [
+            {
+                "title": "GDPR"
+            }
+        ]
     },
     {
         "text": "Chapter 2 of Title V of the TEU",
-        "patterns": [{
-            "title": "SPECIFIC PROVISIONS ON THE COMMON FOREIGN AND SECURITY POLICY"
-        }]
+        "patterns": [
+            {
+                "title": "SPECIFIC PROVISIONS ON THE COMMON FOREIGN AND SECURITY POLICY"
+            }
+        ]
     },
     {
-        "text": "Regulation (EC) No 45/2001"
+        "text": "Regulation (EC) No 45/2001",
+        "patterns": [
+            {
+                "type": "Document"
+            }
+        ]
     },
     {
-        "text": "Regulation (EC) No 45/2001"
+        "text": "Regulation (EC) No 45/2001",
+        "patterns": [
+            {
+                "type": "Document"
+            }
+        ]
     },
     {
-        "text": "this Regulation"
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
     },
     {
         "text": "Article 98",
-        "patterns": [{
-            "title": "Review of other Union legal acts on data protection",
-            "number": 98
-        }]
+        "patterns": [
+            {
+                "title": "Review of other Union legal acts on data protection",
+                "number": 98,
+                "type": "Article"
+            }
+        ]
     },
     {
         "text": "This Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "Directive 2000/31/EC",
+        "patterns": [
+            {
+                "title": "Directive 2000/31/EC",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "Articles 12 to 15 of that Directive",
+        "patterns": [
+            {
+                "title": "TODO"
+            }
+        ]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "This Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "Article 27",
+        "patterns": [
+            {
+                "title": "Representatives of controllers or processors not established in the Union",
+                "type": "Article",
+                "number": 27
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "Article 51",
+        "patterns": [
+            {
+                "title": "Supervisory authority",
+                "type": "Article",
+                "number": 51
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "point (b) of Article 1(1) of Directive (EU) 2015/1535 of the European Parliament and of the Council",
+        "patterns": [
+            {
+                "title": "TODO"
+            }
+        ]
+    },
+    {
+        "text": "Article 89(1)",
+        "patterns": [
+            {
+                "number": 1,
+                "type": "Paragraph",
+                "has_child": {
+                    "type": "Subparagraph",
+                    "number": 1,
+                    "starts_with": "1. Processing for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes, shall be subj"
+                }
+            }
+        ]
+    },
+    {
+        "text": "Article 89(1)",
+        "patterns": [
+            {
+                "number": 1,
+                "type": "Paragraph",
+                "has_child": {
+                    "type": "Subparagraph",
+                    "number": 1,
+                    "starts_with": "1. Processing for archiving purposes in the public interest, scientific or historical research purposes or statistical purposes, shall be subj"
+                }
+            }
+        ]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": [
+            {
+                "title": "GDPR",
+                "type": "Document"
+            }
+        ]
+    },
+    {
+        "text": "paragraph 1",
+        "patterns": [
+            {
+                "type": "Paragraph",
+                "number": 1,
+                "has_child": {
+                    "type": "Subparagraph",
+                    "number": 1,
+                    "start_with": "Personal data shall be:"
+                }
+            }
+        ]
+    },
+    {
+        "text": "Point (f) of the first subparagraph",
         "patterns": [{
-            "title": "GDPR"
+            "type": "Point",
+            "number": 6,
+            "starts_width": "(f) processing is necessary"
         }]
+    },
+    {
+        "text": "this Regulation",
+        "patterns": []
+    },
+    {
+        "text": "points (c) and (e) of paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "Chapter IX",
+        "patterns": []
+    },
+    {
+        "text": "point (c) and (e) of paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "point (e) of paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "this Regulation",
+        "patterns": []
+    },
+    {
+        "text": "Chapter IX",
+        "patterns": []
+    },
+    {
+        "text": "Article 23(1)",
+        "patterns": []
+    },
+    {
+        "text": "Article 9",
+        "patterns": []
+    },
+    {
+        "text": "Article 10",
+        "patterns": []
+    },
+    {
+        "text": "this Regulation",
+        "patterns": []
+    },
+    {
+        "text": "point (a) of Article 6(1)",
+        "patterns": []
+    },
+    {
+        "text": "Paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "Paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "paragraph 3",
+        "patterns": []
+    },
+    {
+        "text": "Article 89(1)",
+        "patterns": []
+    },
+    {
+        "text": "paragraph 1",
+        "patterns": []
+    },
+    {
+        "text": "point (h) of paragraph 2",
+        "patterns": []
+    },
+    {
+        "text": "Article 6(1)",
+        "patterns": []
+    },
+    {
+        "text": "this Regulation",
+        "patterns": []
+    },
+    {
+        "text": "paragraph 1 of this Article",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 20",
+        "patterns": []
+    },
+    {
+        "text": "those articles",
+        "patterns": []
+    },
+    {
+        "text": "Articles 13 and 14",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 22 and 34",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 22",
+        "patterns": []
+    },
+    {
+        "text": "Article 11(2)",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 22",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 22",
+        "patterns": []
+    },
+    {
+        "text": "Articles 13 and 14",
+        "patterns": []
+    },
+    {
+        "text": "Articles 15 to 22 and 34",
+        "patterns": []
     }
 ]

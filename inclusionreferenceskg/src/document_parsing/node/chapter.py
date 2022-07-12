@@ -3,13 +3,14 @@ import typing
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.title import Title
+from inclusionreferenceskg.src.util.regex_util import RegexUtil
 from inclusionreferenceskg.src.util.util import rom_to_dec
 
 
 class Chapter(Node):
     depth = Title.depth + 1
     ignore_when_forming_full_qualifier = True
-    _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^Chapter ([IVXLCDM]+)\s*$", re.I)
+    _pattern: typing.ClassVar[re.Pattern] = re.compile(fr"^Chapter ({RegexUtil.rom}|{RegexUtil.number})\s*$", re.I)
 
     @classmethod
     def accept_block(cls, block: str, _) -> typing.Tuple[bool, typing.Optional["Chapter"]]:
@@ -18,7 +19,11 @@ class Chapter(Node):
         if not match:
             return False, None
 
-        number = rom_to_dec(match.group(1))
+        try:
+            number = int(match.group(1))
+        except ValueError:
+            number = rom_to_dec(match.group(1))
+
         paragraph = Chapter(number=number)
         return True, paragraph
 

@@ -23,6 +23,15 @@ class Phrase:
     agent: List["PhraseObject"] = dataclasses.field(default_factory=list)
     predicate: List["Predicate"] = dataclasses.field(default_factory=list)
 
+    def pprint(self, depth=0) -> str:
+        print([type(p) for p in self.patient])
+        new_line = "\n"
+
+        return f"Phrase:\n" \
+               f"Agent:\n{new_line.join(a.token.text for a in self.agent)}" \
+               f"Predicate: {', '.join(p.token.text for p in self.predicate)}; " \
+               f"Patient: {', '.join(p.token.text if type(p) == PhraseObject else p.pprint(depth=depth+1) for p in self.patient)}"
+
 
 @dataclasses.dataclass
 class Predicate:

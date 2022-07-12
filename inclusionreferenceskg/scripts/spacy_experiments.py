@@ -13,7 +13,8 @@ from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_o
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 
-spacy.prefer_gpu()
+# spacy.prefer_gpu()
+
 
 # https://stackoverflow.com/questions/39763091/how-to-extract-subjects-in-a-sentence-and-their-respective-dependent-phrases
 # Categories thanks to psr's answer on Stackoverflow https://stackoverflow.com/a/40014532/9885004
@@ -70,8 +71,8 @@ def main():
         if node.content:
             txt += node.content + "\n"
 
-    nlp = spacy.load("en_core_web_trf")
-    # nlp = spacy.load("en_core_web_sm")
+    # nlp = spacy.load("en_core_web_trf")
+    nlp = spacy.load("en_core_web_sm")
     nlp.add_pipe("reference_detector_component", before="ner")
     # nlp.add_pipe("noun_phrase_component", before="ner")
     nlp.remove_pipe("ner")
@@ -92,8 +93,10 @@ def main():
         import textacy.spacier.utils as spacy_utils
         main_verbs_of_sent = get_main_verbs_of_sent(sent)
 
-        phrases = [Phrase(predicate=[Predicate(token=verb) for verb in verb_group]) for verb_group in
-                   main_verbs_of_sent]
+        phrases: List[Phrase] = [Phrase(predicate=[Predicate(token=verb) for verb in verb_group]) for verb_group in
+                                 main_verbs_of_sent]
+        print("1")
+        print([type(v) for v in phrases])
 
         for phrase in phrases:
             for predicate in phrase.predicate:
@@ -113,7 +116,6 @@ def main():
             phrase.agent = [PhraseObject(tok) for tok in spacy_utils.get_subjects_of_verb(phrase.predicate[0].token)]
 
             verb_as_patient = [tok for tok in phrase.predicate[0].token.rights if tok.dep_ == "ccomp"]
-
             # TODO: Please refactor. This is giving me nightmares. D,:
             phrase_as_patient = []
             for vap in verb_as_patient:
@@ -122,6 +124,9 @@ def main():
                         if pred.token == vap:
                             phrase_as_patient.append(p)
                             break
+            print([type(v) for v in phrase_as_patient])
+            print("2")
+            print([type(v) for v in phrases])
 
             if phrase_as_patient and is_passive:
                 raise Exception("Phrase as a patient cannot coincide with a passive voice.")
@@ -131,7 +136,7 @@ def main():
             if grammatical_object and phrase_as_patient:
                 raise Exception("Found both an object and a ccomp for a predicate.")
 
-            phrase.patient = grammatical_object or phrase_as_patient
+            phrase.patient = [PhraseObject(token=tok) for tok in grammatical_object] or phrase_as_patient
 
             # If the patient of a phrase is also the
 
@@ -139,8 +144,8 @@ def main():
             [tok for tok in verb_group[0].rights if
              tok.dep_ == "ccomp"] + get_objects_of_verb_consider_preposition(
                 verb_group[0]))"""
+            #print(phrase.pprint())
             print(phrase)
-
         """print("Sentence:", sentence)
         root = sentence.root
 
