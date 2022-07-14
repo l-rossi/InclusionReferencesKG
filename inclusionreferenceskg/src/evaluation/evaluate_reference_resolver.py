@@ -48,6 +48,10 @@ def main():
                     f"done only against the first resolved node.")
             resolved.append(resolved_single[0])
 
+        if not expected_reference["patterns"]:
+            print(f"No patterns provideded for reference '{actual_reference.text_content}'")
+            continue
+
         if len(expected_reference["patterns"]) != len(resolved):
             print(
                 f"Expected {len(expected_reference['patterns'])} solutions for "
@@ -67,6 +71,9 @@ def validate(node: Node, pattern: Dict) -> Tuple[bool, str]:
     :param node: The node to be tested.
     :param pattern: The pattern to test against
     """
+
+    if not set(pattern.keys()).issubset({"title", "number", "type", "starts_with", "has_child"}):
+        print(f"Unrecognized key(s) in pattern '{pattern}'")
 
     if pattern.get("title") and pattern["title"] != node.title:
         return False, f"Expected title '{pattern['title']}'. Got: '{node.title}'"

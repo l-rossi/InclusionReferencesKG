@@ -17,4 +17,4 @@ if __name__ == "__main__":
         if os.path.exists(out_file):
             continue
 
-        PDFParser.parse_to_file(file, out_file)
+        PDFParser.parse_to_file(file, out_file, auto_space=True)
