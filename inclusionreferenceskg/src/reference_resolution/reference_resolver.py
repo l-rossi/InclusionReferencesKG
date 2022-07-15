@@ -300,6 +300,9 @@ class ReferenceResolver:
                     pref_ref_sorted = sorted(prev_ref, key=lambda x: x.depth, reverse=True)
                     for i, pref_ref_node in enumerate(pref_ref_sorted):
                         if pref_ref_node.__class__ == node_type:
+                            # Due to the structure of the returned list, we want to only specify the path
+                            # to the end node(s) once. Thus only the terminal node is appended unless we are
+                            # addeing the first node.
                             if ret:
                                 ret.append(pref_ref_node)
                             else:
