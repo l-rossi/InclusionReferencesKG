@@ -11,18 +11,48 @@ from inclusionreferenceskg.src.reference_resolution.reference_resolver import Re
 def main():
     resolver = ReferenceResolver(
         detector=GoldStandardReferenceDetector("./resources/evaluation_data/gdpr_references.csv"))
-    with open("./resources/eu_documents/gdpr.txt") as f:
-        gdpr = DocumentTreeParser().parse_document("GDPR", f.read())
+    parser = DocumentTreeParser()
 
-    with open("./resources/eu_documents/teu.txt") as f:
-        teu = DocumentTreeParser().parse_document("TEU", f.read())
+    docs = []
+
+    with open("./resources/eu_documents/gdpr.txt", encoding="utf-8") as f:
+        gdpr = parser.parse_document("GDPR", f.read())
+        docs.append(gdpr)
+
+    with open("./resources/eu_documents/teu.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("TEU", f.read()))
+
+    with open("./resources/eu_documents/directive_95_46_ec.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Directive 95/46/EC", f.read()))
+
+    with open("./resources/eu_documents/directive_2000_31_EC.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Directive 2000/31/EC", f.read()))
+
+    with open("./resources/eu_documents/directive_eu_2015_1535.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Directive (EU) 2015/1535", f.read()))
+
+    with open("./resources/eu_documents/mock_en_iso_17065_2012.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("EN-ISO/IEC 17065/2012", f.read()))
+
+    with open("./resources/eu_documents/regulation_ec_45_2001.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Regulation (EC) No 45/2001", f.read()))
+
+    with open("./resources/eu_documents/regulation_eu_182_2011.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Regulation (EU) No 182/2011", f.read()))
+
+    with open("./resources/eu_documents/regulation_ev_765_2008.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Regulation (EC) No 765/2008", f.read()))
+
+    with open("./resources/eu_documents/directive_2002_58_ec.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Directive 2002/58/EC", f.read()))
+
+    with open("./resources/eu_documents/regulation_ec_1049_2001.txt", encoding="utf-8") as f:
+        docs.append(parser.parse_document("Regulation (EC) No 1049/2001", f.read()))
 
     actual_references = resolver.resolve_all(gdpr)
-    # print(references)
+    document_root = Root(children=docs)
 
-    document_root = Root(children=[teu, gdpr])
-
-    with open("./resources/evaluation_data/gdpr_resolved.json") as f:
+    with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
 
     for actual_reference, expected_reference in zip(actual_references, expected_references):
@@ -49,17 +79,27 @@ def main():
             resolved.append(resolved_single[0])
 
         if not expected_reference["patterns"]:
-            print(f"No patterns provideded for reference '{actual_reference.text_content}'")
+            print(f"No patterns provided for reference '{actual_reference.text_content}'")
             continue
 
         if len(expected_reference["patterns"]) != len(resolved):
             print(
                 f"Expected {len(expected_reference['patterns'])} solutions for "
                 f"reference '{actual_reference.text_content}'. But found {len(resolved)}.")
+
+            if actual_reference.text_content == "Articles 15, 16, 18, 19, 20 and 21":
+                print("!!!")
+                print(actual_reference.reference_qualifier)
             continue
 
         for pattern, solution in zip(expected_reference["patterns"], resolved):
             valid, msg = validate(solution, pattern)
+
+            if expected_reference["text"] != actual_reference.text_content:
+                print(f"Mismatch between reference text_content and "
+                      f"actual text_content. Expected '{expected_reference['text']}'"
+                      f"was '{actual_reference.text_content}'")
+
             if not valid:
                 print(
                     f"Found solution for reference '{actual_reference.text_content}' was incorrect.", msg)
@@ -79,17 +119,17 @@ def validate(node: Node, pattern: Dict) -> Tuple[bool, str]:
         return False, f"Expected title '{pattern['title']}'. Got: '{node.title}'"
 
     if pattern.get("number") and pattern["number"] != node.number:
-        print("Incorrect number")
         return False, f"Expected number '{pattern['number']}'. Got: '{node.number}'"
 
     if pattern.get("type") and pattern["type"].lower() != node.__class__.__name__.lower():
         return False, f"Expected type '{pattern['type']}'. Got: '{node.__class__.__name__}'"
 
-    if pattern.get("starts_with") and not node.content.lower().startswith(pattern["starts_with"].lower()):
+    if pattern.get("starts_with") and not node.content.lower().replace(r" ", "").startswith(
+        pattern["starts_with"].lower().replace(r" ", "")):
         return False, f"Expected the node to start with '{pattern['starts_with'][:10]}...'. Was: '{node.content[:10]}'."
 
     if pattern.get("has_child") and not any(validate(n, pattern["has_child"])[0] for n in node.children):
-        return False, "Found no child matching pattern."
+        return False, f"Found no child matching pattern '{pattern['has_child']}'."
 
     return True, "Valid"
 

@@ -1,5 +1,5 @@
 import dataclasses
-import typing
+import uuid
 import warnings
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -26,6 +26,7 @@ class Node(ABC):
     content: Optional[str] = ""
     title: Optional[str] = None
     parent: Optional["Node"] = None
+    id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
     @classmethod
     @abstractmethod

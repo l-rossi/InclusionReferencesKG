@@ -1,10 +1,8 @@
 import itertools
 import re
-import typing
 import warnings
-from typing import List, Type
-
 from collections import defaultdict
+from typing import List, Type
 
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
@@ -95,7 +93,7 @@ class ReferenceResolver:
                     components_of_reference.extend(pattern_for_split)
                 else:
                     print(f"Could not detect any component from split_string: '{split_reference}'")
-                    # TODO this implies an unparsed split and should be handeld
+                    # TODO this implies an unparsed split and should be handled
                     pass
 
             # split patterns into multiple patterns so that each pattern only contains one node of a certain type:
@@ -123,7 +121,8 @@ class ReferenceResolver:
                 resolved.sort(key=lambda x: x.depth)
 
             reference.reference_qualifier = patterns_translated
-            patterns.extend(patterns_translated)
+            patterns.append(patterns_translated)
+
         return references
 
     @staticmethod
@@ -179,31 +178,24 @@ class ReferenceResolver:
         :param node_type: The type of node that should be created.
         :return: A list of detected references.
         """
-        range_pattern = fr"({number_format}) to ({number_format})"
-        new_nodes_for_pattern = []
-        main_match = re.match(main_pattern, text, re.I)
 
+        main_match = re.match(main_pattern, text, re.I)
         if not main_match:
             return []
 
-        for number_or_range in main_match.groups():
-            if number_or_range is None:
-                continue
+        number_or_range_pattern = fr"({number_format})(?:\sto\s({number_format}))?"
+        new_nodes_for_pattern = []
 
-            range_match = re.match(range_pattern, number_or_range, re.I)
-            if range_match:
-                for i in range(ReferenceResolver._translate_number(number_format, range_match[1]),
-                               ReferenceResolver._translate_number(number_format, range_match[2]) + 1):
+        for first_number, end_of_range in re.findall(number_or_range_pattern, main_match.group(0), re.I):
+            if end_of_range:
+                for i in range(ReferenceResolver._translate_number(number_format, first_number),
+                               ReferenceResolver._translate_number(number_format, end_of_range) + 1):
                     new_nodes_for_pattern.append(ReferenceResolver._pattern_from_node(node_type, number=i))
-                continue
-
-            number_match = re.match(fr"({number_format})", number_or_range, re.I)
-            if number_match:
+            else:
                 new_nodes_for_pattern.append(
                     ReferenceResolver._pattern_from_node(node_type,
                                                          number=ReferenceResolver._translate_number(number_format,
-                                                                                                    number_match[1])))
-                continue
+                                                                                                    first_number)))
 
         return new_nodes_for_pattern
 
@@ -213,7 +205,7 @@ class ReferenceResolver:
         Resolves references to documents. Names are not normalized.
         """
 
-        # We do not use RegexReferenceDetector.document as it also matches too much
+        # We do not use RegexReferenceDetector.document as it matches too much
 
         regulation = fr"(?:Commission\s)?Regulation{RegexReferenceDetector.document_numbering}"
         directive = fr"(?:(?:First\s)?Council\s)?Directive{RegexReferenceDetector.document_numbering}"
@@ -258,7 +250,7 @@ class ReferenceResolver:
         return []
 
     @staticmethod
-    def _resolve_that(text: str, previous_references: List[List[Node]]) -> List[Node]:
+    def _resolve_that(text: str, previous_references: List[List[List[Node]]]) -> List[Node]:
         """
         Resolves references introduced by 'that'.
         """
@@ -268,7 +260,7 @@ class ReferenceResolver:
             if not re.match(pattern, text, re.I):
                 return []
 
-            for prev_ref in reversed(previous_references):
+            for prev_ref in reversed(previous_references[-1]):
                 pref_ref_sorted = sorted(prev_ref, key=lambda x: x.depth, reverse=True)
                 for i, pref_ref_node in enumerate(pref_ref_sorted):
                     if pref_ref_node.__class__ == node_type:
@@ -285,12 +277,15 @@ class ReferenceResolver:
         return []
 
     @staticmethod
-    def _resolve_those(text: str, previous_references: List[List[Node]]) -> List[Node]:
+    def _resolve_those(text: str, previous_references: List[List[List[Node]]]) -> List[Node]:
         """
         Resolves references introduced by 'those'.
 
         WARNING: This method assumes that all nodes have the same path to the root. This assumption holds for the GDPR
         but is not guaranteed to hold in other documents.
+
+        "paragraph 1 of article 1 and paragraph 2 of article 2" followed by "those paragraphs" will result in
+        "paragraph 1 of article 1 and paragraph 2 of article 1"
         """
 
         def _resolve_name_to_node(name: str, node_type: Type[Node]):
@@ -300,21 +295,22 @@ class ReferenceResolver:
 
             ret = []
 
-            for prev_ref in reversed(previous_references):
-                pref_ref_sorted = sorted(prev_ref, key=lambda x: x.depth, reverse=True)
-                for i, pref_ref_node in enumerate(pref_ref_sorted):
-                    if pref_ref_node.__class__ == node_type:
-                        # The path from the root to the detected node is only added for the first detected node.
-                        # Subsequent nodes are assumed to have the same path to the root. This is not ideal behaviour.
-                        if ret:
-                            ret.append(pref_ref_sorted[i])
-                        else:
-                            ret.extend(pref_ref_sorted[i:])
+            for ref_group in reversed(previous_references):
+                for prev_ref in ref_group:
+                    pref_ref_sorted = sorted(prev_ref, key=lambda x: x.depth, reverse=True)
+                    for i, pref_ref_node in enumerate(pref_ref_sorted):
+                        if pref_ref_node.__class__ == node_type:
+                            if ret:
+                                ret.append(pref_ref_node)
+                            else:
+                                ret.extend(pref_ref_sorted[i:])
+                if ret:
+                    return ret
             return ret
 
         for nt in Node.__subclasses__():
-            if ret := _resolve_name_to_node(nt.__name__, nt):
-                return ret
+            if r := _resolve_name_to_node(nt.__name__, nt):
+                return r
 
         return []
 
@@ -344,7 +340,7 @@ class ReferenceResolver:
 
     @staticmethod
     def _resolve_thereof(text: str,
-                         previous_references: List[List[Node]],
+                         previous_references: List[List[List[Node]]],
                          current_parsed_reference: List[Node]) -> List[Node]:
         """
         Resolves references ending in thereof.
@@ -355,6 +351,8 @@ class ReferenceResolver:
         reference being parsed, i.e., the part before the 'thereof'.
         :return: The qualifier represented by the 'thereof'.
         """
+
+        previous_references = [ps for pr in previous_references for ps in pr]
 
         if text.lower().endswith("thereof"):
             if not previous_references:

@@ -104,12 +104,12 @@
             {
                 "type": "Article",
                 "number": 12,
-                "title": "‘Mere conduit’"
+                "title": "\"Mere conduit\""
             },
             {
                 "type": "Article",
                 "number": 13,
-                "title": "‘Caching’"
+                "title": "\"Caching\""
             },
             {
                 "type": "Article",
@@ -221,7 +221,7 @@
             {
                 "type": "Point",
                 "number": 2,
-                "starts_with": "(a) ‘product’ means any industrially"
+                "starts_with": "(b) ‘service’ means any Information Society service, that is to say, any service normally provided for"
             }
         ]
     },
@@ -271,7 +271,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "start_with": "Personal data shall be:"
+                    "starts_with": "1. Personal data shall be:"
                 }
             }
         ]
@@ -282,7 +282,7 @@
             {
                 "type": "Point",
                 "number": 6,
-                "starts_width": "(f) processing is necessary"
+                "starts_with": "(f) processing is necessary"
             }
         ]
     },
@@ -301,20 +301,12 @@
             {
                 "type": "Point",
                 "number": 3,
-                "has_child": {
-                    "type": "Subparagraph",
-                    "number": 1,
-                    "starts_width": "(c) processing is necessary for compliance with"
-                }
+                "starts_with": "(c) processing is necessary for compliance with"
             },
             {
                 "type": "Point",
                 "number": 5,
-                "has_child": {
-                    "type": "Subparagraph",
-                    "number": 1,
-                    "starts_width": "(e) processing is necessary for the performance"
-                }
+                "starts_with": "(e) processing is necessary for the performance"
             }
         ]
     },
@@ -334,20 +326,12 @@
             {
                 "type": "Point",
                 "number": 3,
-                "has_child": {
-                    "type": "Subparagraph",
-                    "number": 1,
-                    "starts_width": "(c) processing is necessary for compliance with"
-                }
+                "starts_with": "(c) processing is necessary for compliance with"
             },
             {
                 "type": "Point",
                 "number": 5,
-                "has_child": {
-                    "type": "Subparagraph",
-                    "number": 1,
-                    "starts_width": "(e) processing is necessary for the performance"
-                }
+                "starts_with": "(e) processing is necessary for the performance"
             }
         ]
     },
@@ -357,11 +341,7 @@
             {
                 "type": "Point",
                 "number": 5,
-                "has_child": {
-                    "type": "Subparagraph",
-                    "number": 1,
-                    "starts_width": "(e) processing is necessary for the performance"
-                }
+                "starts_with": "(e) processing is necessary for the performance"
             }
         ]
     },
@@ -393,7 +373,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_width": "1.Union or Member State law to which the data controller or processor is subject may restrict"
+                    "starts_with": "1. Union or Member State law to which the data controller or processor is subject may restrict"
                 }
             }
         ]
@@ -502,7 +482,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_width": "1. Processing for archiving purposes in the public interest, scientific"
+                    "starts_with": "1. Processing for archiving purposes in the public interest, scientific"
                 }
             }
         ]
@@ -516,7 +496,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_width": "1. Processing of personal data revealing racial or ethnic origin,"
+                    "starts_with": "1. Processing of personal data revealing racial or ethnic origin,"
                 }
             }
         ]
@@ -540,7 +520,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_width": "1. Processing shall be lawful only if and to the extent that at least one of the following"
+                    "starts_with": "1. Processing shall be lawful only if and to the extent that at least one of the following"
                 }
             }
         ]
@@ -563,7 +543,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_width": "1. If the purposes for which a controller processes personal"
+                    "starts_with": "1. If the purposes for which a controller processes personal"
                 }
             }
         ]
@@ -1465,7 +1445,7 @@
             },
             {
                 "type": "Paragraph",
-                "number": 1,
+                "number": 2,
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
@@ -1670,7 +1650,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": "17",
+                "number": 17,
                 "title": "Right to erasure (‘right to be forgotten’)"
             }
         ]
@@ -1718,7 +1698,7 @@
             },
             {
                 "type": "Paragraph",
-                "number": 1,
+                "number": 2,
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
@@ -2377,11 +2357,11 @@
         "patterns": [
             {
                 "type": "Paragraph",
-                "number": 4,
+                "number": 1,
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "1.Where processing is to be carried out on behalf of a controller, the controller shall use only"
+                    "starts_with": "1. Where processing is to be carried out on behalf of a controller, the controller shall use only"
                 }
             },
             {
@@ -2451,7 +2431,7 @@
             },
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -2916,10 +2896,10 @@
             },
             {
                 "type": "Paragraph",
-                "number": 1,
+                "number": 5,
                 "has_child": {
                     "type": "Subparagraph",
-                    "number": 5,
+                    "number": 1,
                     "starts_with": "5. The supervisory authority may also establish and make public a list of the kind of processing operations for which"
                 }
             }
@@ -3808,7 +3788,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -3842,7 +3822,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -3852,7 +3832,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -3877,7 +3857,7 @@
         "patterns": [
             {
                 "type": "Point",
-                "number": "8",
+                "number": 8,
                 "starts_with": "(h) to withdraw a certification or to order the certification body to withdraw a certification issued pursuant to"
             }
         ]
@@ -3911,7 +3891,7 @@
         "patterns": [
             {
                 "type": "Document",
-                "title": "\"EN-ISO/IEC 17065/2012"
+                "title": "EN-ISO/IEC 17065/2012"
             }
         ]
     },
@@ -4257,7 +4237,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "2.When assessing the adequacy of the level of protection, the Commission shall, in particular, take account of the following elements:"
+                    "starts_with": "2. When assessing the adequacy of the level of protection, the Commission shall, in particular, take account of the following elements:"
                 }
             }
         ]
@@ -4593,7 +4573,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "1. In the absence of a decision pursuant to Article 45(3), a controller or processor may transfer personal data to a"
+                    "starts_with": "3. Subject to the authorisation from the competent supervisory authority, the appropriate safeguards referred"
                 }
             }
         ]
@@ -5088,10 +5068,10 @@
         "patterns": [
             {
                 "type": "Paragraph",
-                "number": 1,
+                "number": 2,
                 "has_child": {
                     "type": "Subparagraph",
-                    "number": 2,
+                    "number": 1,
                     "starts_with": "2. By derogation from paragraph 1, each supervisory authority shall be competent to handle a complaint lodged with"
                 }
             }
@@ -5125,7 +5105,7 @@
                 "number": 3,
                 "has_child": {
                     "type": "Subparagraph",
-                    "number": 2,
+                    "number": 1,
                     "starts_with": "3. The lead supervisory authority shall, without delay, communicate the relevant information on the matter to the"
                 }
             }
@@ -5347,7 +5327,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -5367,7 +5347,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -5542,7 +5522,7 @@
             },
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -5614,7 +5594,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -5628,7 +5608,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "5.A certification pursuant to this Article shall be issued by the certification bodies referred to in Article 43 or by the"
+                    "starts_with": "5. A certification pursuant to this Article shall be issued by the certification bodies referred to in Article 43 or by the"
                 }
             }
         ]
@@ -5871,7 +5851,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "7. Where the lead supervisory authority intends to follow the relevant and reasoned objection made, it shall submit"
+                    "starts_with": "7. The lead supervisory authority shall adopt and notify the decision to the main establishment"
                 }
             }
         ]
@@ -5885,7 +5865,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "7. Where the lead supervisory authority intends to follow the relevant and reasoned objection made, it shall submit"
+                    "starts_with": "7. The lead supervisory authority shall adopt and notify the decision to the main establishment"
                 }
             },
             {
@@ -6077,7 +6057,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "1. The supervisory authorities shall, where appropriate, conduct joint operations including."
+                    "starts_with": "1. The supervisory authorities shall, where appropriate, conduct joint operations including"
                 }
             }
         ]
@@ -6105,7 +6085,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "1. The supervisory authorities shall, where appropriate, conduct joint operations including."
+                    "starts_with": "1. The supervisory authorities shall, where appropriate, conduct joint operations including"
                 }
             }
         ]
@@ -6366,7 +6346,7 @@
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
-                    "starts_with": "5.The Chair of the Board shall notify, without undue delay, the decision referred to in paragraph"
+                    "starts_with": "5.The Chair of the Board shall, without undue, delay inform by electronic"
                 }
             }
         ]
@@ -6501,7 +6481,7 @@
         "patterns": [
             {
                 "type": "Paragraph",
-                "number": 4,
+                "number": 1,
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
@@ -7209,7 +7189,7 @@
         "patterns": [
             {
                 "type": "Paragraph",
-                "number": 3,
+                "number": 2,
                 "has_child": {
                     "type": "Subparagraph",
                     "number": 1,
@@ -7238,7 +7218,7 @@
         "patterns": [
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -7521,7 +7501,7 @@
             {
                 "type": "Article",
                 "number": 56,
-                "title": "Competence of the lead supervisory authority 1."
+                "title": "Competence of the lead supervisory authority"
             }
         ]
     },
@@ -7808,13 +7788,43 @@
             },
             {
                 "type": "Point",
+                "number": 2,
+                "starts_with": "(b) to issue reprimands to a controller or a processor where processing"
+            },
+            {
+                "type": "Point",
+                "number": 3,
+                "starts_with": "(c) to order the controller or the processor to comply with the data subject's"
+            },
+            {
+                "type": "Point",
+                "number": 4,
+                "starts_with": "(d) to order the controller or processor to bring processing operations into compliance with"
+            },
+            {
+                "type": "Point",
+                "number": 5,
+                "starts_with": "(e) to order the controller to communicate a personal data breach to"
+            },
+            {
+                "type": "Point",
+                "number": 6,
+                "starts_with": "(f) to impose a temporary or definitive limitation including a ban"
+            },
+            {
+                "type": "Point",
+                "number": 7,
+                "starts_with": "(g) to order the rectification or erasure of personal data or restriction of processing"
+            },
+            {
+                "type": "Point",
                 "number": 8,
                 "starts_with": "(h) to withdraw a certification or to order the certification body to withdraw a certification issued"
             },
             {
                 "type": "Point",
                 "number": 10,
-                "starts_with": "j) to order the suspension of data flows to a recipient in a third country or"
+                "starts_with": "(j) to order the suspension of data flows to a recipient in a third country or"
             }
         ]
     },
@@ -8000,7 +8010,7 @@
             },
             {
                 "type": "Article",
-                "number": 42,
+                "number": 43,
                 "title": "Certification bodies"
             }
         ]
@@ -8039,7 +8049,7 @@
             {
                 "type": "Article",
                 "number": 5,
-                "title": "TPrinciples relating to processing of personal data"
+                "title": "Principles relating to processing of personal data"
             },
             {
                 "type": "Article",
@@ -8486,7 +8496,6 @@
                 "number": 16,
                 "title": "Right to rectification"
             },
-            ,
             {
                 "type": "Article",
                 "number": 18,
@@ -8636,7 +8645,7 @@
             {
                 "number": 6,
                 "type": "Chapter",
-                "title": "Cooperation and consistency"
+                "title": "Independent supervisory authorities"
             }
         ]
     },

@@ -17,5 +17,9 @@ class Subparagraph(Node):
         return False, None
 
     def finalize(self):
-        self.number = self.parent.children.index(self) + 1
-
+        for i, sibling in enumerate(self.parent.children, 1):
+            if self.id == sibling.id:
+                self.number = i
+                break
+        else:
+            print("Could not find self in children of parent.")
