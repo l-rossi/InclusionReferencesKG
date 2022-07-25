@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
+from typing import List
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 
@@ -13,3 +13,4 @@ class Reference:
     start: int
     text_content: str
     reference_qualifier: List[List[Node]] = field(default_factory=list)
+    targets: List[Node] = field(default_factory=list)

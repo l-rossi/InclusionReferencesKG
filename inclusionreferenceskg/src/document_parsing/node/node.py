@@ -112,3 +112,24 @@ class Node(ABC):
             matches.extend(child.resolve_loose(pattern, pattern_depth=pattern_depth + advance))
 
         return matches
+
+    def immutable_view(self) -> "ImmutableNodeView":
+        return ImmutableNodeView(
+            id=self.id,
+            type_name=self.__class__.__name__,
+            number=self.number,
+            content=self.content,
+            title=self.title
+        )
+
+
+@dataclass(frozen=True, eq=True)
+class ImmutableNodeView:
+    id: str
+    type_name: str
+    number: Optional[int] = None
+    content: Optional[str] = ""
+    title: Optional[str] = None
+
+    def __str__(self):
+        return f"{self.type_name} {self.number}" + (": " + self.title if self.title else "")

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import itertools
 import re
 import warnings
@@ -8,13 +10,10 @@ from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
 from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
 from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.reference import Reference
-from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 from inclusionreferenceskg.src.util.regex_util import RegexUtil
 from inclusionreferenceskg.src.util.util import rom_to_dec
@@ -25,35 +24,9 @@ class ReferenceResolver:
     Class that takes the document structure as an input and uses a reference detector to resolve references.
     """
 
-    def __init__(self, detector: ReferenceDetector = None, document_structure: List[Node] = None):
-        if detector is None:
-            detector = RegexReferenceDetector()
-        self.detector = detector
-        if document_structure is None:
-            document_structure = [Document, Chapter, Article, Paragraph, Subparagraph, Point]
-        self.document_structure = document_structure
+    SPACY_COMPONENT_NAME = "reference_resolver"
 
-    def resolve_all(self, node: Node) -> List[Reference]:
-        """
-        Resolves this node and its children.
-        :param node:
-        :return:
-        """
-
-        references = []
-        for curr in pre_order(node):
-            references.extend(self.resolve_single(curr))
-        return references
-
-    def resolve_single(self, node: Node) -> List[Reference]:
-        """
-        Resolves the references in this node.
-
-        :param node: The node for which the references should be resolved.
-        :return: None
-        """
-        references = self.detector.detect(node.content)
-
+    def resolve_single(self, node: Node, references: List[Reference]):
         patterns = []
         for reference in references:
             if reference.reference_qualifier:
@@ -302,7 +275,7 @@ class ReferenceResolver:
                         if pref_ref_node.__class__ == node_type:
                             # Due to the structure of the returned list, we want to only specify the path
                             # to the end node(s) once. Thus only the terminal node is appended unless we are
-                            # addeing the first node.
+                            # adding the first node.
                             if ret:
                                 ret.append(pref_ref_node)
                             else:

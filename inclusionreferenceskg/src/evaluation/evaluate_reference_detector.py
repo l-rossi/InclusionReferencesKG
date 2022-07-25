@@ -94,5 +94,15 @@ def evaluate_gold_standard_reference_detector_on_gdpr():
 
 
 if __name__ == "__main__":
-    evaluate_regex_reference_detector_on_gdpr()
+    with open("./resources/eu_documents/gdpr.txt") as f:
+        gdpr_text = f.read()
+    parser = DocumentTreeParser(preprocessors=[HeaderPreprocessor, FootnoteDeletePreprocessor])
+    gdpr = parser.parse_document("GDPR", gdpr_text)
+    raw_text = "\n".join(node.content for node in pre_order(gdpr))
+
+    for x, y in zip(GoldStandardReferenceDetector().detect(raw_text), RegexReferenceDetector().detect(raw_text)):
+        print(x, y)
+
+
+    # evaluate_regex_reference_detector_on_gdpr()
     # evaluate_gold_standard_reference_detector_on_gdpr()

@@ -3,15 +3,17 @@ from typing import Dict, Tuple
 
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.node import Node
+from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.document_parsing.node.root import Root
 from inclusionreferenceskg.src.reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
 from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
 
 
 def main():
-    resolver = ReferenceResolver(
-        detector=GoldStandardReferenceDetector("./resources/evaluation_data/gdpr_references.csv"))
+    resolver = ReferenceResolver()
+
     parser = DocumentTreeParser()
+    reference_detector = GoldStandardReferenceDetector("./resources/evaluation_data/gdpr_references.csv")
 
     docs = []
 
@@ -49,8 +51,15 @@ def main():
     with open("./resources/eu_documents/regulation_ec_1049_2001.txt", encoding="utf-8") as f:
         docs.append(parser.parse_document("Regulation (EC) No 1049/2001", f.read()))
 
-    actual_references = resolver.resolve_all(gdpr)
     document_root = Root(children=docs)
+    for doc in document_root.children:
+        doc.parent = document_root
+
+    actual_references = []
+
+    for node in pre_order(gdpr):
+        refs = reference_detector.detect(node.content)
+        actual_references.extend(resolver.resolve_single(node, refs))
 
     with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
@@ -97,7 +106,7 @@ def main():
 
             if expected_reference["text"] != actual_reference.text_content:
                 print(f"Mismatch between reference text_content and "
-                      f"actual text_content. Expected '{expected_reference['text']}'"
+                      f"actual text_content. Expected '{expected_reference['text']}' "
                       f"was '{actual_reference.text_content}'")
 
             if not valid:

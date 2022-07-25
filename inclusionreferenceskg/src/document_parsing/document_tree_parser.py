@@ -1,13 +1,13 @@
-from typing import List, Optional, Type
 import typing
+from typing import List, Optional, Type
 
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
+from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.node import Node
+from inclusionreferenceskg.src.document_parsing.node.point import Point
 from inclusionreferenceskg.src.document_parsing.node.section import Section
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
 from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import \
@@ -78,6 +78,18 @@ class DocumentTreeParser:
             node.finalize()
 
         return regulation
+
+    def parse_from_eu_doc_file(self, name, file_name) -> Document:
+        """
+        Shorthand for opening a file in "./resources/eu_documents" and parsing it
+        :param file_name: The filename of the document.
+        :param name: The name of the regulation.
+        :return: The Document node representing the document
+        """
+        with open(f"./resources/eu_documents/{file_name}", encoding="utf-8") as f:
+            return self.parse_document(name, f.read())
+
+
 
     @staticmethod
     def _blockize(text) -> typing.List[str]:

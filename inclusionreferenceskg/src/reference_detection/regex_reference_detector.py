@@ -1,6 +1,8 @@
 import re
 from typing import List
 
+from spacy import Language
+
 from inclusionreferenceskg.src.reference import Reference
 from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
 from inclusionreferenceskg.src.util.regex_util import RegexUtil
@@ -10,6 +12,8 @@ class RegexReferenceDetector(ReferenceDetector):
     """
     Reference detector based on regular expressions.
     """
+
+    SPACY_COMPONENT_NAME = "reference_detector_component_regex"
 
     number_or_range = fr"(?:{RegexUtil.number}(?:\sto\s{RegexUtil.number})?)"
     para_or_range = fr"(?:{RegexUtil.para}(?:\sto\s{RegexUtil.para})?)"
@@ -50,6 +54,11 @@ class RegexReferenceDetector(ReferenceDetector):
 
     def detect(self, text) -> List[Reference]:
         return [Reference(start=m.start(), text_content=m.group()) for m in self.pattern.finditer(text)]
+
+    @staticmethod
+    @Language.component(SPACY_COMPONENT_NAME, retokenizes=True)
+    def as_spacy_pipe_component(doc):
+        return ReferenceDetector._spacy_pipe_component_base(RegexReferenceDetector())(doc)
 
 
 if __name__ == "__main__":

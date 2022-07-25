@@ -1,5 +1,3 @@
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 
 
@@ -21,21 +19,3 @@ def test_detect():
 
     for text, result in test_cases:
         assert matcher.detect(text) == result
-
-
-def test_print_gdpr():
-
-    with open("./resources/eu_documents/gdpr.txt", "r", encoding="utf-8") as f:
-        gdpr_text = f.read()
-
-    matcher = RegexReferenceDetector()
-    matches = []
-
-    parser = DocumentTreeParser()
-    gdpr = parser.parse_document("GDPR", gdpr_text)
-
-    for node in pre_order(gdpr):
-        matches.extend(matcher.detect(node.content))
-
-    print(len(matches))
-    print("\n".join(matches))

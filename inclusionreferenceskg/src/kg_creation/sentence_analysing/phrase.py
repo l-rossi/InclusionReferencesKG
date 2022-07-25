@@ -1,10 +1,10 @@
+from __future__ import annotations
+
 import dataclasses
 import uuid
-from typing import List, Union, Optional
+from typing import List, Optional
 
 import spacy.tokens
-
-from inclusionreferenceskg.src.reference import Reference
 
 
 @dataclasses.dataclass
@@ -19,24 +19,62 @@ class Phrase:
     of a Phrase may be another Phrase as os the case for the first phrase in the sentence "The human shall ensure
     that the dog eats the cat".
     """
-    patient: Union[List["PhraseObject"], "Phrase"] = dataclasses.field(default_factory=list)
-    agent: List["PhraseObject"] = dataclasses.field(default_factory=list)
-    predicate: List["Predicate"] = dataclasses.field(default_factory=list)
+    id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
-    def pprint(self, depth=0) -> str:
-        print([type(p) for p in self.patient])
-        new_line = "\n"
+    agent_objects: List[PhraseObject] = dataclasses.field(default_factory=list)
+    agent_phrases: List[Phrase] = dataclasses.field(default_factory=list)
 
-        return f"Phrase:\n" \
-               f"Agent:\n{new_line.join(a.token.text for a in self.agent)}" \
-               f"Predicate: {', '.join(p.token.text for p in self.predicate)}; " \
-               f"Patient: {', '.join(p.token.text if type(p) == PhraseObject else p.pprint(depth=depth+1) for p in self.patient)}"
+    patient_objects: List[PhraseObject] = dataclasses.field(default_factory=list)
+    patient_phrases: List[Phrase] = dataclasses.field(default_factory=list)
+
+    predicate: List[Predicate] = dataclasses.field(default_factory=list)
+
+    condition_phrases: List[Phrase] = dataclasses.field(default_factory=list)
+
+    # attributes
+    is_conditional: bool = False
+    origin_node_id: Optional[str] = None
+
+    def pprint(self, depth=0):
+        """
+        Prints the phrase in a human readable form
+        """
+
+        indent = "    " * depth
+        print(f"{indent}Phrase{{")
+        print(f"{indent}  Agent:")
+        for p in self.agent_objects:
+            print(f"{indent}    {p.pretty_str()}")
+
+        for p in self.agent_phrases:
+            p.pprint(depth=depth + 1)
+
+        print(f"{indent}  Predicate:")
+
+        for p in self.predicate:
+            print(f"{indent}    {p.token} {p.token.lemma_} {p.token.tag_}")
+
+        print(f"{indent}  Patient:")
+        for p in self.patient_objects:
+            print(f"{indent}    {p.pretty_str()}")
+
+        for p in self.patient_phrases:
+            p.pprint(depth=depth + 1)
+
+        print(f"{indent}  Conditions:")
+        for p in self.condition_phrases:
+            p.pprint(depth=depth + 1)
+
+        print(f"{indent}}}")
 
 
 @dataclasses.dataclass
 class Predicate:
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
+
+    # attributes
+    prepositions: List[str] = dataclasses.field(default_factory=lambda: list)
 
 
 @dataclasses.dataclass
@@ -45,5 +83,14 @@ class PhraseObject:
     Effectively a wrapper for a Spacy token.
     """
     token: spacy.tokens.Token
-    reference: Optional[Reference] = None
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
+
+    def pretty_str(self) -> str:
+        coref_chain = self.token.doc._.coref_chains.resolve(self.token)
+        coref_str = ""
+        if coref_chain and self.token.pos_ == "PRON":
+            coref_str = f", Coreferences: {coref_chain}"
+
+        return f"{self.token}{coref_str}, Context: '{' '.join(str(x) for x in self.token.subtree)}'"
+
+    # attributes
