@@ -143,7 +143,7 @@ class KGRenderer:
         for agent_object in phrase.agent_objects:
             if agent_object.token._.reference and (targets := agent_object.token._.reference.targets):
                 for target, predicate in itertools.product(targets, phrase.predicate):
-                    graph.edge(predicate.id, target.id, "patient")
+                    graph.edge(predicate.id, target.id, "agent")
             else:
                 graph.node(agent_object.id, str(agent_object.token))
                 for predicate in phrase.predicate:
