@@ -1,0 +1,498 @@
+DIRECTIVE (EU) 2015/1535 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL
+
+of 9 September 2015
+
+laying down a procedure for the provision of information in the field of technical regulations and of rules on Information Society services (codification)
+
+(Text with EEA relevance)
+
+THE EUROPEAN PARLIAMENT AND THE COUNCIL OF THE EUROPEAN UNION,
+
+Having regard to the Treaty on the Functioning of the European Union, and in particular Articles 114, 337 and 43 thereof,
+
+Having regard to the proposal from the European Commission,
+
+After transmission of the draft legislative act to the national parliaments,
+
+Having regard to the opinions of the European Economic and Social Committee (1),
+
+Acting in accordance with the ordinary legislative procedure (2),
+
+Whereas:
+
+(1)
+
+Directive 98/34/EC of the European Parliament and of the Council (3) has been substantially amended several times (4). In the interests of clarity and rationality, that Directive should be codified.
+
+(2)
+
+The internal market comprises an area without internal frontiers in which the free movement of goods, persons, services and capital is ensured. Therefore, the prohibition of quantitative restrictions on the movement of goods and of measures having an equivalent effect is one of the basic principles of the Union.
+
+(3)
+
+In order to promote the smooth functioning of the internal market, as much transparency as possible should be ensured as regards national initiatives for the establishment of technical regulations.
+
+(4)
+
+Barriers to trade resulting from technical regulations relating to products may be allowed only where they are necessary in order to meet essential requirements and have an objective in the public interest of which they constitute the main guarantee.
+
+(5)
+
+It is essential for the Commission to have the necessary information at its disposal before the adoption of technical provisions. Consequently, the Member States, which are required to facilitate the achievement of its task pursuant to Article 4(3) of the Treaty on European Union (TEU), must notify it of their projects in the field of technical regulations.
+
+(6)
+
+All the Member States must also be informed of the technical regulations envisaged by any one Member State.
+
+(7)
+
+The aim of the internal market is to create an environment that is conducive to the competitiveness of undertakings. Increased provision of information is one way of helping undertakings to make more of the advantages inherent in this market. It is therefore necessary to enable economic operators to give their assessment of the impact of the national technical regulations proposed by other Member States, by providing for the regular publication of the titles of notified drafts and by means of the provisions relating to the confidentiality of such drafts.
+
+(8)
+
+It is appropriate, in the interests of legal certainty, that Member States publicly announce that a national technical regulation has been adopted in accordance with the formalities laid down in this Directive.
+
+(9)
+
+As far as technical regulations for products are concerned, the measures designed to ensure the proper functioning or the continued development of the market include greater transparency of national intentions and a broadening of the criteria and conditions for assessing the potential effect of the proposed regulations on the market.
+
+(10)
+
+It is therefore necessary to assess all the requirements laid down in respect of a product and to take account of developments in national practices for the regulation of products.
+
+(11)
+
+Requirements, other than technical specifications, referring to the life cycle of a product after it has been placed on the market are liable to affect the free movement of that product or to create obstacles to the proper functioning of the internal market.
+
+(12)
+
+It is necessary to clarify the concept of a de facto technical regulation. In particular, the provisions by which the public authority refers to technical specifications or other requirements, or encourages the observance thereof, and the provisions referring to products with which the public authority is associated, in the public interest, have the effect of conferring on such requirements or specifications a more binding value than they would otherwise have by virtue of their private origin.
+
+(13)
+
+The Commission and the Member States must also be allowed sufficient time in which to propose amendments to an envisaged measure, in order to remove or reduce any barriers which it might create to the free movement of goods.
+
+(14)
+
+The Member State concerned must take account of those amendments when formulating the definitive text of the measure envisaged.
+
+(15)
+
+It is inherent in the internal market that, in particular where the principle of mutual recognition cannot be implemented by the Member States, the Commission adopts or proposes the adoption of binding acts. A specific temporary standstill period has been established in order to prevent the introduction of national measures from compromising the adoption of binding acts by the European Parliament and the Council or by the Commission in the same field.
+
+(16)
+
+The Member State concerned is to, pursuant to the general obligations laid down in Article 4(3) TEU, defer implementation of the envisaged measure for a period sufficient to allow either a joint examination of the proposed amendments or the preparation of a proposal for a legislative act or the adoption of a binding act of the Commission.
+
+(17)
+
+With a view to facilitating the adoption of measures by the European Parliament and the Council, Member States should refrain from adopting technical regulations once the Council has adopted a position at first reading on a Commission proposal concerning that sector.
+
+(18)
+
+It is necessary to provide for a Standing Committee, the members of which are appointed by the Member States, with the task of cooperating in the efforts of the Commission to lessen any adverse effects on the free movement of goods.
+
+(19)
+
+This Directive should be without prejudice to the obligations of the Member States relating to the time limits for the transposition into national law of the Directives set out in Part B of Annex III,
+
+HAVE ADOPTED THIS DIRECTIVE:
+
+Article 1
+
+1.   For the purposes of this Directive, the following definitions apply:
+
+(a)
+‘product’ means any industrially manufactured product and any agricultural product, including fish products;
+
+(b)
+‘service’ means any Information Society service, that is to say, any service normally provided for remuneration, at a distance, by electronic means and at the individual request of a recipient of services.
+
+For the purposes of this definition:
+
+(i)
+‘at a distance’ means that the service is provided without the parties being simultaneously present;
+
+(ii)
+‘by electronic means’ means that the service is sent initially and received at its destination by means of electronic equipment for the processing (including digital compression) and storage of data, and entirely transmitted, conveyed and received by wire, by radio, by optical means or by other electromagnetic means;
+(iii)
+
+‘at the individual request of a recipient of services’ means that the service is provided through the transmission of data on individual request.
+
+An indicative list of services not covered by this definition is set out in Annex I;
+
+(c)
+‘technical specification’ means a specification contained in a document which lays down the characteristics required of a product such as levels of quality, performance, safety or dimensions, including the requirements applicable to the product as regards the name under which the product is sold, terminology, symbols, testing and test methods, packaging, marking or labelling and conformity assessment procedures.
+The term ‘technical specification’ also covers production methods and processes used in respect of agricultural products, as referred to in the second subparagraph of Article 38(1) of the Treaty on the Functioning of the European Union (TFEU), products intended for human and animal consumption, and medicinal products as defined in Article 1 of Directive 2001/83/EC of the European Parliament and of the Council (5), as well as production methods and processes relating to other products, where these have an effect on their characteristics;
+
+(d)
+‘other requirements’ means a requirement, other than a technical specification, imposed on a product for the purpose of protecting, in particular, consumers or the environment, and which affects its life cycle after it has been placed on the market, such as conditions of use, recycling, reuse or disposal, where such conditions can significantly influence the composition or nature of the product or its marketing;
+
+(e)
+‘rule on services’ means a requirement of a general nature relating to the taking-up and pursuit of service activities within the meaning of point (b), in particular provisions concerning the service provider, the services and the recipient of services, excluding any rules which are not specifically aimed at the services defined in that point.
+
+For the purposes of this definition:
+
+(i)
+a rule shall be considered to be specifically aimed at Information Society services where, having regard to its statement of reasons and its operative part, the specific aim and object of all or some of its individual provisions is to regulate such services in an explicit and targeted manner;
+
+(ii)
+a rule shall not be considered to be specifically aimed at Information Society services if it affects such services only in an implicit or incidental manner;
+
+(f)
+‘technical regulation’ means technical specifications and other requirements or rules on services, including the relevant administrative provisions, the observance of which is compulsory, de jure or de facto, in the case of marketing, provision of a service, establishment of a service operator or use in a Member State or a major part thereof, as well as laws, regulations or administrative provisions of Member States, except those provided for in Article 7, prohibiting the manufacture, importation, marketing or use of a product or prohibiting the provision or use of a service, or establishment as a service provider.
+
+De facto technical regulations shall include:
+
+(i)
+laws, regulations or administrative provisions of a Member State which refer either to technical specifications or to other requirements or to rules on services, or to professional codes or codes of practice which in turn refer to technical specifications or to other requirements or to rules on services, compliance with which confers a presumption of conformity with the obligations imposed by the aforementioned laws, regulations or administrative provisions;
+
+(ii)
+voluntary agreements to which a public authority is a contracting party and which provide, in the general interest, for compliance with technical specifications or other requirements or rules on services, excluding public procurement tender specifications;
+
+(iii)
+technical specifications or other requirements or rules on services which are linked to fiscal or financial measures affecting the consumption of products or services by encouraging compliance with such technical specifications or other requirements or rules on services; technical specifications or other requirements or rules on services linked to national social security systems are not included.
+
+This comprises technical regulations imposed by the authorities designated by the Member States and appearing on a list drawn up and updated, where appropriate, by the Commission, in the framework of the Committee referred to in Article 2.
+
+The same procedure shall be used for amending this list;
+
+(g)
+‘draft technical regulation’ means the text of a technical specification or other requirement or of a rule on services, including administrative provisions, formulated with the aim of enacting it or of ultimately having it enacted as a technical regulation, the text being at a stage of preparation at which substantial amendments can still be made.
+
+2.   This Directive shall not apply to:
+
+(a)
+radio broadcasting services;
+
+(b)
+television broadcasting services covered by point (e) of Article 1(1) of Directive 2010/13/EU of the European Parliament and of the Council (6).
+
+3.   This Directive shall not apply to rules relating to matters which are covered by Union legislation in the field of telecommunications services, as covered by Directive 2002/21/EC of the European Parliament and of the Council (7).
+
+4.   This Directive shall not apply to rules relating to matters which are covered by Union legislation in the field of financial services, as listed non-exhaustively in Annex II to this Directive.
+
+5.   With the exception of Article 5(3), this Directive shall not apply to rules enacted by or for regulated markets within the meaning of Directive 2004/39/EC of the European Parliament and of the Council (8) or by or for other markets or bodies carrying out clearing or settlement functions for those markets.
+
+6.   This Directive shall not apply to those measures Member States consider necessary under the Treaties for the protection of persons, in particular workers, when products are used, provided that such measures do not affect the products.
+
+Article 2
+
+A Standing Committee shall be set up consisting of representatives appointed by the Member States who may call on the assistance of experts or advisers; its chairman shall be a representative of the Commission.
+
+The Committee shall draw up its own rules of procedure.
+
+Article 3
+
+1.   The Committee shall meet at least twice a year.
+
+The Committee shall meet in a specific composition to examine questions concerning Information Society services.
+
+2.   The Commission shall submit to the Committee a report on the implementation and application of the procedures set out in this Directive, and shall present proposals aimed at eliminating existing or foreseeable barriers to trade.
+
+3.   The Committee shall express its opinion on the communications and proposals referred to in paragraph 2 and may, in that regard, propose, in particular, that the Commission:
+
+(a)
+ensure where necessary, in order to avoid the risk of barriers to trade, that initially the Member States concerned decide amongst themselves on appropriate measures;
+
+(b)
+take all appropriate measures;
+
+(c)
+identify the areas where harmonisation appears necessary, and, should the case arise, undertake appropriate harmonisation in a given sector.
+
+4.   The Committee must be consulted by the Commission:
+
+(a)
+when deciding on the actual system through which the exchange of information provided for in this Directive is to be effected and on any change to it;
+
+(b)
+when reviewing the operation of the system provided for in this Directive.
+
+5.   The Committee may be consulted by the Commission on any preliminary draft technical regulation received by the latter.
+
+6.   Any question regarding the implementation of this Directive may be submitted to the Committee at the request of its chairman or of a Member State.
+
+7.   The proceedings of the Committee and the information to be submitted to it shall be confidential.
+
+However, the Committee and the national authorities may, provided that the necessary precautions are taken, consult, for an expert opinion, natural or legal persons, including persons in the private sector.
+
+8.   With respect to rules on services, the Commission and the Committee may consult natural or legal persons from industry or academia, and where possible representative bodies, capable of delivering an expert opinion on the social and societal aims and consequences of any draft rule on services, and take note of their advice whenever requested to do so.
+
+Article 4
+
+Member States shall communicate to the Commission, in accordance with Article 5(1), all requests made to standards institutions to draw up technical specifications or a standard for specific products for the purpose of enacting a technical regulation for such products in the form of draft technical regulations, and shall state the grounds for their enactment.
+
+Article 5
+
+1.   Subject to Article 7, Member States shall immediately communicate to the Commission any draft technical regulation, except where it merely transposes the full text of an international or European standard, in which case information regarding the relevant standard shall suffice; they shall also let the Commission have a statement of the grounds which make the enactment of such a technical regulation necessary, where those grounds have not already been made clear in the draft.
+
+Where appropriate, and unless it has already been sent with a prior communication, Member States shall simultaneously communicate the text of the basic legislative or regulatory provisions principally and directly concerned to the Commission, should knowledge of such text be necessary to assess the implications of the draft technical regulation.
+
+Member States shall communicate the draft technical regulation again to the Commission under the conditions set out in the first and second subparagraphs of this paragraph if they make changes to the draft that have the effect of significantly altering its scope, shortening the timetable originally envisaged for implementation, adding specifications or requirements, or making the latter more restrictive.
+
+Where, in particular, the draft technical regulation seeks to limit the marketing or use of a chemical substance, preparation or product on grounds of public health or of the protection of consumers or the environment, Member States shall also forward either a summary or the references of all relevant data relating to the substance, preparation or product concerned and to known and available substitutes, where such information may be available, and communicate the anticipated effects of the measure on public health and the protection of the consumer and the environment, together with an analysis of the risk carried out as appropriate in accordance with the principles provided for in the relevant part of Section II.3 of Annex XV to Regulation (EC) No 1907/2006 of the European Parliament and of the Council (9).
+
+The Commission shall immediately notify the other Member States of the draft technical regulation and all documents which have been forwarded to it; it may also refer this draft, for an opinion, to the Committee referred to in Article 2 of this Directive and, where appropriate, to the committee responsible for the field in question.
+
+With respect to the technical specifications or other requirements or rules on services referred to in point (iii) of the second subparagraph of point (f) of Article 1(1) of this Directive, the comments or detailed opinions of the Commission or Member States may concern only aspects which may hinder trade or, in respect of rules on services, the free movement of services or the freedom of establishment of service operators and not the fiscal or financial aspects of the measure.
+
+2.   The Commission and the Member States may make comments to the Member State which has forwarded a draft technical regulation; that Member State shall take such comments into account as far as possible in the subsequent preparation of the technical regulation.
+
+3.   Member States shall communicate the definitive text of a technical regulation to the Commission without delay.
+
+4.   Information supplied under this Article shall not be confidential except at the express request of the notifying Member State. Any such request shall be supported by reasons.
+
+In cases of that kind, if the necessary precautions are taken, the Committee referred to in Article 2 and the national authorities may seek expert advice from physical or legal persons in the private sector.
+
+5.   When draft technical regulations form part of measures which are required to be communicated to the Commission at the draft stage under another Union act, Member States may make a communication within the meaning of paragraph 1 under that other act, provided that they formally indicate that the said communication also constitutes a communication for the purposes of this Directive.
+
+The absence of a reaction from the Commission under this Directive to a draft technical regulation shall not prejudice any decision which might be taken under other Union acts.
+
+Article 6
+
+1.   Member States shall postpone the adoption of a draft technical regulation for three months from the date of receipt by the Commission of the communication referred to in Article 5(1).
+
+2.   Member States shall postpone:
+
+—
+
+for four months the adoption of a draft technical regulation in the form of a voluntary agreement within the meaning of point (ii) of the second subparagraph of point (f) of Article 1(1),
+
+—
+
+without prejudice to paragraphs 3, 4 and 5 of this article, for six months the adoption of any other draft technical regulation except for draft rules on services,
+
+from the date of receipt by the Commission of the communication referred to in Article 5(1), if the Commission or another Member State delivers a detailed opinion, within three months of that date, to the effect that the measure envisaged may create obstacles to the free movement of goods within the internal market,
+
+—
+
+without prejudice to paragraphs 4 and 5, for four months the adoption of any draft rule on services, from the date of receipt by the Commission of the communication referred to in Article 5(1), if the Commission or another Member State delivers a detailed opinion, within three months of that date, to the effect that the measure envisaged may create obstacles to the free movement of services or to the freedom of establishment of service operators within the internal market.
+
+With regard to draft rules on services, detailed opinions from the Commission or Member States may not affect any cultural policy measures, in particular in the audiovisual sphere, which Member States might adopt in accordance with the law of the Union, taking account of their linguistic diversity, their specific national and regional characteristics and their cultural heritage.
+
+The Member State concerned shall report to the Commission on the action it proposes to take on such detailed opinions. The Commission shall comment on this reaction.
+
+With respect to rules on services, the Member State concerned shall indicate, where appropriate, the reasons why the detailed opinions cannot be taken into account.
+
+3.   With the exclusion of draft rules relating to services, Member States shall postpone the adoption of a draft technical regulation for 12 months from the date of receipt by the Commission of the communication referred to in Article 5(1) of this Directive, if, within three months of that date, the Commission announces its intention to propose or adopt a directive, regulation or decision on the matter in accordance with Article 288 TFEU.
+
+4.   Member States shall postpone the adoption of a draft technical regulation for 12 months from the date of receipt by the Commission of the communication referred to in Article 5(1) of this Directive, if, within the three months following that date, the Commission announces its finding that the draft technical regulation concerns a matter which is covered by a proposal for a directive, regulation or decision presented to the European Parliament and the Council in accordance with Article 288 TFEU.
+
+5.   If the Council adopts a position at first reading during the standstill period referred to in paragraphs 3 and 4, that period shall, subject to paragraph 6, be extended to 18 months.
+
+6.   The obligations referred to in paragraphs 3, 4 and 5 shall lapse:
+
+(a)
+when the Commission informs the Member States that it no longer intends to propose or adopt a binding act;
+
+(b)
+when the Commission informs the Member States of the withdrawal of its draft or proposal;
+
+(c)
+when a binding act has been adopted by the European Parliament and the Council or by the Commission.
+
+7.   Paragraphs 1 to 5 shall not apply in cases where:
+
+(a)
+for urgent reasons, occasioned by serious and unforeseeable circumstances relating to the protection of public health or safety, the protection of animals or the preservation of plants, and for rules on services, also for public policy, in particular the protection of minors, a Member State is obliged to prepare technical regulations in a very short space of time in order to enact and introduce them immediately without any consultations being possible; or
+
+(b)
+for urgent reasons occasioned by serious circumstances relating to the protection of the security and the integrity of the financial system, in particular the protection of depositors, investors and insured persons, a Member State is obliged to enact and implement rules on financial services immediately.
+
+In the communication referred to in Article 5, the Member State shall give reasons for the urgency of the measures taken. The Commission shall give its views on the communication as soon as possible. It shall take appropriate action in cases where improper use is made of this procedure. The European Parliament shall be kept informed by the Commission.
+
+Article 7
+
+1.   Articles 5 and 6 shall not apply to those laws, regulations and administrative provisions of the Member States or voluntary agreements by means of which Member States:
+
+(a)
+comply with binding Union acts which result in the adoption of technical specifications or rules on services;
+
+(b)
+fulfil the obligations arising out of international agreements which result in the adoption of common technical specifications or rules on services in the Union;
+
+(c)
+make use of safeguard clauses provided for in binding Union acts;
+
+(d)
+apply Article 12(1) of Directive 2001/95/EC of the European Parliament and of the Council (10);
+
+(e)
+restrict themselves to implementing a judgment of the Court of Justice of the European Union;
+
+(f)
+restrict themselves to amending a technical regulation within the meaning of point (f) of Article 1(1), in accordance with a Commission request, with a view to removing a barrier to trade or, in the case of rules on services, to the free movement of services or the freedom of establishment of service operators.
+
+2.   Article 6 shall not apply to the laws, regulations and administrative provisions of the Member States prohibiting manufacture in so far as they do not impede the free movement of products.
+
+3.   Paragraphs 3 to 6 of Article 6 shall not apply to the voluntary agreements referred to in point (ii) of the second subparagraph of point (f) of Article 1(1).
+
+4.   Article 6 shall not apply to the technical specifications or other requirements or the rules on services referred to in point (iii) of the second subparagraph of point (f) of Article 1(1).
+
+Article 8
+
+The Commission shall report every two years to the European Parliament, the Council and the European Economic and Social Committee on the results of the application of this Directive.
+
+The Commission shall publish annual statistics on the notifications received in the Official Journal of the European Union.
+
+Article 9
+
+When Member States adopt a technical regulation, it shall contain a reference to this Directive or shall be accompanied by such reference on the occasion of its official publication. The methods of making such reference shall be laid down by Member States.
+
+Article 10
+
+Directive 98/34/EC, as amended by the acts listed in Part A of Annex III to this Directive, is repealed, without prejudice to the obligations of the Member States relating to the time limits for the transposition into national law of the Directives set out in Part B of Annex III to the repealed Directive and in Part B of Annex III to this Directive.
+
+References to the repealed Directive shall be construed as references to this Directive and shall be read in accordance with the correlation table in Annex IV.
+
+Article 11
+
+This Directive shall enter into force on the twentieth day following that of its publication in the Official Journal of the European Union.
+
+Article 12
+
+This Directive is addressed to the Member States.
+
+Done at Strasbourg, 9 September 2015.
+
+For the European Parliament
+
+The President
+
+M. SCHULZ
+
+For the Council
+
+The President
+
+N. SCHMIT
+
+(1)  Opinion of 14 July 2010 (OJ C 44, 11.2.2011, p. 142) and opinion of 26 February 2014 (OJ C 214, 8.7.2014, p. 55).
+
+(2)  Position of the European Parliament of 15 April 2014 (not yet published in the Official Journal) and decision of the Council of 13 July 2015.
+
+(3)  Directive 98/34/EC of the European Parliament and of the Council of 22 June 1998 laying down a procedure for the provision of information in the field of technical standards and regulations and of rules on Information Society services (OJ L 204, 21.7.1998, p. 37). The original title was ‘Directive 98/34/EC of the European Parliament and of the Council of 22 June 1998 laying down a procedure for the provision of information in the field of technical standards and regulations’. It was amended by Directive 98/48/EC of the European Parliament and of the Council of 20 July 1998 amending Directive 98/34/EC laying down a procedure for the provision of information in the field of technical standards and regulations (OJ L 217, 5.8.1998, p. 18).
+
+(4)  See Annex III, Part A.
+
+(5)  Directive 2001/83/EC of the European Parliament and of the Council of 6 November 2001 on the Community code relating to medicinal products for human use (OJ L 311, 28.11.2001, p. 67).
+
+(6)  Directive 2010/13/EU of the European Parliament and of the Council of 10 March 2010 on the coordination of certain provisions laid down by law, regulation or administrative action in Member States concerning the provision of audiovisual media services (Audiovisual Media Services Directive) (OJ L 95, 15.4.2010, p. 1).
+
+(7)  Directive 2002/21/EC of the European Parliament and of the Council of 7 March 2002 on a common regulatory framework for electronic communications networks and services (Framework Directive) (OJ L 108, 24.4.2002, p. 33).
+
+(8)  Directive 2004/39/EC of the European Parliament and of the Council of 21 April 2004 on markets in financial instruments amending Council Directives 85/611/EEC and 93/6/EEC and Directive 2000/12/EC of the European Parliament and of the Council and repealing Council Directive 93/22/EEC (OJ L 145, 30.4.2004, p. 1).
+
+(9)  Regulation (EC) No 1907/2006 of the European Parliament and of the Council of 18 December 2006 concerning the Registration, Evaluation, Authorisation and Restriction of Chemicals (REACH), establishing a European Chemicals Agency, amending Directive 1999/45/EC and repealing Council Regulation (EEC) No 793/93 and Commission Regulation (EC) No 1488/94 as well as Council Directive 76/769/EEC and Commission Directives 91/155/EEC, 93/67/EEC, 93/105/EC and 2000/21/EC (OJ L 396, 30.12.2006, p. 1).
+
+(10)  Directive 2001/95/EC of the European Parliament and of the Council of 3 December 2001 on general product safety (OJ L 11, 15.1.2002, p. 4).
+
+ANNEX I
+
+Indicative list of services not covered by the second subparagraph of point (b) of Article 1(1)
+
+1.   Services not provided ‘at a distance’
+
+Services provided in the physical presence of the provider and the recipient, even if they involve the use of electronic devices:
+
+(a)
+medical examinations or treatment at a doctor's surgery using electronic equipment where the patient is physically present;
+
+(b)
+consultation of an electronic catalogue in a shop with the customer on site;
+
+(c)
+plane ticket reservation at a travel agency in the physical presence of the customer by means of a network of computers;
+
+(d)
+electronic games made available in a video arcade where the customer is physically present.
+
+2.   Services not provided ‘by electronic means’
+
+
+services having material content even though provided via electronic devices:
+
+(a)
+automatic cash or ticket dispensing machines (banknotes, rail tickets);
+
+(b)
+access to road networks, car parks, etc., charging for use, even if there are electronic devices at the entrance/exit controlling access and/or ensuring correct payment is made,
+
+—
+
+offline services: distribution of CD-ROMs or software on diskettes,
+
+—
+
+services which are not provided via electronic processing/inventory systems:
+
+(a)
+voice telephony services;
+
+(b)
+telefax/telex services;
+
+(c)
+services provided via voice telephony or fax;
+
+(d)
+telephone/telefax consultation of a doctor;
+
+(e)
+telephone/telefax consultation of a lawyer;
+
+(f)
+telephone/telefax direct marketing.
+
+3.   Services not supplied ‘at the individual request of a recipient of services’
+
+Services provided by transmitting data without individual demand for simultaneous reception by an unlimited number of individual receivers (point to multipoint transmission):
+
+(a)
+television broadcasting services (including near-video on-demand services), covered by point (e) of Article 1(1) of Directive 2010/13/EU;
+
+(b)
+radio broadcasting services;
+
+(c)
+(televised) teletext.
+
+ANNEX II
+
+Indicative list of the financial services covered by Article 1(4)
+
+—
+
+Investment services,
+
+—
+
+insurance and reinsurance operations,
+
+—
+
+banking services,
+
+—
+
+operations relating to pension funds,
+
+—
+
+services relating to dealings in futures or options.
+
+Such services include in particular:
+
+(a)
+investment services referred to in the Annex to Directive 2004/39/EC; services of collective investment undertakings;
+
+(b)
+services covered by the activities subject to mutual recognition referred to in Annex I to Directive 2013/36/EU of the European Parliament and of the Council (1);
+
+(c)
+operations covered by the insurance and reinsurance activities referred to in Directive 2009/138/EC of the European Parliament and of the Council (2).
+
+(1)  Directive 2013/36/EU of the European Parliament and of the Council of 26 June 2013 on access to the activity of credit institutions and the prudential supervision of credit institutions and investment firms, amending Directive 2002/87/EC and repealing Directives 2006/48/EC and 2006/49/EC (OJ L 176, 27.6.2013, p. 338).
+
+(2)  Directive 2009/138/EC of the European Parliament and of the Council of 25 November 2009 on the taking-up and pursuit of the business of Insurance and Reinsurance (Solvency II) (OJ L 335, 17.12.2009, p. 1).

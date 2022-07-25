@@ -12,6 +12,7 @@ setuptools~=61.2.0
 nltk
 spacy~=3.3.1
 textacy~=0.12.0
+coreferee
 
 # Acceleration
 cupy
