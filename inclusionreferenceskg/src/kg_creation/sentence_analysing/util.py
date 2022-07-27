@@ -36,14 +36,6 @@ def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
         set([tok] + get_conjuncts(tok, {"VERB"})) for tok in sent if tok.pos_ in {"VERB", "AUX"} and tok.dep_ not in AUX_DEPS
     ]
 
-    """verbs: List[Set[Token]] = []
-
-    for tok in sent:
-        if tok.pos_ == "VERB" and tok.dep_ not in AUX_DEPS:
-            # We only want to add verbs that have no object of their own
-            conj = [x for x in get_conjuncts(tok, {"VERB"}) if not get_objects_of_verb_consider_preposition([x])]
-            verbs.append(set(conj + [tok]))"""
-
     verbs_out = []
 
     for vg in verbs:

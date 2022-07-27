@@ -86,5 +86,5 @@ class PhraseExtractor:
 
         :param phrase:
         """
-
+        # TODO CHeck completeness of {"IN", "WRB"}
         return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)

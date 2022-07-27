@@ -14,6 +14,7 @@ from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.conditional_extractor import ConditionalExtractor
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.negation_extractor import NegationExtractor
+from inclusionreferenceskg.src.kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phrase
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
@@ -125,7 +126,8 @@ class KGRenderer:
 
     def _add_phrase_graphviz(self, graph, phrase):
         for predicate in phrase.predicate:
-            graph.node(predicate.id, str(predicate.token))
+            graph.node(predicate.id,
+                       f"{predicate.token}, negated: {predicate.negated}, prepositions: {predicate.prepositions}")
 
         if phrase.origin_node_id:
             for predicate in phrase.predicate:
@@ -136,7 +138,7 @@ class KGRenderer:
                 for target, predicate in itertools.product(targets, phrase.predicate):
                     graph.edge(predicate.id, target.id, "patient")
             else:
-                graph.node(patient_object.id, str(patient_object.token))
+                graph.node(patient_object.id, patient_object.pretty_str())
                 for predicate in phrase.predicate:
                     graph.edge(predicate.id, patient_object.id, "patient")
 
@@ -145,7 +147,7 @@ class KGRenderer:
                 for target, predicate in itertools.product(targets, phrase.predicate):
                     graph.edge(predicate.id, target.id, "agent")
             else:
-                graph.node(agent_object.id, str(agent_object.token))
+                graph.node(agent_object.id, agent_object.pretty_str())
                 for predicate in phrase.predicate:
                     graph.edge(predicate.id, agent_object.id, "agent")
 
@@ -178,13 +180,15 @@ def main():
     root = gdpr
     analyzed = article6
 
-    attribute_extractors = [
-        ConditionalExtractor(),
+    attribute_extractors = {
+        PrepositionExtractor(),
         NegationExtractor()
-    ]
+    }
 
     Token.set_extension("reference", default=None)
+    Token.set_extension("node", default=None)
     nlp = spacy.load("en_core_web_trf", disable=["ner"])
+    # nlp.add_pipe(DocumentTreeParser.SPACY_COMPONENT_NAME, config={}, after="tagger")
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
     nlp.add_pipe("coreferee", config={}, after="parser")
 
@@ -193,9 +197,32 @@ def main():
     reference_resolver = ReferenceResolver()
     phrases = []
 
+    raw_text = ""
+    # We keep a list of node content end positions in the text
+    text_positions: List[Tuple[int, Node]] = []
+
+    for node in pre_order(analyzed):
+        raw_text += node.content
+        raw_text += "\n"
+        text_positions.append((len(raw_text), node))
+
+
+    # TODO extract to a pipe component
+    doc = nlp(raw_text)
+    for tok in doc:
+        for pos, node in text_positions:
+            if tok.idx < pos:
+                print(f"{tok.idx} {node.immutable_view()}")
+                tok._.node = node
+                break
+        else:
+            warnings.warn(f"Could not assign a node to token '{tok}'. This is most likely caused by a bug.")
+
     content_nodes = ((node.content, node) for node in pre_order(analyzed) if node.content)
     for doc, node in nlp.pipe(content_nodes, as_tuples=True):
+
         references = [tok._.reference for tok in doc if tok._.reference]
+        # This statement has side effects. Basically, the references in the tokens are modified.
         reference_resolver.resolve_single(node, references)
 
         for tok in doc:
