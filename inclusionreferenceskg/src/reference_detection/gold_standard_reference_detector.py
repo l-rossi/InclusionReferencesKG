@@ -36,7 +36,8 @@ class GoldStandardReferenceDetector(ReferenceDetector):
             text_inner = text
             total_offset = 0
 
-            while self.expected_references and (ind := text_inner.find(self.expected_references[0], total_offset)) != -1:
+            while self.expected_references and (
+            ind := text_inner.find(self.expected_references[0], total_offset)) != -1:
                 expected_ref = self.expected_references.pop(0)
                 yield Reference(start=ind, text_content=expected_ref)
                 # We assume non-overlapping references
@@ -47,6 +48,6 @@ class GoldStandardReferenceDetector(ReferenceDetector):
     @staticmethod
     @Language.factory(SPACY_COMPONENT_NAME,
                       default_config={"file_location": "./resources/evaluation_data/gdpr_references.csv"},
-                      retokenizes=True)
+                      retokenizes=True, assigns=["token._.reference"])
     def as_spacy_pipe_component(nlp, name, file_location):
         return ReferenceDetector._spacy_pipe_component_base(GoldStandardReferenceDetector(file_location))

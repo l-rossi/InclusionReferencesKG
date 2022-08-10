@@ -33,7 +33,8 @@ def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
     """
 
     verbs = [
-        set([tok] + get_conjuncts(tok, {"VERB"})) for tok in sent if tok.pos_ in {"VERB", "AUX"} and tok.dep_ not in AUX_DEPS
+        set([tok] + get_conjuncts(tok, {"VERB"})) for tok in sent if
+        tok.pos_ in {"VERB", "AUX"} and tok.dep_ not in AUX_DEPS
     ]
 
     verbs_out = []
@@ -67,7 +68,7 @@ def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
         objs.extend(tok for v in verb_and_prep for tok in v.rights if tok.dep_ in OBJ_DEPS)
         objs.extend(tok for tok in verb.rights if tok.dep_ == "xcomp")
         objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp"})
-        objs.extend(tok for obj in objs for tok in get_conjuncts(obj))
+        objs.extend(tok for obj in objs for tok in get_conjuncts(obj, {obj.pos_}))
     return objs
 
 
@@ -80,7 +81,7 @@ def get_conjuncts(tok: Token, allowed_pos: Set[str] = None) -> List[Token]:
     """
 
     return [right for right in tok.rights if
-            right.dep_ in {"conj", "dep"} and (not allowed_pos or tok.pos_ in allowed_pos)]
+            right.dep_ == "conj" and (not allowed_pos or right.pos_ in allowed_pos)]
 
 
 def get_subjects_of_verbs(verbs: List[Predicate]):

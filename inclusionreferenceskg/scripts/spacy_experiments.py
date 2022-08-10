@@ -6,6 +6,7 @@ from spacy.tokens import Token
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
+from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 
@@ -21,7 +22,7 @@ def main():
 
     gdpr = DocumentTreeParser().parse_document("GDPR", gdpr_text)
 
-    article6 = gdpr.resolve_loose([Article(number=8)])[0]
+    article6 = gdpr.resolve_loose([Article(number=49), Paragraph(number=1)])[0]
 
     txt = ""
     for node in pre_order(article6):
@@ -61,14 +62,15 @@ The dog that ate the cat is purple.
 
     # Temporal vs conditional then?
     # doc = nlp("""
-    #    The dog eats the cat.
-    #    The dog eats the cat that is green.
-    #    If the dog likes the cat it will eat it.
-    #    Where the dog likes the cat it will eat it.
-    #    Where I like the cat I will eat it.
-    #    In such cases, the dog will eat the cat.
-    #    Then the dog will eat the cat.
-    #    Then the dog will eat the cat referred to in article 3.
+    #     The dog eats the cat.
+    #     The dog eats the cat that is green.
+    #     If the dog likes the cat it will eat it.
+    #     Where the dog likes the cat it will eat it.
+    #     Where I like the cat I will eat it.
+    #     In such cases, the dog will eat the cat.
+    #     Then the dog will eat the cat.
+    #     Then the dog will eat the cat referred to in article 3.
+    #     The dog, the cat and the kid are red.
     # """)
 
     doc = nlp(txt)
@@ -88,6 +90,9 @@ The dog that ate the cat is purple.
     tot = sum(count_dep.values())
     for k, v in sorted(count_dep.items(), key=lambda x: x[1], reverse=True):
         print(f"{k}: {v} ({v / tot})")"""
+
+    #for tok in doc:
+    #    print(tok, tok.pos_, tok.tag_, tok.ent_type_)
 
     pe = PhraseExtractor()
 

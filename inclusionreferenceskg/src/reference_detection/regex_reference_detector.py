@@ -56,7 +56,7 @@ class RegexReferenceDetector(ReferenceDetector):
         return [Reference(start=m.start(), text_content=m.group()) for m in self.pattern.finditer(text)]
 
     @staticmethod
-    @Language.component(SPACY_COMPONENT_NAME, retokenizes=True)
+    @Language.component(SPACY_COMPONENT_NAME, retokenizes=True, assigns=["token._.reference"])
     def as_spacy_pipe_component(doc):
         return ReferenceDetector._spacy_pipe_component_base(RegexReferenceDetector())(doc)
 

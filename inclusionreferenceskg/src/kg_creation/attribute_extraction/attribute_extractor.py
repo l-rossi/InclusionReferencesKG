@@ -21,5 +21,5 @@ class AttributeExtractor(ABC):
         :param phrase: The phrase for which to extract attributes.
         """
         self._accept(phrase)
-        for p in phrase.patient_phrases:
+        for p in phrase.patient_phrases + phrase.condition_phrases + phrase.agent_phrases:
             self._accept(p)

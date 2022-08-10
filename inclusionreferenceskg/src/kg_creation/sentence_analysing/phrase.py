@@ -92,6 +92,7 @@ class PhraseObject:
         if coref_chain and self.token.pos_ == "PRON":
             coref_str = f", Coreferences: {coref_chain}"
 
-        return f"{self.token}{coref_str}, Context: '{' '.join(str(x) for x in self.token.subtree)}'"
+        # return f"{self.token}{coref_str}, Context: '{' '.join(str(x) for x in self.token.subtree)}'"
+        return f"{self.token}{coref_str}"
 
     # attributes

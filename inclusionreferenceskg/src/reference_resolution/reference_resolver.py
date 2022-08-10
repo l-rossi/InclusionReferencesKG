@@ -6,10 +6,14 @@ import warnings
 from collections import defaultdict
 from typing import List, Type
 
+from spacy import Language
+from spacy.tokens import Token
+
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
 from inclusionreferenceskg.src.document_parsing.node.document import Document
 from inclusionreferenceskg.src.document_parsing.node.node import Node
+from inclusionreferenceskg.src.document_parsing.node.node_traversal import traverse_doc_by_node
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
 from inclusionreferenceskg.src.document_parsing.node.title import Title
@@ -395,3 +399,34 @@ class ReferenceResolver:
         elif number_format == RegexUtil.rom:
             return rom_to_dec(number)
         return None
+
+    @staticmethod
+    @Language.component(SPACY_COMPONENT_NAME, requires=["token._.node", "token._.reference"])
+    def as_spacy_component(doc):
+        """
+        Allows the reference resolver to be used as a Spacy pipeline component.
+
+        Example usage:
+
+        nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, after=RegexReferenceDetector.SPACY_COMPONENT_NAME)
+
+
+        :param doc: The doc that is operated on.
+        :return: The modified doc.
+        """
+
+        if not Token.get_extension("node"):
+            raise AttributeError("ReferenceResolver requires tokens to have the node extension.")
+
+        if not Token.get_extension("reference"):
+            raise AttributeError("ReferenceResolver requires tokens to have the reference extension.")
+
+        reference_resolver = ReferenceResolver()
+
+        for node, span in traverse_doc_by_node(doc):
+
+            refs = [tok._.reference for tok in span if tok._.reference]
+            if refs:
+                reference_resolver.resolve_single(node, refs)
+
+        return doc

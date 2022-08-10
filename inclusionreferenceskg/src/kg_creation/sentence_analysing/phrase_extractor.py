@@ -24,9 +24,9 @@ class PhraseExtractor:
         phrases: List[Phrase] = [Phrase(predicate=[Predicate(token=verb) for verb in verb_group]) for verb_group in
                                  main_verbs_of_sent]
 
-        # print("START OF SENTENCE")
-        # print(sent)
-        # print(main_verbs_of_sent)
+        print("START OF SENTENCE")
+        print(sent)
+        print(main_verbs_of_sent)
 
         # TODO subjects missing compunds
         # TODO Verbs missing negations, auxilaries
@@ -71,6 +71,25 @@ class PhraseExtractor:
                                                                                               phrase.patient_phrases if
                                                                                               self.is_conditional(x)]
 
+        # Remove phrases that are in the subtree of another phrase from the top level
+        """
+        for p1, p2 in itertools.product(phrases, phrases):
+            if p1 is p2:
+                continue
+
+            for pred1, pred2 in itertools.product(p1.predicate, p2.predicate):
+                if pred1 is pred2:
+                    continue
+
+                if pred1.token in pred2.token.subtree:
+                    deletion_marks.add(p1.id)
+                    break"""
+
+        # Remove phrases with no agent and patient from the top level.
+        for phrase in phrases:
+            if not phrase.agent_phrases and not phrase.agent_objects and not phrase.patient_phrases and not phrase.patient_objects:
+                deletion_marks.add(phrase.id)
+
         phrases = [phrase for phrase in phrases if phrase.id not in deletion_marks]
 
         for phrase in phrases:
@@ -86,5 +105,8 @@ class PhraseExtractor:
 
         :param phrase:
         """
-        # TODO CHeck completeness of {"IN", "WRB"}
-        return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)
+        # TODO Check completeness of {"IN", "WRB"}
+
+        # examples of conditional phrases: provided that, if and to the extent that
+        return any(tok.pos_ == "SCONJ" for pred in phrase.predicate for tok in pred.token.children)
+        # return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)
