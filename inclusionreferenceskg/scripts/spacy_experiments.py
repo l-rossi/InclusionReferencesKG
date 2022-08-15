@@ -73,7 +73,7 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp(txt)
+    doc = nlp(txt + " The dog referred to in article 5 is blue.")
 
     # for token in doc:
     #    print(token, token.pos_, token.tag_)

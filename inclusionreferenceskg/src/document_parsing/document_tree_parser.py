@@ -2,7 +2,7 @@ import typing
 from typing import List, Optional, Type
 
 from spacy import Language
-from spacy.tokens import Doc, Token
+from spacy.tokens import Doc
 
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter

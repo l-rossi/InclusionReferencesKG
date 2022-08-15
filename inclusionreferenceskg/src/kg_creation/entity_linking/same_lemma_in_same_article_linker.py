@@ -20,6 +20,8 @@ class SameLemmaInSameArticleLinker(EntityLinker):
 
     def link(self, graph: KnowledgeGraph) -> KnowledgeGraph:
 
+        # TODO Do not merge nodes like 'which' (maybe only nouns)
+
         coref_chains = self.doc._.coref_chains if Doc.get_extension("coref_chains") else None
 
         group_by_paragraph = defaultdict(list)
@@ -46,7 +48,7 @@ class SameLemmaInSameArticleLinker(EntityLinker):
                 if coref_chains and (res := coref_chains.resolve(base)):
                     base = res
 
-                group_by_token_lemma[base.lemma_].append(kg_node.id)
+                group_by_token_lemma[(base.lemma_, base.tag_)].append(kg_node.id)
 
             for group in group_by_token_lemma.values():
                 reduce(graph.merge, group)

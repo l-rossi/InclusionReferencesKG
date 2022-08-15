@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from typing import Dict, Tuple, Union, Optional, Set
 
@@ -18,6 +19,7 @@ class KnowledgeGraph:
 
     def __init__(self):
         self.nodes: Dict[str, KGNode] = dict()
+
 
     def add_edge(self, u: str, v: str, label: str):
         """
@@ -68,11 +70,11 @@ class KnowledgeGraph:
         v_node = self.nodes.get(v)
         if not u_node:
             warnings.warn(f"Could not merge nodes with ids {u} and {v} as node with id {u} does not exist.")
-            return
+            return v
 
         if not v_node:
             warnings.warn(f"Could not merge nodes with ids {u} and {v} as node with id {v} does not exist.")
-            return
+            return u
 
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
             warnings.warn(
@@ -97,6 +99,8 @@ class KnowledgeGraph:
         if item is not None:
             u_node.item = item
 
+
+        print(f"merged {u} and {v}")
         return u
 
     def as_graphviz_graph(self, name: str, engine: str, format_: str, attrs: Dict[str, str]) -> graphviz.Digraph:

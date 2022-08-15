@@ -4,9 +4,9 @@ from typing import Dict, Tuple
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.document_parsing.node.root import Root
 from inclusionreferenceskg.src.reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
 from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
+from inclusionreferenceskg.src.util.parser_util import gdpr_dependency_root
 
 
 def main():
@@ -15,45 +15,7 @@ def main():
     parser = DocumentTreeParser()
     reference_detector = GoldStandardReferenceDetector("./resources/evaluation_data/gdpr_references.csv")
 
-    docs = []
-
-    with open("./resources/eu_documents/gdpr.txt", encoding="utf-8") as f:
-        gdpr = parser.parse_document("GDPR", f.read())
-        docs.append(gdpr)
-
-    with open("./resources/eu_documents/teu.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("TEU", f.read()))
-
-    with open("./resources/eu_documents/directive_95_46_ec.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Directive 95/46/EC", f.read()))
-
-    with open("./resources/eu_documents/directive_2000_31_EC.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Directive 2000/31/EC", f.read()))
-
-    with open("./resources/eu_documents/directive_eu_2015_1535.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Directive (EU) 2015/1535", f.read()))
-
-    with open("./resources/eu_documents/mock_en_iso_17065_2012.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("EN-ISO/IEC 17065/2012", f.read()))
-
-    with open("./resources/eu_documents/regulation_ec_45_2001.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Regulation (EC) No 45/2001", f.read()))
-
-    with open("./resources/eu_documents/regulation_eu_182_2011.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Regulation (EU) No 182/2011", f.read()))
-
-    with open("./resources/eu_documents/regulation_ev_765_2008.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Regulation (EC) No 765/2008", f.read()))
-
-    with open("./resources/eu_documents/directive_2002_58_ec.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Directive 2002/58/EC", f.read()))
-
-    with open("./resources/eu_documents/regulation_ec_1049_2001.txt", encoding="utf-8") as f:
-        docs.append(parser.parse_document("Regulation (EC) No 1049/2001", f.read()))
-
-    document_root = Root(children=docs)
-    for doc in document_root.children:
-        doc.parent = document_root
+    gdpr, document_root = gdpr_dependency_root(parser)
 
     actual_references = []
 

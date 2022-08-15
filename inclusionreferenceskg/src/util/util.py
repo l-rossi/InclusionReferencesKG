@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def rom_to_dec(num: str) -> int:
     """
     Converts a roman numeral to a number. This function has undefined

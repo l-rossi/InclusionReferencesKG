@@ -1,11 +1,24 @@
 from typing import List, Optional
 
-from spacy.tokens import Span
+from spacy.tokens import Span, Doc
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_subjects_of_verbs, \
     get_objects_of_predicate_consider_preposition
+
+
+def is_conditional(phrase: Phrase):
+    """
+    Primitive heuristic to determine if a phrase is a conditional.
+
+    :param phrase:
+    """
+    # TODO Check completeness of {"IN", "WRB"}
+
+    # examples of conditional phrases: provided that, if and to the extent that
+    return any(tok.pos_ == "SCONJ" for pred in phrase.predicate for tok in pred.token.children)
+    # return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)
 
 
 class PhraseExtractor:
@@ -28,7 +41,7 @@ class PhraseExtractor:
         print(sent)
         print(main_verbs_of_sent)
 
-        # TODO subjects missing compunds
+        # TODO subjects missing compounds
         # TODO Verbs missing negations, auxilaries
 
         # used to mark phrases for deletion
@@ -50,26 +63,27 @@ class PhraseExtractor:
                             deletion_marks.add(p.id)
                             break
 
-            """if phrase_as_patient and is_passive:
-                print(sent)
-                phrase.pprint()
-                displacy.serve(sent, "dep")
-                raise Exception("Phrase as a patient cannot coincide with a passive voice.")"""
-
             grammatical_object = get_objects_of_predicate_consider_preposition(phrase.predicate)
 
             phrase.patient_phrases = phrase_as_patient
             phrase.patient_objects = [PhraseObject(token=tok) for tok in grammatical_object]
 
             if is_passive:
-                # Is this really necessary?
                 phrase.patient_objects, phrase.agent_objects = phrase.agent_objects, phrase.patient_objects
                 phrase.patient_phrases, phrase.agent_phrases = phrase.agent_phrases, phrase.patient_phrases
 
             phrase.patient_phrases, phrase.condition_phrases = [x for x in phrase.patient_phrases if
-                                                                not self.is_conditional(x)], [x for x in
-                                                                                              phrase.patient_phrases if
-                                                                                              self.is_conditional(x)]
+                                                                not is_conditional(x)], \
+                                                               [x for x in phrase.patient_phrases if
+                                                                is_conditional(x)]
+
+            for po in phrase.agent_objects + phrase.patient_objects:
+                if po.token.head.dep_ == "relcl" and po.token.pos_ == "PRON":
+                    po.token = po.token.head.head
+
+            if Doc.get_extension("coref_chains"):
+                extend_phrase_objects_by_coref(phrase.agent_objects)
+                extend_phrase_objects_by_coref(phrase.patient_objects)
 
         # Remove phrases that are in the subtree of another phrase from the top level
         """
@@ -99,14 +113,18 @@ class PhraseExtractor:
 
         return phrases
 
-    def is_conditional(self, phrase: Phrase):
-        """
-        Primitive heuristic to determine if a phrase is a conditional.
 
-        :param phrase:
-        """
-        # TODO Check completeness of {"IN", "WRB"}
+def extend_phrase_objects_by_coref(phrase_objects: List[PhraseObject]):
+    """
+    Modifies the passed list of phrase_objects so that tokens referring to other tokens (it, they, ...)
+    are added.
 
-        # examples of conditional phrases: provided that, if and to the extent that
-        return any(tok.pos_ == "SCONJ" for pred in phrase.predicate for tok in pred.token.children)
-        # return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)
+    Warning: This function modifies both the passed in list and the PhraseObjects within.
+    """
+    new_pos = []
+    for po in phrase_objects:
+        if res := po.token.doc._.coref_chains.resolve(po.token):
+            po.token = res[0]
+            for r in res[1:]:
+                new_pos.append(PhraseObject(token=r))
+    phrase_objects.extend(new_pos)

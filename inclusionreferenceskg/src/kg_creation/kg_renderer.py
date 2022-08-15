@@ -6,6 +6,7 @@ from typing import List, Tuple
 import coreferee
 import spacy
 from spacy import Language
+from spacy.matcher import Matcher
 from spacy.tokens import Token, Doc
 
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
@@ -15,6 +16,8 @@ from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_o
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.negation_extractor import NegationExtractor
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
+from inclusionreferenceskg.src.kg_creation.entity_linking.reference_linker import ReferenceLinker
+from inclusionreferenceskg.src.kg_creation.entity_linking.relative_clause_linker import RelativeClauseLinker
 from inclusionreferenceskg.src.kg_creation.entity_linking.same_lemma_in_same_article_linker import \
     SameLemmaInSameArticleLinker
 from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
@@ -22,14 +25,15 @@ from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phra
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
+from inclusionreferenceskg.src.util.parser_util import gdpr_dependency_root
 from inclusionreferenceskg.src.util.spacy_components import REFERENCE_QUALIFIER_RESOLVER_COMPONENT
-
-"""
-Translates the graph from the internal format to a format used by external libraries for analysing and visualisation.
-"""
 
 
 class KGRenderer:
+    """
+    Translates the graph from the internal format to a format used by external libraries for analysing and visualisation.
+    """
+
     def render(self, root, phrases: List[Phrase]) -> KnowledgeGraph:
         graph = KnowledgeGraph()
 
@@ -157,10 +161,10 @@ def main():
 
     spacy.prefer_gpu()
 
-    gdpr = DocumentTreeParser().parse_from_eu_doc_file("GDPR", "gdpr.txt")
+    gdpr, document_root = gdpr_dependency_root()
     article6 = gdpr.resolve_loose([Article(number=49), Paragraph(number=1)])[0]
 
-    root = gdpr
+    root = document_root
     analyzed = article6
 
     attribute_extractors = {
@@ -169,8 +173,8 @@ def main():
     }
 
     Token.set_extension("reference", default=None)
-    nlp = spacy.load("en_core_web_trf", disable=["ner"])
-    # nlp = spacy.load("en_core_web_sm", disable=["ner"])
+    # nlp = spacy.load("en_core_web_trf", disable=["ner"])
+    nlp = spacy.load("en_core_web_sm", disable=["ner"])
     # nlp.add_pipe(DocumentTreeParser.SPACY_COMPONENT_NAME, config={}, after="tagger")
     nlp.add_pipe("coreferee", config={}, after="parser")
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
@@ -212,7 +216,21 @@ def main():
                 else:
                     f_id = kg_node.id"""
 
-    graph = SameLemmaInSameArticleLinker(doc).link(graph)
+    # graph = SameLemmaInSameArticleLinker(doc).link(graph)
+    # graph = RelativeClauseLinker().link(graph)
+    # graph = ReferenceLinker().link(graph)
+    matcher = Matcher(doc.vocab)
+    matcher.add("REF_IN", [[
+        {"POS": "VERB"},
+        {"POS": "ADP", "OP": "+"},
+        {"TAG": "REF"}
+    ]])
+
+    #print(list(matcher(doc)))
+
+    #print("match", list(
+    #    " ".join(str(doc[i]) for i in range(start, end)) for _, start, end in matcher(doc)
+    #))
 
     graph.as_graphviz_graph("GDPR", engine="dot", format_="svg", attrs={"overlap": "true"}) \
         .render(directory='output/graphs', view=False)

@@ -33,7 +33,7 @@ def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
     """
 
     verbs = [
-        set([tok] + get_conjuncts(tok, {"VERB"})) for tok in sent if
+        set([tok] + get_conjuncts(tok, {"VERB", "AUX"})) for tok in sent if
         tok.pos_ in {"VERB", "AUX"} and tok.dep_ not in AUX_DEPS
     ]
 
