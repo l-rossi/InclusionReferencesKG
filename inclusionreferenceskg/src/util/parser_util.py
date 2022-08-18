@@ -38,6 +38,8 @@ def gdpr_dependency_root(parser: DocumentTreeParser = None) -> Tuple[Document, R
                                               "directive_2002_58_ec.txt"))
     docs.append(parser.parse_from_eu_doc_file("Regulation (EC) No 1049/2001",
                                               "regulation_ec_1049_2001.txt"))
+    docs.append(parser.parse_from_eu_doc_file("Regulation (EEC) No 339/93",
+                                              "regulation_eec_339_93.txt"))
 
     document_root = Root(children=docs)
     for doc in document_root.children:

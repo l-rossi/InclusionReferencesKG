@@ -24,7 +24,7 @@ def traverse_doc_by_node(doc: Doc) -> Generator[Tuple[Node, Span], None, None]:
     """
     Iterates a doc object by the nodes.
     :param doc: The doc to be iterated.
-    :return: A generator of tuples.
+    :return: A generator of tuples of the node and the corresponding span.
     """
 
     if not Token.get_extension("node"):

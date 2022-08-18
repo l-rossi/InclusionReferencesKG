@@ -25,10 +25,8 @@ from inclusionreferenceskg.src.document_parsing.preprocessing.initial_space_prep
 
 class DocumentTreeParser:
     """
-    Main class for parsing a EU regulation in text form to a tree on which operations can be easily made.
+    Main class for parsing an EU regulation in text form to a tree on which operations can be easily made.
     """
-
-    SPACY_COMPONENT_NAME = "document_tree_parser"
 
     def __init__(self, node_patterns=None, preprocessors: Optional[List[Type[BlockPreprocessor]]] = None):
         """
@@ -104,24 +102,3 @@ class DocumentTreeParser:
         :return: A list of text blocks.
         """
         return [block.strip().replace("\n", " ").replace("­", "") for block in text.split("\n\n") if block.strip()]
-
-    @staticmethod
-    @Language.component(SPACY_COMPONENT_NAME, assigns=["doc.text"])
-    def as_spacy_component(doc: Doc, title: str):
-        Doc.set_extension("root", default=None)
-
-        parser = DocumentTreeParser()
-        root = parser.parse_document(title, doc.text)
-
-        raw_text = ""
-        # We keep a list of node content end positions in the text
-        text_positions: List[Tuple[int, Node]] = []
-
-        for node in pre_order(analyzed):
-            raw_text += node.content
-            raw_text += "\n"
-            text_positions.append((len(raw_text), node))
-
-        doc.text = raw_text
-        doc._.root = root
-        return doc

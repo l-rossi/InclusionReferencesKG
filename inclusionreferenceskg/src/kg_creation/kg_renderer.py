@@ -129,9 +129,9 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         raw_text += "\n"
         text_positions.append((len(raw_text), node))
 
-    # TODO: We create an anonymous pipe to insert attributes into the doc right after creation.
-    # This is bad practice and a better solution should ideally be found
-    comp_name = "anonymous_component_" + str(uuid.uuid4())
+    # We create an anonymous pipe to insert attributes into the doc right after creation.
+    # TODO: This is bad practice and a better solution should ideally be found
+    comp_name = "document_supplement_component_" + str(uuid.uuid4())
 
     @Language.component(comp_name)
     def comp(d):
@@ -149,6 +149,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         return d
 
     nlp.add_pipe(comp_name, first=True)
+
     doc = nlp(raw_text)
 
     return doc
@@ -165,7 +166,7 @@ def main():
     article6 = gdpr.resolve_loose([Article(number=49), Paragraph(number=1)])[0]
 
     root = document_root
-    analyzed = article6
+    analyzed = gdpr
 
     attribute_extractors = {
         PrepositionExtractor(),
@@ -218,22 +219,11 @@ def main():
 
     # graph = SameLemmaInSameArticleLinker(doc).link(graph)
     # graph = RelativeClauseLinker().link(graph)
-    # graph = ReferenceLinker().link(graph)
-    matcher = Matcher(doc.vocab)
-    matcher.add("REF_IN", [[
-        {"POS": "VERB"},
-        {"POS": "ADP", "OP": "+"},
-        {"TAG": "REF"}
-    ]])
+    graph = ReferenceLinker(doc).link(graph)
 
-    #print(list(matcher(doc)))
 
-    #print("match", list(
-    #    " ".join(str(doc[i]) for i in range(start, end)) for _, start, end in matcher(doc)
-    #))
-
-    graph.as_graphviz_graph("GDPR", engine="dot", format_="svg", attrs={"overlap": "true"}) \
-        .render(directory='output/graphs', view=False)
+    #graph.as_graphviz_graph("GDPR", engine="dot", format_="svg", attrs={"overlap": "true"}) \
+    #    .render(directory='output/graphs', view=False)
 
     # for phrase in phrases:
     #    phrase.pprint()
