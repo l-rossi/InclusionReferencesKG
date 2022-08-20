@@ -99,8 +99,6 @@ class Node(ABC):
         ToDO: Fact check the statement above.
         """
 
-        # print(pattern_depth, pattern[pattern_depth], self.__class__, self.number)
-
         if pattern_depth == len(pattern) - 1 and self._pattern_match(pattern[pattern_depth]):
             return [self]
 

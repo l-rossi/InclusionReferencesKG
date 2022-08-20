@@ -36,7 +36,7 @@ class RegexReferenceDetector(ReferenceDetector):
 
     thereof = r"(?:\sthereof)?"
 
-    single = fr"(?:(?:article\s{RegexUtil.number}{RegexUtil.para}{thereof})|this\s{node_name}|the previous\s{node_name}|{node_name}\s{RegexUtil.number}{thereof}|{node_name_rom}\s{RegexUtil.rom}{thereof}|the\s{RegexUtil.ordinal}\s{node_name}{thereof}|that\s{node_name}|{document})"  # Missing thereof
+    single = fr"(?:(?:article\s{RegexUtil.number}{RegexUtil.para}{thereof})|this\s{node_name}|the previous\s{node_name}|{node_name}\s{RegexUtil.number}{thereof}|{node_name_rom}\s{RegexUtil.rom}{thereof}|the\s{RegexUtil.ordinal}\s{node_name}{thereof}|that\s{node_name}|{document})"
     multi = fr"(?:article\s{RegexUtil.number}{para_or_range}(?:, {para_or_range})*(?:\s{RegexUtil.conj}\s{para_or_range})*{thereof}|" \
             fr"{node_name}s?\s{number_or_range}(?:,\s{number_or_range})*(?:\s{RegexUtil.conj}\s{number_or_range})*{thereof}|" \
             fr"those\s{node_name}s)"
