@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 import warnings
 from typing import Dict, Tuple, Union, Optional, Set
 
@@ -79,6 +78,9 @@ class KnowledgeGraph:
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
             warnings.warn(
                 "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept")
+
+        doc = u_node.item.token.doc
+        print(f"merging '{doc[u_node.item.token.i:u_node.item.token.i+10]}' and '{doc[v_node.item.token.i:v_node.item.token.i+10]}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:

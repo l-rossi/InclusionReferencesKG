@@ -1,7 +1,6 @@
 from functools import reduce
 
 from spacy.matcher import Matcher
-from spacy.matcher import Matcher
 from spacy.tokens import Doc, Token
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
@@ -39,6 +38,8 @@ class ReferenceLinker(EntityLinker):
 
     def link(self, graph: KnowledgeGraph) -> KnowledgeGraph:
 
+        marked_for_merge = []
+
         for kg_node in graph.nodes.values():
             if not isinstance(kg_node.item, PhraseObject):
                 continue
@@ -54,16 +55,44 @@ class ReferenceLinker(EntityLinker):
                     for node in pre_order(target):
                         target_ids.add(node.id)
 
+                print("span", span)
+                print("node token", kg_node.item.token)
+
                 # TODO find more efficient implementation by precomputing
 
                 kg_nodes_in_target = [node for node in graph.nodes.values() if
                                       not isinstance(node.item, Node) and node.item.token._.node.id in target_ids]
+                # print("targes:", [graph.nodes.get(id) for id in target_ids])
+                print("kg_nodes_in_target", len(kg_nodes_in_target))
 
-                nodes_to_be_merged = [n.id for n in kg_nodes_in_target if
-                                      self._equals(n.item.token, kg_node.item.token)]
+                nodes_to_be_merged = {n.id for n in kg_nodes_in_target if
+                                      self._equals(n.item.token, kg_node.item.token)}
+                print("nodes_to_be_merged", len(nodes_to_be_merged))
 
                 if nodes_to_be_merged:
-                    reduce(graph.merge, nodes_to_be_merged, kg_node.id)
+                    marked_for_merge.append(nodes_to_be_merged | {kg_node.id})
+
+        # We first group all the groups of nodes that should be merged by
+        # intersection, i.e., if two or more groups of nodes intersect, they must all be merged as once.
+        # We do this to avoid nodes being deleted by a merge which are then needed in a subsequent merge.
+
+        # We amend the id sets by a tag that indicates if that group has been consumed by another.
+        to_be_merged_stack = [[False, x] for x in marked_for_merge]
+        to_be_merged_new = []
+
+        while to_be_merged_stack:
+            _, curr = to_be_merged_stack.pop()
+
+            for consumed_and_nodes in to_be_merged_stack:
+                if not curr.isdisjoint(consumed_and_nodes[1]):
+                    consumed_and_nodes[0] = True
+                    curr |= consumed_and_nodes[1]
+
+            to_be_merged_stack = [[False, nodes]
+                                  for consumed, nodes in to_be_merged_stack if not consumed]
+
+        for nodes_to_be_merged in to_be_merged_new:
+            reduce(graph.merge, nodes_to_be_merged)
 
         return graph
 

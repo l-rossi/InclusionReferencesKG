@@ -216,7 +216,7 @@
         ]
     },
     {
-        "text": "point (b) of Article 1(1) of Directive (EU) 2015/1535 of the European Parliament and of the Council",
+        "text": "point (b) of Article 1(1) of Directive (EU) 2015/1535",
         "patterns": [
             {
                 "type": "Point",
@@ -3878,7 +3878,7 @@
         ]
     },
     {
-        "text": "Regulation (EC) No 765/2008 of the European Parliament and of the Council",
+        "text": "Regulation (EC) No 765/2008",
         "patterns": [
             {
                 "type": "Document",
@@ -7463,7 +7463,7 @@
         ]
     },
     {
-        "text": "Regulation (EC) No 1049/2001 of the European Parliament and of the Council",
+        "text": "Regulation (EC) No 1049/2001",
         "patterns": [
             {
                 "title": "Regulation (EC) No 1049/2001",

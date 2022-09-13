@@ -6,10 +6,8 @@ from typing import List, Tuple
 import coreferee
 import spacy
 from spacy import Language
-from spacy.matcher import Matcher
 from spacy.tokens import Token, Doc
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
@@ -17,9 +15,6 @@ from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.negation_extractor import NegationExtractor
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
 from inclusionreferenceskg.src.kg_creation.entity_linking.reference_linker import ReferenceLinker
-from inclusionreferenceskg.src.kg_creation.entity_linking.relative_clause_linker import RelativeClauseLinker
-from inclusionreferenceskg.src.kg_creation.entity_linking.same_lemma_in_same_article_linker import \
-    SameLemmaInSameArticleLinker
 from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phrase
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
@@ -201,7 +196,7 @@ def main():
     nx.draw(graph, pos=pos, labels=node_labels, with_labels=True, node_color=node_colors)
     nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels)"""
 
-    graph = KGRenderer().render(analyzed, phrases)
+    graph = KGRenderer().render(document_root, phrases)
 
     # Test merging a bunch of nodes
     """f_id = None

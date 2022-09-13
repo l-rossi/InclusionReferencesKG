@@ -1,14 +1,11 @@
 import typing
 from typing import List, Optional, Type
 
-from spacy import Language
-from spacy.tokens import Doc
-
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
 from inclusionreferenceskg.src.document_parsing.node.document import Document
+from inclusionreferenceskg.src.document_parsing.node.indent import Indent
 from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.document_parsing.node.point import Point
 from inclusionreferenceskg.src.document_parsing.node.section import Section
 from inclusionreferenceskg.src.document_parsing.node.subparagraph import Paragraph
@@ -37,7 +34,7 @@ class DocumentTreeParser:
         :param preprocessors: A list of preprocessors to first be applied to the raw text. This is order dependant.
         """
         if node_patterns is None:
-            node_patterns = [Chapter, Title, Article, Paragraph, Section, Point, Subparagraph]
+            node_patterns = [Chapter, Title, Article, Paragraph, Section, Point, Indent, Subparagraph]
         self.node_patterns = node_patterns
 
         if preprocessors is None:

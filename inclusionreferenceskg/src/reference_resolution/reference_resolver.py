@@ -20,7 +20,7 @@ from inclusionreferenceskg.src.document_parsing.node.title import Title
 from inclusionreferenceskg.src.reference import Reference
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
 from inclusionreferenceskg.src.util.regex_util import RegexUtil
-from inclusionreferenceskg.src.util.util import rom_to_dec
+from inclusionreferenceskg.src.util.util import rom_to_dec, alph_to_dec
 
 
 class ReferenceResolver:
@@ -60,18 +60,19 @@ class ReferenceResolver:
                 pattern_for_split.extend(self._resolve_that(split_reference, patterns))
                 pattern_for_split.extend(self._resolve_those(split_reference, patterns))
                 pattern_for_split.extend(self._resolve_document(split_reference))
-                pattern_for_split.extend(self._resolve_paragraph_after_article(split_reference))
+
+                # pattern_for_split.extend(self._resolve_paragraph_after_article(split_reference))
+                # pattern_for_split.extend(self._resolve_point_after_paragraph(split_reference))
+                pattern_for_split.extend(self._resolve_paragraph_tight_notation(split_reference))
+                pattern_for_split.extend(self._resolve_point_tight_notation(split_reference))
 
                 # Thereof requires the current split_reference to be at least partially parsed.
                 pattern_for_split.extend(self._resolve_thereof(split_reference, patterns, pattern_for_split))
 
-                # TODO add items to components_of_reference directly?
                 if pattern_for_split:
                     components_of_reference.extend(pattern_for_split)
                 else:
                     print(f"Could not detect any component from split_string: '{split_reference}'")
-                    # TODO this implies an unparsed split and should be handled
-                    pass
 
             # split patterns into multiple patterns so that each pattern only contains one node of a certain type:
             # [Paragraph(1), Paragraph(2), Article(3)] -> [], [Paragraph(2), Article(3)], [Paragraph(1), Article(3)]
@@ -103,6 +104,32 @@ class ReferenceResolver:
         return references
 
     @staticmethod
+    def _resolve_paragraph_tight_notation(text: str):
+        """
+        Resolve paragraphs denoted using parentheses notation, e.g., (1), (2) and (3)
+
+        :param text:
+        :return:
+        """
+        number_format = RegexUtil.para
+        number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
+        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Paragraph)
+
+    @staticmethod
+    def _resolve_point_tight_notation(text: str):
+        """
+        Resolve paragraphs denoted using point notation, e.g., (a), (b) and (c)
+
+        :param text:
+        :return:
+        """
+        number_format = RegexUtil.alph
+        number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
+        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Point)
+
+    @staticmethod
     def _resolve_paragraph_after_article(text: str) -> List[Node]:
         """
         Resolves paragraphs that occur after the definition of an article, i.e., Article ?? (1), (2) and (3)
@@ -117,6 +144,22 @@ class ReferenceResolver:
         main_pattern = fr"article\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Paragraph)
+
+    @staticmethod
+    def _resolve_point_after_paragraph(text: str) -> List[Node]:
+        """
+        Resolves point that occur after the definition of an paragraph, i.e., paragraph 1(a)
+
+        :param text: The part of the reference to scan for a match.
+        :return: A list of nodes corresponding to those in the reference.
+        """
+
+        number_format = RegexUtil.alph
+
+        number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
+        main_pattern = fr"paragraph\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+
+        return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Point)
 
     @staticmethod
     def _extract_basic_references(text: str, node_type: Type[Node], number_format: str) -> List[Node]:
@@ -182,11 +225,20 @@ class ReferenceResolver:
         Resolves references to documents. Names are not normalized.
         """
 
-        # We do not use RegexReferenceDetector.document as it matches too much
+        # We handle the case of multiple directives separately.
+        # Multiple occurrences of other documents are not handled.
+        multiple_directives = fr"(?:(?:{RegexUtil.ordinal}\s)?Council\s)?Directive(s{RegexReferenceDetector.document_numbering_plural})"
+        if multi_directive_match := re.match(multiple_directives, text, re.I):
+            qualifiers = []
+            for numbering in re.findall(RegexReferenceDetector.document_numbering, multi_directive_match.group(0),
+                                        re.I):
+                qualifiers.append(ReferenceResolver._pattern_from_node(Document, title=f"Directive{numbering}"))
+            return qualifiers
 
+        # We do not use RegexReferenceDetector.document as it matches too much
         regulation = fr"(?:Commission\s)?Regulation{RegexReferenceDetector.document_numbering}"
-        directive = fr"(?:(?:First\s)?Council\s)?Directive{RegexReferenceDetector.document_numbering}"
-        treaty = r"(?:the treaty (?:(?:[a-z]*){0,2} [A-Z][a-z]*)+)(?-i:\s\([A-Z]{2,}\))?|(?:the\s)?(?-i:[A-Z]{2,})"
+        directive = fr"(?:(?:{RegexUtil.ordinal}\s)?Council\s)?Directive{RegexReferenceDetector.document_numbering}"
+        treaty = r"(?:the\streaty\s(?:(?:[a-z]*){0,2}\s[A-Z][a-z]*)+)(?-i:\s\([A-Z]{2,}\))?|(?:the\s)?(?-i:[A-Z]{2,})"
         pattern = fr"{regulation}|{directive}|{treaty}"
 
         if re.match(pattern, text, re.I):
@@ -393,7 +445,7 @@ class ReferenceResolver:
         if number_format == RegexUtil.number:
             return int(number)
         elif number_format == RegexUtil.alph:
-            return ord(number[1:-1]) - 96
+            return alph_to_dec(number[1:-1])
         elif number_format == RegexUtil.para:
             return int(number[1:-1])
         elif number_format == RegexUtil.rom:

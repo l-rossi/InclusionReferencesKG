@@ -26,10 +26,15 @@ def main():
     with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
 
+    print(len(expected_references))
+
+    print(sum(map(lambda x: len(x["patterns"]), expected_references)))
+
     for actual_reference, expected_reference in zip(actual_references, expected_references):
         if (l := len(actual_reference.reference_qualifier)) == 0:
             print(
-                f"ReferenceResolver produced {l} reference qualifiers for reference '{actual_reference.text_content}'. Expected 1.")
+                f"ReferenceResolver produced {l} reference qualifiers for reference '{actual_reference.text_content}'. "
+                f"Expected 1.")
             continue
 
         if "patterns" not in expected_reference:
@@ -40,7 +45,8 @@ def main():
         for reference_qualifier in actual_reference.reference_qualifier:
             resolved_single = document_root.resolve_loose(reference_qualifier)
             if len(resolved_single) == 0:
-                print(f"Could not resolve '{actual_reference.text_content}'")
+                print(f"Could not resolve '{actual_reference.text_content}'. "
+                      f"Qualifier: '{actual_reference.reference_qualifier}'.")
                 continue
 
             if len(resolved_single) > 1:

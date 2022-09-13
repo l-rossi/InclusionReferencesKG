@@ -2,6 +2,7 @@ from inclusionreferenceskg.src.document_parsing.document_tree_parser import Docu
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
 from inclusionreferenceskg.src.document_parsing.node.document import Document
+from inclusionreferenceskg.src.document_parsing.node.indent import Indent
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
 from inclusionreferenceskg.src.document_parsing.node.section import Section
@@ -55,6 +56,20 @@ or organisational measures (‘integrity and confidentiality’).
 
 2. The controller shall be responsible for, and be able to demonstrate compliance with, paragraph 1 (‘accountability’).
 
+(i) The coordinated field concerns requirements with which the service provider has to comply in respect of:
+
+- the taking up of the activity of an information society service, such as requirements concerning qualifications, authorisation or notification,
+
+- the pursuit of the activity of an information society service, such as requirements concerning the behaviour of the service provider, requirements regarding the quality or content of the service including those applicable to advertising and contracts, or requirements concerning the liability of the service provider;
+
+(ii) The coordinated field does not cover requirements such as:
+
+- requirements applicable to goods as such,
+
+- requirements applicable to the delivery of goods,
+
+- requirements applicable to services not provided by electronic means.
+
 """
 
     parser = DocumentTreeParser()
@@ -103,7 +118,37 @@ or organisational measures (‘integrity and confidentiality’).
                     ]),
                     Paragraph(number=2, children=[
                         Subparagraph(number=1, content="2. The controller shall be responsible for, and be able to "
-                                                       "demonstrate compliance with, paragraph 1 (‘accountability’).")
+                                                       "demonstrate compliance with, paragraph 1 (‘accountability’).",
+                                     children=[
+                                         Point(number=9,
+                                               content="(i) The coordinated field concerns requirements with which the "
+                                                       "service provider has to comply in respect of:", children=[
+                                                 Indent(number=1, content="- the taking up of the activity of an "
+                                                                          "information society service, such as "
+                                                                          "requirements concerning qualifications, "
+                                                                          "authorisation or notification,"),
+                                                 Indent(number=2, content="- the pursuit of the activity of an "
+                                                                          "information society service, such as "
+                                                                          "requirements concerning the behaviour of "
+                                                                          "the service provider, requirements "
+                                                                          "regarding the quality or content of the "
+                                                                          "service including those applicable to "
+                                                                          "advertising and contracts, or requirements "
+                                                                          "concerning the liability of the service "
+                                                                          "provider;"),
+                                             ]),
+                                         Point(number=10,
+                                               content="(ii) The coordinated field does not cover "
+                                                       "requirements such as:",
+                                               children=[
+                                                   Indent(number=1, content="- requirements applicable to "
+                                                                            "goods as such,"),
+                                                   Indent(number=2, content="- requirements applicable to the delivery "
+                                                                            "of goods,"),
+                                                   Indent(number=3, content="- requirements applicable to services not "
+                                                                            "provided by electronic means."),
+                                               ]),
+                                     ])
                     ])
                 ])
             ])
@@ -129,7 +174,7 @@ or organisational measures (‘integrity and confidentiality’).
         assert a.__class__ == e.__class__
         assert a.number == e.number
         assert a.title == e.title
-        assert len(a.children) == len(e.children)
+        assert len(a.children) == len(e.children), f"{a.immutable_view()} {e.immutable_view()}"
 
         actual_stack.extend(a.children)
         expected_stack.extend(e.children)

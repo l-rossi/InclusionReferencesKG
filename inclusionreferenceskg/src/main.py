@@ -1,5 +1,5 @@
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node_printer import NodePrinter
+from inclusionreferenceskg.src.document_parsing.node.node_printer import print_nodes
 
 
 if __name__ == "__main__":
@@ -9,6 +9,6 @@ if __name__ == "__main__":
 
     parser = DocumentTreeParser()
     gdpr = parser.parse_document("GDPR", gdpr_text)
-    NodePrinter.print(gdpr)
+    print_nodes(gdpr)
 
     # print(PDFParser.parse_to_file("./resources/gdpr.pdf", "./resources/gdpr.txt"))

@@ -1,5 +1,5 @@
-import re
 import typing
+import warnings
 
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
@@ -7,8 +7,7 @@ from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 
 class Subparagraph(Node):
     depth = Paragraph.depth + 1
-    _pattern: typing.ClassVar[re.Pattern] = re.compile(r"^(?:([1-9][0-9]*)\.|\(([1-9][0-9]*)\)) .*?$", re.I)
-
+    
     @classmethod
     def accept_block(cls, block: str, parent: Node) -> typing.Tuple[bool, typing.Optional["Node"]]:
         if parent.__class__.depth >= Paragraph.depth:
@@ -22,4 +21,4 @@ class Subparagraph(Node):
                 self.number = i
                 break
         else:
-            print("Could not find self in children of parent.")
+            warnings.warn(f"Could not find self in children of parent. For subparagraph {self.immutable_view()}.")

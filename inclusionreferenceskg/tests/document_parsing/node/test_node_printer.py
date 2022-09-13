@@ -1,7 +1,7 @@
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
 from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.node_printer import NodePrinter
+from inclusionreferenceskg.src.document_parsing.node.node_printer import print_nodes
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.document_parsing.node.point import Point
 
@@ -36,7 +36,7 @@ def test_print():
                 Point 1: Stet clita kasd gube...
                 Point 2: Duis autem vel eum i..."""
 
-    NodePrinter.print(start_node, indent=4, output=lambda x: out.append(x))
+    print_nodes(start_node, indent=4, output=lambda x: out.append(x))
     actual = "\n".join(out)
 
-    assert expected == actual, "NodePrinter did not print correctly."
+    assert expected == actual, "print_nodes did not print correctly."

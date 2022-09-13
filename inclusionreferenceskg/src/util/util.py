@@ -30,3 +30,20 @@ def rom_to_dec(num: str) -> int:
         last_prim = c
 
     return acc
+
+
+def alph_to_dec(alph):
+    """
+    Translates an alphabetic numbering to its number representation.
+
+    :param alph: The alphabetic numbering.
+    :return: The corresponding int.
+    """
+
+    if alph == "ii":
+        return 10
+
+    if len(alph) != 1:
+        raise ValueError(f"Expected alphanumeric numbering to be 'ii' or have length 1. Was: '{alph}'.")
+
+    return ord(alph) - 96
