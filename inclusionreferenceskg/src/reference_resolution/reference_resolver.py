@@ -47,11 +47,11 @@ class ReferenceResolver:
                 pattern_for_split.extend(
                     self._extract_basic_references(split_reference, Paragraph, RegexUtil.number))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Point, RegexUtil.alph))
+                    self._extract_basic_references(split_reference, Point, RegexUtil.alpha))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Chapter, RegexUtil.rom))
+                    self._extract_basic_references(split_reference, Chapter, RegexUtil.roman))
                 pattern_for_split.extend(
-                    self._extract_basic_references(split_reference, Title, RegexUtil.rom))
+                    self._extract_basic_references(split_reference, Title, RegexUtil.roman))
                 pattern_for_split.extend(
                     self._extract_basic_references(split_reference, Chapter, RegexUtil.number))
                 pattern_for_split.extend(self._resolve_ordinal(split_reference))
@@ -111,9 +111,9 @@ class ReferenceResolver:
         :param text:
         :return:
         """
-        number_format = RegexUtil.para
+        number_format = RegexUtil.paragraph
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conjunction})\s{number_or_range_pattern})*"
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Paragraph)
 
     @staticmethod
@@ -124,9 +124,10 @@ class ReferenceResolver:
         :param text:
         :return:
         """
-        number_format = RegexUtil.alph
+        # Note: We redefine the patterns already found in RegexReferenceDetector, as we need the groups to be capturing.
+        number_format = RegexUtil.alpha
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr".*{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conjunction})\s{number_or_range_pattern})*"
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Point)
 
     @staticmethod
@@ -138,10 +139,10 @@ class ReferenceResolver:
         :return: A list of nodes corresponding to those in the reference.
         """
 
-        number_format = RegexUtil.para
+        number_format = RegexUtil.paragraph
 
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr"article\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr"article\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conjunction})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Paragraph)
 
@@ -154,10 +155,10 @@ class ReferenceResolver:
         :return: A list of nodes corresponding to those in the reference.
         """
 
-        number_format = RegexUtil.alph
+        number_format = RegexUtil.alpha
 
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr"paragraph\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr"paragraph\s{RegexUtil.number}{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conjunction})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, Point)
 
@@ -177,13 +178,13 @@ class ReferenceResolver:
         to compare against the document structure
         """
 
-        if number_format not in [RegexUtil.number, RegexUtil.alph,
-                                 RegexUtil.para, RegexUtil.rom]:
+        if number_format not in [RegexUtil.number, RegexUtil.alpha,
+                                 RegexUtil.paragraph, RegexUtil.roman]:
             raise ValueError(f"number_format must be in [RegexReferenceDetector.number, RegexReferenceDetector.alph,"
                              f" RegexReferenceDetector.para, RegexReferenceDetector.rom], was: {number_format}")
 
         number_or_range_pattern = fr"({number_format}(?:\sto\s{number_format})?)"
-        main_pattern = fr"{node_type.__name__}s?\s{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conj})\s{number_or_range_pattern})*"
+        main_pattern = fr"{node_type.__name__}s?\s{number_or_range_pattern}(?:,\s{number_or_range_pattern})*(?:\s(?:{RegexUtil.conjunction})\s{number_or_range_pattern})*"
 
         return ReferenceResolver._extract_from_pattern(text, main_pattern, number_format, node_type)
 
@@ -437,18 +438,18 @@ class ReferenceResolver:
         :return:
         """
 
-        if number_format not in [RegexUtil.number, RegexUtil.alph,
-                                 RegexUtil.para, RegexUtil.rom]:
+        if number_format not in [RegexUtil.number, RegexUtil.alpha,
+                                 RegexUtil.paragraph, RegexUtil.roman]:
             raise ValueError(f"number_format must be in [RegexReferenceDetector.number, RegexReferenceDetector.alph,"
                              f" RegexReferenceDetector.para, RegexReferenceDetector.rom], was: {number_format}")
 
         if number_format == RegexUtil.number:
             return int(number)
-        elif number_format == RegexUtil.alph:
+        elif number_format == RegexUtil.alpha:
             return alph_to_dec(number[1:-1])
-        elif number_format == RegexUtil.para:
+        elif number_format == RegexUtil.paragraph:
             return int(number[1:-1])
-        elif number_format == RegexUtil.rom:
+        elif number_format == RegexUtil.roman:
             return rom_to_dec(number)
         return None
 

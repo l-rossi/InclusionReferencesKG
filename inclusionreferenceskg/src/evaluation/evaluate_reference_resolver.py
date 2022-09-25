@@ -26,9 +26,8 @@ def main():
     with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
 
-    print(len(expected_references))
-
-    print(sum(map(lambda x: len(x["patterns"]), expected_references)))
+    print("Number of tested references:", len(expected_references))
+    print("Number of referenced nodes:", sum(map(lambda x: len(x["patterns"]), expected_references)))
 
     for actual_reference, expected_reference in zip(actual_references, expected_references):
         if (l := len(actual_reference.reference_qualifier)) == 0:

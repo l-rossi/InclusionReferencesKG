@@ -10,7 +10,7 @@ from inclusionreferenceskg.src.util.util import rom_to_dec
 class Chapter(Node):
     depth = Title.depth + 1
     ignore_when_forming_full_qualifier = True
-    _pattern: typing.ClassVar[re.Pattern] = re.compile(fr"^Chapter ({RegexUtil.rom}|{RegexUtil.number})\s*$", re.I)
+    _pattern: typing.ClassVar[re.Pattern] = re.compile(fr"^Chapter ({RegexUtil.roman}|{RegexUtil.number})\s*$", re.I)
 
     @classmethod
     def accept_block(cls, block: str, _) -> typing.Tuple[bool, typing.Optional["Chapter"]]:

@@ -153,15 +153,15 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
 def main():
     # We need to use coreferee so that PyCharm does not tidy up the reference.
     if not coreferee:
-        print("Could not import coreferee for anaphora resolution.")
+        raise ModuleNotFoundError("Could not import coreferee for anaphora resolution.")
 
     spacy.prefer_gpu()
 
     gdpr, document_root = gdpr_dependency_root()
-    article6 = gdpr.resolve_loose([Article(number=49), Paragraph(number=1)])[0]
+    article6 = gdpr.resolve_loose([Article(number=6), Paragraph(number=1)])[0]
 
-    root = document_root
-    analyzed = gdpr
+    root = article6
+    analyzed = article6
 
     attribute_extractors = {
         PrepositionExtractor(),
@@ -171,7 +171,6 @@ def main():
     Token.set_extension("reference", default=None)
     # nlp = spacy.load("en_core_web_trf", disable=["ner"])
     nlp = spacy.load("en_core_web_sm", disable=["ner"])
-    # nlp.add_pipe(DocumentTreeParser.SPACY_COMPONENT_NAME, config={}, after="tagger")
     nlp.add_pipe("coreferee", config={}, after="parser")
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
     nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, config={},
@@ -196,29 +195,14 @@ def main():
     nx.draw(graph, pos=pos, labels=node_labels, with_labels=True, node_color=node_colors)
     nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels)"""
 
-    graph = KGRenderer().render(document_root, phrases)
-
-    # Test merging a bunch of nodes
-    """f_id = None
-    for kg_id in list(graph.nodes.keys()):
-        kg_node = graph.nodes.get(kg_id)
-        if not kg_node:
-            continue
-
-        if isinstance(kg_node.item, PhraseObject):
-            if kg_node.item.token.lemma_ == "transfer":
-                if f_id:
-                    graph.merge(f_id, kg_node.id)
-                else:
-                    f_id = kg_node.id"""
+    graph = KGRenderer().render(root, phrases)
 
     # graph = SameLemmaInSameArticleLinker(doc).link(graph)
     # graph = RelativeClauseLinker().link(graph)
     graph = ReferenceLinker(doc).link(graph)
 
-
-    #graph.as_graphviz_graph("GDPR", engine="dot", format_="svg", attrs={"overlap": "true"}) \
-    #    .render(directory='output/graphs', view=False)
+    graph.as_graphviz_graph("Article6", engine="dot", format_="svg", attrs={"overlap": "true"}) \
+        .render(directory='output/graphs', view=False)
 
     # for phrase in phrases:
     #    phrase.pprint()

@@ -12,13 +12,11 @@ def is_conditional(phrase: Phrase):
     """
     Primitive heuristic to determine if a phrase is a conditional.
 
-    :param phrase:
+    :param phrase: THe phrase to be checked for conditionality.
     """
-    # TODO Check completeness of {"IN", "WRB"}
 
     # examples of conditional phrases: provided that, if and to the extent that
     return any(tok.pos_ == "SCONJ" for pred in phrase.predicate for tok in pred.token.children)
-    # return any(tok.tag_ in {"IN", "WRB"} for pred in phrase.predicate for tok in pred.token.children)
 
 
 class PhraseExtractor:
@@ -27,7 +25,7 @@ class PhraseExtractor:
         """
         Extracts the phrases from a sentence.
 
-        :param sent: THe sentence to be checked for nodes.
+        :param sent: The sentence to be checked for nodes.
         :param node: Optionally add the node from which the sentence originates from.
         :return:
         """

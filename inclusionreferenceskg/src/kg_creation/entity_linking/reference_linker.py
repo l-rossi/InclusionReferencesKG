@@ -55,19 +55,19 @@ class ReferenceLinker(EntityLinker):
                     for node in pre_order(target):
                         target_ids.add(node.id)
 
-                print("span", span)
-                print("node token", kg_node.item.token)
+                #print("span", span)
+                #print("node token", kg_node.item.token)
 
                 # TODO find more efficient implementation by precomputing
 
                 kg_nodes_in_target = [node for node in graph.nodes.values() if
                                       not isinstance(node.item, Node) and node.item.token._.node.id in target_ids]
                 # print("targes:", [graph.nodes.get(id) for id in target_ids])
-                print("kg_nodes_in_target", len(kg_nodes_in_target))
+                #print("kg_nodes_in_target", len(kg_nodes_in_target))
 
                 nodes_to_be_merged = {n.id for n in kg_nodes_in_target if
                                       self._equals(n.item.token, kg_node.item.token)}
-                print("nodes_to_be_merged", len(nodes_to_be_merged))
+                #print("nodes_to_be_merged", len(nodes_to_be_merged))
 
                 if nodes_to_be_merged:
                     marked_for_merge.append(nodes_to_be_merged | {kg_node.id})

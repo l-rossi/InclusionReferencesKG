@@ -19,8 +19,7 @@ class KnowledgeGraph:
     def __init__(self):
         self.nodes: Dict[str, KGNode] = dict()
 
-
-    def add_edge(self, u: str, v: str, label: str):
+    def add_edge(self, u: str, v: str, label: str, attributes: Dict[str, any] = None):
         """
         Creates an edge between from node u to node v. If either u or v does they are created
         as a node sans item. If the edge already exists, it is overwritten.
@@ -28,13 +27,18 @@ class KnowledgeGraph:
         :param label: The edge label.
         :param u: Id of the first node.
         :param v: Id of the second node.
+        :param attributes: A dictionary of attributes / properties for the edge.
         """
+
+        if attributes is None:
+            attributes = dict()
+
         if not self.nodes.get(u):
             self._add_node(u, None)
         if not self.nodes.get(v):
             self._add_node(v, None)
 
-        self.nodes[u].adj[v] = (self.nodes[v], label)
+        self.nodes[u].adj[v] = (self.nodes[v], label, attributes)
         self.nodes[v].adj_in.add(u)
 
     def _add_node(self, id_: str, item: Optional[Union[Predicate, PhraseObject, Node]]):
@@ -80,7 +84,8 @@ class KnowledgeGraph:
                 "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept")
 
         doc = u_node.item.token.doc
-        print(f"merging '{doc[u_node.item.token.i:u_node.item.token.i+10]}' and '{doc[v_node.item.token.i:v_node.item.token.i+10]}'")
+        print(
+            f"merging '{doc[u_node.item.token.i:u_node.item.token.i + 10]}' and '{doc[v_node.item.token.i:v_node.item.token.i + 10]}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
@@ -101,9 +106,12 @@ class KnowledgeGraph:
         if item is not None:
             u_node.item = item
 
-
         print(f"merged {u} and {v}")
         return u
+
+    @staticmethod
+    def _edge_to_str(label, attributes: Dict[str, any]) -> str:
+        return f"{label} [{(', '.join(f'{k}: {str(v)}' for k, v in attributes.items()))}]"
 
     def as_graphviz_graph(self, name: str, engine: str, format_: str, attrs: Dict[str, str]) -> graphviz.Digraph:
         """
@@ -122,8 +130,8 @@ class KnowledgeGraph:
 
         for node in self.nodes.values():
             out.node(str(node.id), str(node))
-            for _, (neighbor, label) in node.adj.items():
-                out.edge(str(node.id), str(neighbor.id), label=label)
+            for _, (neighbor, label, attributes) in node.adj.items():
+                out.edge(str(node.id), str(neighbor.id), label=KnowledgeGraph._edge_to_str(label, attributes))
 
         return out
 
@@ -136,7 +144,7 @@ class KGNode:
         """
 
         # The adjacency list (dictionary) stores a set of tuples of Node and edge label
-        self.adj: Dict[str, Tuple[KGNode, str]] = dict()
+        self.adj: Dict[str, Tuple[KGNode, str, Dict[str, any]]] = dict()
         # A KGNode keeps a set of references of nodes that point to it (in-neighbours). This speeds up merging of nodes.
         self.adj_in: Set[str] = set()
         self.id = id_

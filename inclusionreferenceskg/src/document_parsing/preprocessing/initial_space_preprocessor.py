@@ -18,7 +18,7 @@ class InitialSpacePreprocessor(BlockPreprocessor):
     @staticmethod
     def process(blocks: typing.List[str]) -> typing.List[str]:
         def map_block(block):
-            if match := re.match(fr"^(?:{RegexUtil.number}\.|{RegexUtil.para})\S", block):
+            if match := re.match(fr"^(?:{RegexUtil.number}\.|{RegexUtil.paragraph})\S", block):
                 return block[:match.end() - 1] + " " + block[match.end() - 1:]
             return block
 

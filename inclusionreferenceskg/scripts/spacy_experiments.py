@@ -1,5 +1,6 @@
 import coreferee
 import spacy
+import textacy.spacier.utils
 from spacy import displacy
 from spacy.tokens import Token
 
@@ -8,7 +9,7 @@ from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
 from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
-from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
+from inclusionreferenceskg.src.kg_creation.sentence_analysing.util import get_main_verbs_of_sent
 
 spacy.prefer_gpu()
 # We need to use coreferee so that PyCharm does not tidy up the reference.
@@ -36,7 +37,7 @@ def main():
     # reference_detector_component
     # nlp.add_pipe(ReferenceDetector.as_spacy_pipe_component(GoldStandardReferenceDetector()), before="ner")
     nlp.add_pipe('coreferee')
-    nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={})
+    # nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={})
     # nlp.add_pipe(GoldStandardReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
     # nlp.add_pipe("noun_phrase_component", before="ner")
     # nlp.remove_pipe("ner")
@@ -73,7 +74,7 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp(txt + " The dog referred to in article 5 is blue.")
+    doc = nlp("""(24) ‘relevant and reasoned objection’ means an objection to a draft decision as to whether there is an infringement of this Regulation, or whether envisaged action in relation to the controller or processor complies with this Regulation, which clearly demonstrates the significance of the risks posed by the draft decision as regards the fundamental rights and freedoms of data subjects and, where applicable, the free flow of personal data within the Union;""")
 
     # for token in doc:
     #    print(token, token.pos_, token.tag_)
@@ -81,6 +82,9 @@ The dog that ate the cat is purple.
         phrases = PhraseExtractor().extract_from_sentence(sent)
         for phrase in phrases:
             phrase.pprint()"""
+
+    print(textacy.spacier.utils.get_main_verbs_of_sent(doc))
+    print(get_main_verbs_of_sent(doc))
 
     """count_dep = defaultdict(int)
     for token in doc:
@@ -91,7 +95,7 @@ The dog that ate the cat is purple.
     for k, v in sorted(count_dep.items(), key=lambda x: x[1], reverse=True):
         print(f"{k}: {v} ({v / tot})")"""
 
-    #for tok in doc:
+    # for tok in doc:
     #    print(tok, tok.pos_, tok.tag_, tok.ent_type_)
 
     pe = PhraseExtractor()

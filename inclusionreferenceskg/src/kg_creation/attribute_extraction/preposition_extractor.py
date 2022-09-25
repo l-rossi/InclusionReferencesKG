@@ -6,4 +6,5 @@ class PrepositionExtractor(AttributeExtractor):
 
     def _accept(self, phrase: Phrase):
         for predicate in phrase.predicate:
+
             predicate.prepositions = [x.text for x in predicate.token.children if x.dep_ == "prep"]

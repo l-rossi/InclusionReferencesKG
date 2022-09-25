@@ -27,7 +27,7 @@ AUX_DEPS: Set[str] = {"aux", "auxpass", "neg"}
 
 def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
     """
-    Based on 'get_main_verbs_of_sents' in textacy, but also groups verbs linked by conjunctions
+    Based on 'get_main_verbs_of_sent' in textacy, but also groups verbs linked by conjunctions
 
     Return the main (non-auxiliary) verbs in a sentence.
     """
