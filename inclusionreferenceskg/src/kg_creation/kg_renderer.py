@@ -163,11 +163,6 @@ def main():
     root = article6
     analyzed = article6
 
-    attribute_extractors = {
-        PrepositionExtractor(),
-        NegationExtractor()
-    }
-
     Token.set_extension("reference", default=None)
     # nlp = spacy.load("en_core_web_trf", disable=["ner"])
     nlp = spacy.load("en_core_web_sm", disable=["ner"])
@@ -185,9 +180,9 @@ def main():
     for sent in doc.sents:
         phrases.extend(phrase_extractor.extract_from_sentence(sent))
 
-    for phrase in phrases:
+    """for phrase in phrases:
         for attribute_extractor in attribute_extractors:
-            attribute_extractor.accept_with_children(phrase)
+            attribute_extractor.accept_with_children(phrase)"""
 
     """graph, node_labels, edge_labels, node_colors = KGRenderer().render_to_networkx(root=analyzed, phrases=phrases)
 
@@ -196,6 +191,9 @@ def main():
     nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels)"""
 
     graph = KGRenderer().render(root, phrases)
+
+    graph = NegationExtractor().accept(graph)
+    graph = PrepositionExtractor().accept(graph)
 
     # graph = SameLemmaInSameArticleLinker(doc).link(graph)
     # graph = RelativeClauseLinker().link(graph)

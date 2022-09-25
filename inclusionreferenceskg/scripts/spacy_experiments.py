@@ -74,7 +74,7 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp("""(24) ‘relevant and reasoned objection’ means an objection to a draft decision as to whether there is an infringement of this Regulation, or whether envisaged action in relation to the controller or processor complies with this Regulation, which clearly demonstrates the significance of the risks posed by the draft decision as regards the fundamental rights and freedoms of data subjects and, where applicable, the free flow of personal data within the Union;""")
+    doc = nlp("The data subject has given consent to one of the following")
 
     # for token in doc:
     #    print(token, token.pos_, token.tag_)

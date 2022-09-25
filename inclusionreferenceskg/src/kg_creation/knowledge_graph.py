@@ -89,10 +89,10 @@ class KnowledgeGraph:
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
-            label = self.nodes[ref].adj[v][1]
+            label, attributes = self.nodes[ref].adj[v][1:2]
             self.nodes[ref].adj.pop(v)
             if v != u:
-                self.add_edge(ref, u, label=label)
+                self.add_edge(ref, u, label=label, attributes=attributes)
 
         v_node.adj_in = []
 
@@ -152,7 +152,7 @@ class KGNode:
 
     def __str__(self) -> str:
         if isinstance(self.item, Predicate):
-            return f"{self.item.token}, negated: {self.item.negated}, prepositions: {self.item.prepositions}"
+            return f"{self.item.token}, negated: {self.item.negated}"
         elif isinstance(self.item, PhraseObject):
             return self.item.pretty_str()
         elif isinstance(self.item, Node):
