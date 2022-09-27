@@ -11,11 +11,13 @@ from spacy.tokens import Token, Doc
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.node import Node
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.negation_extractor import NegationExtractor
 from inclusionreferenceskg.src.kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
+from inclusionreferenceskg.src.kg_creation.entity_linking.proper_noun_linker import ProperNounLinker
 from inclusionreferenceskg.src.kg_creation.entity_linking.reference_linker import ReferenceLinker
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
+from inclusionreferenceskg.src.kg_creation.entity_linking.same_lemma_in_same_article_linker import \
+    SameLemmaInSameParagraphLinker
+from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph, BatchedMerge
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phrase
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
@@ -29,7 +31,7 @@ class KGRenderer:
     Translates the graph from the internal format to a format used by external libraries for analysing and visualisation.
     """
 
-    def render(self, root, phrases: List[Phrase]) -> KnowledgeGraph:
+    def render(self, root: Node, phrases: List[Phrase]) -> KnowledgeGraph:
         graph = KnowledgeGraph()
 
         # add document structure:
@@ -150,22 +152,27 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
     return doc
 
 
-def main():
+def create_graph(root: Node, analyzed: Node, fast: bool = True):
+    """
+    Creates a knowledge graph from a parsed doucment.
+
+    :param root: The document structure against which to resolve references.
+    :param analyzed: The document structure from which to obtain the knowledge in the knowledge graph.
+    :param fast: Determines if a faster spacy pipeline should be used.
+    :return:
+    """
+
     # We need to use coreferee so that PyCharm does not tidy up the reference.
     if not coreferee:
         raise ModuleNotFoundError("Could not import coreferee for anaphora resolution.")
 
     spacy.prefer_gpu()
 
-    gdpr, document_root = gdpr_dependency_root()
-    article6 = gdpr.resolve_loose([Article(number=6), Paragraph(number=1)])[0]
-
-    root = article6
-    analyzed = article6
-
     Token.set_extension("reference", default=None)
-    # nlp = spacy.load("en_core_web_trf", disable=["ner"])
-    nlp = spacy.load("en_core_web_sm", disable=["ner"])
+    if fast:
+        nlp = spacy.load("en_core_web_sm", disable=["ner"])
+    else:
+        nlp = spacy.load("en_core_web_trf", disable=["ner"])
     nlp.add_pipe("coreferee", config={}, after="parser")
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
     nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, config={},
@@ -195,17 +202,22 @@ def main():
     graph = NegationExtractor().accept(graph)
     graph = PrepositionExtractor().accept(graph)
 
-    # graph = SameLemmaInSameArticleLinker(doc).link(graph)
-    # graph = RelativeClauseLinker().link(graph)
-    graph = ReferenceLinker(doc).link(graph)
+    # TODO: Merging/Linking should be done as a transaction, i.e., mark nodes for merge first and then merge all
+    with BatchedMerge(graph) as proxy_kg:
+        SameLemmaInSameParagraphLinker(doc).link(proxy_kg)
+        ReferenceLinker(doc).link(proxy_kg)
+        ProperNounLinker().link(proxy_kg)
 
-    graph.as_graphviz_graph("Article6", engine="dot", format_="svg", attrs={"overlap": "true"}) \
-        .render(directory='output/graphs', view=False)
+    return graph
 
-    # for phrase in phrases:
-    #    phrase.pprint()
 
-    # plt.show()
+def main():
+    gdpr, document_root = gdpr_dependency_root()
+    article6 = gdpr.resolve_loose([Article(number=6)])[0]
+
+    graph = create_graph(document_root, gdpr)
+    #graph.as_graphviz_graph("Article6", engine="dot", format_="svg", attrs={"overlap": "true"}) \
+    #    .render(directory='output/graphs', view=False)
 
 
 if __name__ == "__main__":

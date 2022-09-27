@@ -30,7 +30,7 @@ def main():
         if node.content:
             txt += node.content + "\n"
 
-    nlp = spacy.load("en_core_web_trf", disable=["ner"])
+    nlp = spacy.load("en_core_web_sm", disable=["ner"])
 
     # nlp = spacy.load("en_core_web_sm", disable=["ner"])
 
@@ -74,7 +74,7 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp("The data subject has given consent to one of the following")
+    doc = nlp("The apple which is red is yummy.")
 
     # for token in doc:
     #    print(token, token.pos_, token.tag_)

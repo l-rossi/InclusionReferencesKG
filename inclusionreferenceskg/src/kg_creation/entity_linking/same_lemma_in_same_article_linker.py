@@ -9,9 +9,9 @@ from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import PhraseObject
 
 
-class SameLemmaInSameArticleLinker(EntityLinker):
+class SameLemmaInSameParagraphLinker(EntityLinker):
     """
-    Links nodes on the heuristic, that if a node is in the same article and has the same lemma, it
+    Links nodes on the heuristic, that if a node is in the same paragraph and has the same lemma, it
     refers to the same thing.
     """
 

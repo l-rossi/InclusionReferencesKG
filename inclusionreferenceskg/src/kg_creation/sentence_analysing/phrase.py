@@ -74,7 +74,6 @@ class Predicate:
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
     # attributes
-    prepositions: List[str] = dataclasses.field(default_factory=list)
     negated: bool = False
 
 

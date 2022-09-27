@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import warnings
-from typing import Dict, Tuple, Union, Optional, Set
+from collections import defaultdict
+from functools import reduce
+from typing import Dict, Tuple, Union, Optional, Set, List
 
 import graphviz
 import networkx as nx
@@ -59,7 +61,7 @@ class KnowledgeGraph:
         """
         self._add_node(id_, item)
 
-    def merge(self, u: str, v: str, item: Optional[Union[Predicate, PhraseObject, Node]] = None):
+    def merge(self, u: str, v: str):
         """
         Merges node v into node u. Edges from u to v or vice versa are lost.
 
@@ -85,11 +87,11 @@ class KnowledgeGraph:
 
         doc = u_node.item.token.doc
         print(
-            f"merging '{doc[u_node.item.token.i:u_node.item.token.i + 10]}' and '{doc[v_node.item.token.i:v_node.item.token.i + 10]}'")
+            f"merging '{doc[u_node.item.token.i - 5:u_node.item.token.i + 5]}' and '{doc[v_node.item.token.i - 5:v_node.item.token.i + 5]}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
-            label, attributes = self.nodes[ref].adj[v][1:2]
+            label, attributes = self.nodes[ref].adj[v][1:3]
             self.nodes[ref].adj.pop(v)
             if v != u:
                 self.add_edge(ref, u, label=label, attributes=attributes)
@@ -97,14 +99,11 @@ class KnowledgeGraph:
         v_node.adj_in = []
 
         # Replace edges v points to
-        for id_, (node, label) in v_node.adj.items():
+        for id_, (node, label, attributes) in v_node.adj.items():
             node.adj_in.remove(v)
-            self.add_edge(u, id_, label)
+            self.add_edge(u, id_, label, attributes)
 
         self.nodes.pop(v)
-
-        if item is not None:
-            u_node.item = item
 
         print(f"merged {u} and {v}")
         return u
@@ -136,11 +135,69 @@ class KnowledgeGraph:
         return out
 
 
+class KGProxy(KnowledgeGraph):
+    """
+    Proxy for merging nodes in which merges are not applied directly.
+    """
+
+    def __init__(self, kg: KnowledgeGraph):
+        super().__init__()
+        self.nodes = kg.nodes
+        self.merges: List[Tuple[str, str]] = []
+
+    def merge(self, u: str, v: str):
+        self.merges.append((u, v))
+        return u
+
+
+class BatchedMerge:
+    """
+    Creates a proxy around a knowledge graph to batch merging.
+    """
+
+    def __init__(self, kg: KnowledgeGraph):
+        self.kg = kg
+        self.proxy_kg = KGProxy(kg)
+        pass
+
+    def __enter__(self) -> KGProxy:
+        return self.proxy_kg
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Nodes are grouped so that no node is merged in more than one group.
+        # We group by using a tree search algorithm on nodes until all nodes have been visited.
+        nodes = set(x for edge in self.proxy_kg.merges for x in edge)
+        groups = []
+
+        adj: Dict[str, Set[str]] = defaultdict(set)
+        for u, v in self.proxy_kg.merges:
+            adj[u].add(v)
+            adj[v].add(u)
+        while nodes:
+            curr = nodes.pop()
+            group = {curr}
+
+            search_stack = [curr]
+            while search_stack:
+                curr_search = search_stack.pop()
+                for neighbour in adj[curr_search]:
+                    if neighbour in nodes:
+                        search_stack.append(neighbour)
+                        group.add(neighbour)
+                        nodes.discard(neighbour)
+
+            groups.append(group)
+
+        for group in groups:
+            reduce(self.kg.merge, group)
+
+
 class KGNode:
     def __init__(self, id_: str, item: Optional[Union[Predicate, PhraseObject, Node]]):
         """
         :param id_: The id of the KGNode
-        :param item: The item to store.
+        :param item: The items to store. A KGNode should be created with only one item but through merging
+        more items may be added.
         """
 
         # The adjacency list (dictionary) stores a set of tuples of Node and edge label

@@ -11,6 +11,10 @@ from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Pred
 
 class RelativeClauseLinker(EntityLinker):
 
+    def __init__(self):
+        warnings.warn("RelativeClauseLinker is deprecated as its function is now done by the Phrase Extractor directly",
+                      DeprecationWarning)
+
     def link(self, graph: KnowledgeGraph) -> KnowledgeGraph:
 
         token_to_node: Dict[Token, KGNode] = {node.item.token: node for node in graph.nodes.values() if
@@ -23,7 +27,7 @@ class RelativeClauseLinker(EntityLinker):
 
                 relative_pronoun_nodes = []
                 for pred in predicate_node_for_merge:
-                    relative_pronoun_nodes += [neighbour.id for neighbour, label in pred.adj.values() if
+                    relative_pronoun_nodes += [neighbour.id for neighbour, label, _ in pred.adj.values() if
                                                label == "agent" and neighbour.item.token.pos_ == "PRON"]
 
                 if relative_pronoun_nodes:
