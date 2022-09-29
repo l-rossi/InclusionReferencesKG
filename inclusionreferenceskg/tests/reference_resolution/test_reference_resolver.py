@@ -9,8 +9,6 @@ from inclusionreferenceskg.src.reference_resolution.reference_resolver import Re
 
 
 def _references_eq_qualifiers(actual_references, expected_qualifiers):
-    print(actual_references)
-
     assert len(actual_references) == 1
     assert len(actual_references[0].reference_qualifier) == len(expected_qualifiers)
 

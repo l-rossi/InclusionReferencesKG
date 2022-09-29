@@ -17,6 +17,7 @@ from inclusionreferenceskg.src.kg_creation.entity_linking.proper_noun_linker imp
 from inclusionreferenceskg.src.kg_creation.entity_linking.reference_linker import ReferenceLinker
 from inclusionreferenceskg.src.kg_creation.entity_linking.same_lemma_in_same_article_linker import \
     SameLemmaInSameParagraphLinker
+from inclusionreferenceskg.src.kg_creation.entity_linking.same_token_linker import SameTokenLinker
 from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph, BatchedMerge
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phrase
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
@@ -202,8 +203,8 @@ def create_graph(root: Node, analyzed: Node, fast: bool = True):
     graph = NegationExtractor().accept(graph)
     graph = PrepositionExtractor().accept(graph)
 
-    # TODO: Merging/Linking should be done as a transaction, i.e., mark nodes for merge first and then merge all
     with BatchedMerge(graph) as proxy_kg:
+        SameTokenLinker().link(proxy_kg)
         SameLemmaInSameParagraphLinker(doc).link(proxy_kg)
         ReferenceLinker(doc).link(proxy_kg)
         ProperNounLinker().link(proxy_kg)
@@ -213,11 +214,16 @@ def create_graph(root: Node, analyzed: Node, fast: bool = True):
 
 def main():
     gdpr, document_root = gdpr_dependency_root()
-    article6 = gdpr.resolve_loose([Article(number=6)])[0]
+    article6 = gdpr.resolve_loose([Article(number=29)])[0]
 
-    graph = create_graph(document_root, gdpr)
-    #graph.as_graphviz_graph("Article6", engine="dot", format_="svg", attrs={"overlap": "true"}) \
-    #    .render(directory='output/graphs', view=False)
+    graph = create_graph(article6, article6, fast=False)
+    for triplet in graph.as_triplets():
+        if triplet[1] in {"contains", "defines"}:
+            continue
+        print(triplet)
+
+    graph.as_graphviz_graph("Article29", engine="dot", format_="svg", attrs={"overlap": "true"}) \
+        .render(directory='output/graphs', view=False)
 
 
 if __name__ == "__main__":

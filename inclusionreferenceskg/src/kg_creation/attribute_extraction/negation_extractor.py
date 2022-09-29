@@ -10,6 +10,10 @@ class NegationExtractor(AttributeExtractor):
     def accept(self, graph: KnowledgeGraph) -> KnowledgeGraph:
         for node in graph.nodes.values():
             if isinstance(node.item, Predicate):
-                node.item.negated = sum(1 for tok in node.item.token.children if tok.dep_ == "neg") % 2 == 1
+                negation_counter = sum(1 for tok in node.item.token.children if tok.dep_ == "neg")
+                negation_counter += sum(
+                    1 for tok in node.item.token.children if
+                    tok.dep_ == "mark" and tok.pos_ == "SCONJ" and tok.text in {"except", "unless"})
+                node.item.negated = negation_counter % 2 == 1
 
         return graph

@@ -7,7 +7,6 @@ from spacy.tokens import Token
 from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
 from inclusionreferenceskg.src.document_parsing.node.article import Article
 from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from inclusionreferenceskg.src.kg_creation.sentence_analysing.util import get_main_verbs_of_sent
 
@@ -23,14 +22,14 @@ def main():
 
     gdpr = DocumentTreeParser().parse_document("GDPR", gdpr_text)
 
-    article6 = gdpr.resolve_loose([Article(number=49), Paragraph(number=1)])[0]
+    article6 = gdpr.resolve_loose([Article(number=29)])[0]
 
     txt = ""
     for node in pre_order(article6):
         if node.content:
             txt += node.content + "\n"
 
-    nlp = spacy.load("en_core_web_sm", disable=["ner"])
+    nlp = spacy.load("en_core_web_trf", disable=["ner"])
 
     # nlp = spacy.load("en_core_web_sm", disable=["ner"])
 
@@ -74,10 +73,8 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp("The apple which is red is yummy.")
+    doc = nlp(txt)
 
-    # for token in doc:
-    #    print(token, token.pos_, token.tag_)
     """for sent in doc.sents:
         phrases = PhraseExtractor().extract_from_sentence(sent)
         for phrase in phrases:

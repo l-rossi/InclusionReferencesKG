@@ -67,8 +67,9 @@ def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
         verb_and_prep = [verb] + [tok for tok in verb.rights if tok.dep_ in {"prep", "agent"}]
         objs.extend(tok for v in verb_and_prep for tok in v.rights if tok.dep_ in OBJ_DEPS)
         objs.extend(tok for tok in verb.rights if tok.dep_ == "xcomp")
-        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp"})
+        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod"})
         objs.extend(tok for obj in objs for tok in get_conjuncts(obj, {obj.pos_}))
+
     return objs
 
 

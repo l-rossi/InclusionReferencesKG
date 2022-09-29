@@ -85,13 +85,17 @@ class PhraseObject:
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
+    _str: Optional[str] = None
+
     def pretty_str(self) -> str:
         coref_chain = self.token.doc._.coref_chains.resolve(self.token)
         coref_str = ""
         if coref_chain and self.token.pos_ == "PRON":
             coref_str = f", Coreferences: {coref_chain}"
 
-        # return f"{self.token}{coref_str}, Context: '{' '.join(str(x) for x in self.token.subtree)}'"
-        return f"{self.token}{coref_str}"
+        return f"{self._proper_noun_str()}{coref_str}"
 
-    # attributes
+    def _proper_noun_str(self):
+        return " ".join(x.text for x in
+                        sorted((self.token,) + tuple(tok for tok in self.token.children if tok.dep_ == "compound"),
+                               key=lambda x: x.i))

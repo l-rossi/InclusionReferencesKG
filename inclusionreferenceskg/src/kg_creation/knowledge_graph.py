@@ -112,6 +112,20 @@ class KnowledgeGraph:
     def _edge_to_str(label, attributes: Dict[str, any]) -> str:
         return f"{label} [{(', '.join(f'{k}: {str(v)}' for k, v in attributes.items()))}]"
 
+    def as_triplets(self) -> List[Tuple[str, str, str]]:
+        """
+        Produces an array of origin, relationship, destination triplets.
+        Properties/Attributes are ignored.
+        :return: A list of triplets
+        """
+        out = []
+
+        for node in self.nodes.values():
+            for other, label, _ in node.adj.values():
+                out.append((str(node), label, str(other)))
+
+        return out
+
     def as_graphviz_graph(self, name: str, engine: str, format_: str, attrs: Dict[str, str]) -> graphviz.Digraph:
         """
         Produces a graphviz.Digraph from the nodes and edges in this graph.
