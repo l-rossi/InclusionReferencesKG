@@ -1,0 +1,8 @@
+required,agent,law
+required,patient,process
+process,conditional,required
+process,agent,processor
+process,patient,data
+process,agent,person
+acting,patient,authority
+acting,agent,person

@@ -1,4 +1,4 @@
-from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
+from reference_detection.regex_reference_detector import RegexReferenceDetector
 
 if __name__ == "__main__":
 

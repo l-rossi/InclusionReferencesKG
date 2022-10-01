@@ -1,8 +1,8 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import BlockPreprocessor
-from inclusionreferenceskg.src.util.regex_util import RegexUtil
+from document_parsing.preprocessing.block_preprocessor import BlockPreprocessor
+from util.regex_util import RegexUtil
 
 
 class InitialSpacePreprocessor(BlockPreprocessor):

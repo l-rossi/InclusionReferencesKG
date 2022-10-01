@@ -3,8 +3,8 @@ from typing import List
 
 from spacy import Language
 
-from inclusionreferenceskg.src.reference import Reference
-from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
+from reference import Reference
+from reference_detection.reference_detector import ReferenceDetector
 
 
 class GoldStandardReferenceDetector(ReferenceDetector):

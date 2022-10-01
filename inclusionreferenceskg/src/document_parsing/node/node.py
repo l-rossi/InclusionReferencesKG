@@ -96,9 +96,7 @@ class Node(ABC):
         nodes and before the first node but not after the last node of the pattern.
 
         Note: This implementation breaks if the pattern contains multiple of the same type of node.
-        ToDO: Fact check the statement above.
         """
-
         if pattern_depth == len(pattern) - 1 and self._pattern_match(pattern[pattern_depth]):
             return [self]
 

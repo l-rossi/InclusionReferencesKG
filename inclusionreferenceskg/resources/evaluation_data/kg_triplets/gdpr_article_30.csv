@@ -1,0 +1,71 @@
+maintain,agent,controller
+maintain,agent,representative
+maintain,patient,record
+contain,agent,record
+contain,patient,description
+contain,patient,categories
+contain,patient,transfer
+contain,patient,purpose
+contain,patient,details
+contain,patient,name
+contain,agent,record
+contain,patient,documentation
+contain,conditional,referred
+referred,agent,transfer
+referred,patient,the second subparagraph of Article 49(1)
+contain,patient,description
+referred,agent,description
+referred,patient,Article 32(1)
+containing,patient,description
+referred,agent,description
+referred,patient,Article 32(1)
+containing,agent,record
+maintain,patient,record
+maintain,agent,processor
+containing,patient,name
+containing,patient,categories
+containing,patient,detailsW
+containing,patient,transfers
+including,agent,transfers
+including,patient,identification
+including,agent,transfers,
+including,patient,documentation
+including,conditional,referred
+referred,patient,the second subparagraph of Article 49(1)
+be,patient,writing
+be,patient,including
+including,patient,form
+be,agent,record
+referred,patient,paragraphs 1 and 2
+make,agent,controller
+make,agent,processor
+make,agent,representative
+make,patient,record
+referred,patient,paragraph 1 and 2
+referred,agent,obligations
+apply,agent,obligations
+apply,patient,enterprise
+apply,patient,organisation
+apply,conditional,employing
+employing,patient,persons
+carries,agent,enterprise
+carries,agent,organisation
+carries,agent,processing
+is,agent,processing
+is,patient,likely
+apply,conditional,is
+is,agent,processing
+is,patient,occasional
+apply,conditional,includes
+includes,agent,processing,
+includes,patient,categories
+referred,agent,categories
+referred,patient,Article 9(1)
+includes,agent,processing
+includes,patient,data
+relating,agent,data
+relating,patient,convictions
+relating,patient,offences
+referred,agent,convictions
+referred,agent,offences
+referred,patient,Article 10

@@ -4,15 +4,15 @@ import csv
 from difflib import Differ, SequenceMatcher
 from typing import Optional
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.document_parsing.preprocessing.footnote_delete_preprocessor import \
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.node_traversal import pre_order
+from document_parsing.preprocessing.footnote_delete_preprocessor import \
     FootnoteDeletePreprocessor
-from inclusionreferenceskg.src.document_parsing.preprocessing.header_preprocessor import HeaderPreprocessor
-from inclusionreferenceskg.src.evaluation.stat_accumulator import StatAccumulator
-from inclusionreferenceskg.src.reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
-from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
-from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
+from document_parsing.preprocessing.header_preprocessor import HeaderPreprocessor
+from evaluation.stat_accumulator import StatAccumulator
+from reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
+from reference_detection.reference_detector import ReferenceDetector
+from reference_detection.regex_reference_detector import RegexReferenceDetector
 
 
 def evaluate_detector(detector: ReferenceDetector, origin_text: str, expected_file: str,

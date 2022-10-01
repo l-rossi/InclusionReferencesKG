@@ -1,6 +1,6 @@
 import os
 
-from inclusionreferenceskg.src.document_parsing.preprocessing.pdf_parser import PDFParser
+from document_parsing.preprocessing.pdf_parser import PDFParser
 
 if __name__ == "__main__":
     root = "./resources/eu_documents"

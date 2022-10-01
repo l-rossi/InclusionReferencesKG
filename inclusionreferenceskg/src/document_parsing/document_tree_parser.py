@@ -1,23 +1,23 @@
 import typing
 from typing import List, Optional, Type
 
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.indent import Indent
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.section import Section
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
-from inclusionreferenceskg.src.document_parsing.node.title import Title
-from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import \
+from document_parsing.node.article import Article
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.document import Document
+from document_parsing.node.indent import Indent
+from document_parsing.node.node import Node
+from document_parsing.node.point import Point
+from document_parsing.node.section import Section
+from document_parsing.node.subparagraph import Paragraph
+from document_parsing.node.subparagraph import Subparagraph
+from document_parsing.node.title import Title
+from document_parsing.preprocessing.block_preprocessor import \
     BlockPreprocessor
-from inclusionreferenceskg.src.document_parsing.preprocessing.footnote_append_preprocessor import \
+from document_parsing.preprocessing.footnote_append_preprocessor import \
     FootnoteAppendPreprocessor
-from inclusionreferenceskg.src.document_parsing.preprocessing.header_preprocessor import \
+from document_parsing.preprocessing.header_preprocessor import \
     HeaderPreprocessor
-from inclusionreferenceskg.src.document_parsing.preprocessing.initial_space_preprocessor import InitialSpacePreprocessor
+from document_parsing.preprocessing.initial_space_preprocessor import InitialSpacePreprocessor
 
 
 class DocumentTreeParser:

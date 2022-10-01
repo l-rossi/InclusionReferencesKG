@@ -1,30 +1,29 @@
 import itertools
 import uuid
 import warnings
-from typing import List, Tuple
+from typing import List, Tuple, Set
 
 import coreferee
 import spacy
+from document_parsing.node.article import Article
+from document_parsing.node.node import Node
+from document_parsing.node.node_traversal import pre_order
+from kg_creation.attribute_extraction.negation_extractor import NegationExtractor
+from kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
+from kg_creation.entity_linking.proper_noun_linker import ProperNounLinker
+from kg_creation.entity_linking.reference_linker import ReferenceLinker
+from kg_creation.entity_linking.same_lemma_in_same_article_linker import \
+    SameLemmaInSameParagraphLinker
+from kg_creation.entity_linking.same_token_linker import SameTokenLinker
+from kg_creation.knowledge_graph import KnowledgeGraph, BatchedMerge
+from kg_creation.sentence_analysing.phrase import Phrase
+from kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
+from reference_detection.regex_reference_detector import RegexReferenceDetector
+from reference_resolution.reference_resolver import ReferenceResolver
 from spacy import Language
 from spacy.tokens import Token, Doc
-
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.kg_creation.attribute_extraction.negation_extractor import NegationExtractor
-from inclusionreferenceskg.src.kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
-from inclusionreferenceskg.src.kg_creation.entity_linking.proper_noun_linker import ProperNounLinker
-from inclusionreferenceskg.src.kg_creation.entity_linking.reference_linker import ReferenceLinker
-from inclusionreferenceskg.src.kg_creation.entity_linking.same_lemma_in_same_article_linker import \
-    SameLemmaInSameParagraphLinker
-from inclusionreferenceskg.src.kg_creation.entity_linking.same_token_linker import SameTokenLinker
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph, BatchedMerge
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Phrase
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
-from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
-from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
-from inclusionreferenceskg.src.util.parser_util import gdpr_dependency_root
-from inclusionreferenceskg.src.util.spacy_components import REFERENCE_QUALIFIER_RESOLVER_COMPONENT
+from util.parser_util import gdpr_dependency_root
+from util.spacy_components import REFERENCE_QUALIFIER_RESOLVER_COMPONENT
 
 
 class KGRenderer:
@@ -35,6 +34,9 @@ class KGRenderer:
     def render(self, root: Node, phrases: List[Phrase]) -> KnowledgeGraph:
         graph = KnowledgeGraph()
 
+        # We keep track of which phrases have already been added to avoid recursion errors.
+        added_phrases = set()
+
         # add document structure:
         for node in pre_order(root):
             graph.add_node(node.id, node)
@@ -44,11 +46,14 @@ class KGRenderer:
                 graph.add_edge(node.id, child.id, label="contains")
 
         for phrase in phrases:
-            self._add_phrase(graph, phrase)
+            self._add_phrase(graph, phrase, added_phrases)
 
         return graph
 
-    def _add_phrase(self, graph: KnowledgeGraph, phrase: Phrase):
+    def _add_phrase(self, graph: KnowledgeGraph, phrase: Phrase, added_phrases: Set[str]):
+        if phrase.id in added_phrases:
+            return
+        added_phrases.add(phrase.id)
 
         for predicate in phrase.predicate:
             graph.add_edge(predicate.token._.node.id, predicate.id, "defines")
@@ -79,17 +84,17 @@ class KGRenderer:
         for patient_phrase in phrase.patient_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, patient_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "patient")
-            self._add_phrase(graph, patient_phrase)
+            self._add_phrase(graph, patient_phrase, added_phrases)
 
         for agent_phrase in phrase.agent_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, agent_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "agent")
-            self._add_phrase(graph, agent_phrase)
+            self._add_phrase(graph, agent_phrase, added_phrases)
 
         for conditional_phrase in phrase.condition_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, conditional_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "conditional")
-            self._add_phrase(graph, conditional_phrase)
+            self._add_phrase(graph, conditional_phrase, added_phrases)
 
 
 def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
@@ -128,7 +133,6 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         text_positions.append((len(raw_text), node))
 
     # We create an anonymous pipe to insert attributes into the doc right after creation.
-    # TODO: This is bad practice and a better solution should ideally be found
     comp_name = "document_supplement_component_" + str(uuid.uuid4())
 
     @Language.component(comp_name)
@@ -153,7 +157,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
     return doc
 
 
-def create_graph(root: Node, analyzed: Node, fast: bool = True):
+def create_graph(root: Node, analyzed: Node, fast: bool = False):
     """
     Creates a knowledge graph from a parsed doucment.
 
@@ -169,7 +173,8 @@ def create_graph(root: Node, analyzed: Node, fast: bool = True):
 
     spacy.prefer_gpu()
 
-    Token.set_extension("reference", default=None)
+    if Token.get_extension("reference") is None:
+        Token.set_extension("reference", default=None)
     if fast:
         nlp = spacy.load("en_core_web_sm", disable=["ner"])
     else:
@@ -210,21 +215,3 @@ def create_graph(root: Node, analyzed: Node, fast: bool = True):
         ProperNounLinker().link(proxy_kg)
 
     return graph
-
-
-def main():
-    gdpr, document_root = gdpr_dependency_root()
-    article6 = gdpr.resolve_loose([Article(number=29)])[0]
-
-    graph = create_graph(article6, article6, fast=False)
-    for triplet in graph.as_triplets():
-        if triplet[1] in {"contains", "defines"}:
-            continue
-        print(triplet)
-
-    graph.as_graphviz_graph("Article29", engine="dot", format_="svg", attrs={"overlap": "true"}) \
-        .render(directory='output/graphs', view=False)
-
-
-if __name__ == "__main__":
-    main()

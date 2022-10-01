@@ -8,8 +8,8 @@ from typing import Dict, Tuple, Union, Optional, Set, List
 import graphviz
 import networkx as nx
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import PhraseObject, Predicate
+from document_parsing.node.node import Node
+from kg_creation.sentence_analysing.phrase import PhraseObject, Predicate
 
 
 class KnowledgeGraph:
@@ -83,11 +83,11 @@ class KnowledgeGraph:
 
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
             warnings.warn(
-                "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept")
+                "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept.")
 
         doc = u_node.item.token.doc
-        print(
-            f"merging '{doc[u_node.item.token.i - 5:u_node.item.token.i + 5]}' and '{doc[v_node.item.token.i - 5:v_node.item.token.i + 5]}'")
+        #print(
+        #    f"merging '{doc[u_node.item.token.i - 5:u_node.item.token.i + 5]}' and '{doc[v_node.item.token.i - 5:v_node.item.token.i + 5]}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
@@ -98,6 +98,12 @@ class KnowledgeGraph:
 
         v_node.adj_in = []
 
+        if not u_node.attributes.keys().isdisjoint(v_node.attributes.keys()):
+            warnings.warn("Merging nodes with overlapping attributes. Conflicting attributes are resolved by using "
+                          "node u will be kept.")
+        v_node.attributes.update(u_node.attributes)
+        u_node.attributes = v_node.attributes.copy()
+
         # Replace edges v points to
         for id_, (node, label, attributes) in v_node.adj.items():
             node.adj_in.remove(v)
@@ -105,16 +111,21 @@ class KnowledgeGraph:
 
         self.nodes.pop(v)
 
-        print(f"merged {u} and {v}")
+        # print(f"merged {u} and {v}")
         return u
 
     @staticmethod
-    def _edge_to_str(label, attributes: Dict[str, any]) -> str:
+    def _edge_to_str(label: str, attributes: Dict[str, any]) -> str:
         return f"{label} [{(', '.join(f'{k}: {str(v)}' for k, v in attributes.items()))}]"
 
-    def as_triplets(self) -> List[Tuple[str, str, str]]:
+    @staticmethod
+    def _node_to_str(token_text: str, attributes: Dict[str, any]):
+        return f"{token_text} [{(', '.join(f'{k}: {str(v)}' for k, v in attributes.items()))}]"
+
+    def as_triplets(self) -> List[Tuple[Tuple[str, str], str, Tuple[str, str]]]:
         """
         Produces an array of origin, relationship, destination triplets.
+        Origin and destination each are comprised of a tuple of id and string representation.
         Properties/Attributes are ignored.
         :return: A list of triplets
         """
@@ -122,7 +133,7 @@ class KnowledgeGraph:
 
         for node in self.nodes.values():
             for other, label, _ in node.adj.values():
-                out.append((str(node), label, str(other)))
+                out.append(((node.id, str(node)), label, (node.id, str(other))))
 
         return out
 
@@ -142,7 +153,7 @@ class KnowledgeGraph:
         out.graph_attr.update(attrs)
 
         for node in self.nodes.values():
-            out.node(str(node.id), str(node))
+            out.node(str(node.id), KnowledgeGraph._node_to_str(str(node), node.attributes))
             for _, (neighbor, label, attributes) in node.adj.items():
                 out.edge(str(node.id), str(neighbor.id), label=KnowledgeGraph._edge_to_str(label, attributes))
 
@@ -214,16 +225,17 @@ class KGNode:
         more items may be added.
         """
 
-        # The adjacency list (dictionary) stores a set of tuples of Node and edge label
+        # The adjacency list (dictionary) stores a set of tuples of Node, edge label and attributtes
         self.adj: Dict[str, Tuple[KGNode, str, Dict[str, any]]] = dict()
         # A KGNode keeps a set of references of nodes that point to it (in-neighbours). This speeds up merging of nodes.
         self.adj_in: Set[str] = set()
         self.id = id_
         self.item = item
+        self.attributes: Dict[str, any] = dict()
 
     def __str__(self) -> str:
         if isinstance(self.item, Predicate):
-            return f"{self.item.token}, negated: {self.item.negated}"
+            return self.item.token.text
         elif isinstance(self.item, PhraseObject):
             return self.item.pretty_str()
         elif isinstance(self.item, Node):
@@ -234,9 +246,3 @@ class KGNode:
         else:
             raise ValueError(f"self.item has the wrong type. "
                              f"Expected one of Predicate, PhraseObject, Node. Was: '{type(self.item)}'.")
-
-
-if __name__ == "__main__":
-    G = nx.DiGraph()
-
-    G.add_edge("1", "2")

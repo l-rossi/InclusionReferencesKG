@@ -4,9 +4,9 @@ from typing import Dict
 
 from spacy.tokens import Token
 
-from inclusionreferenceskg.src.kg_creation.entity_linking.entity_linker import EntityLinker
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph, KGNode
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Predicate
+from kg_creation.entity_linking.entity_linker import EntityLinker
+from kg_creation.knowledge_graph import KnowledgeGraph, KGNode
+from kg_creation.sentence_analysing.phrase import Predicate
 
 
 class RelativeClauseLinker(EntityLinker):

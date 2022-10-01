@@ -1,12 +1,12 @@
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.indent import Indent
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.section import Section
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.article import Article
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.document import Document
+from document_parsing.node.indent import Indent
+from document_parsing.node.paragraph import Paragraph
+from document_parsing.node.point import Point
+from document_parsing.node.section import Section
+from document_parsing.node.subparagraph import Subparagraph
 
 
 def test_parse_regulation():

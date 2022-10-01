@@ -9,18 +9,18 @@ from typing import List, Type
 from spacy import Language
 from spacy.tokens import Token
 
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import traverse_doc_by_node
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.title import Title
-from inclusionreferenceskg.src.reference import Reference
-from inclusionreferenceskg.src.reference_detection.regex_reference_detector import RegexReferenceDetector
-from inclusionreferenceskg.src.util.regex_util import RegexUtil
-from inclusionreferenceskg.src.util.util import rom_to_dec, alph_to_dec
+from document_parsing.node.article import Article
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.document import Document
+from document_parsing.node.node import Node
+from document_parsing.node.node_traversal import traverse_doc_by_node
+from document_parsing.node.paragraph import Paragraph
+from document_parsing.node.point import Point
+from document_parsing.node.title import Title
+from reference import Reference
+from reference_detection.regex_reference_detector import RegexReferenceDetector
+from util.regex_util import RegexUtil
+from util.util import rom_to_dec, alph_to_dec
 
 
 class ReferenceResolver:
@@ -288,6 +288,11 @@ class ReferenceResolver:
         def _resolve_name_to_node(name: str, node_type: Type[Node]):
             pattern = fr"that\s{name}"
             if not re.match(pattern, text, re.I):
+                return []
+
+            if not previous_references:
+                warnings.warn("Encountered reference containing that although no previous "
+                              "reference has been encountered in this node.")
                 return []
 
             for prev_ref in reversed(previous_references[-1]):

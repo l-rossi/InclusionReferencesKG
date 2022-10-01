@@ -1,4 +1,4 @@
-from inclusionreferenceskg.src.util.util import rom_to_dec
+from util.util import rom_to_dec
 
 
 def test_rom_to_dec():

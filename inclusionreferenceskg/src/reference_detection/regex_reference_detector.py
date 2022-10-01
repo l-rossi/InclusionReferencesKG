@@ -3,9 +3,9 @@ from typing import List
 
 from spacy import Language
 
-from inclusionreferenceskg.src.reference import Reference
-from inclusionreferenceskg.src.reference_detection.reference_detector import ReferenceDetector
-from inclusionreferenceskg.src.util.regex_util import RegexUtil
+from reference import Reference
+from reference_detection.reference_detector import ReferenceDetector
+from util.regex_util import RegexUtil
 
 
 class RegexReferenceDetector(ReferenceDetector):

@@ -3,10 +3,10 @@ from functools import reduce
 
 from spacy.tokens import Doc
 
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
-from inclusionreferenceskg.src.kg_creation.entity_linking.entity_linker import EntityLinker
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import PhraseObject
+from document_parsing.node.paragraph import Paragraph
+from kg_creation.entity_linking.entity_linker import EntityLinker
+from kg_creation.knowledge_graph import KnowledgeGraph
+from kg_creation.sentence_analysing.phrase import PhraseObject
 
 
 class SameLemmaInSameParagraphLinker(EntityLinker):

@@ -2,8 +2,8 @@ import re
 import typing
 from typing import Tuple, Optional
 
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.node import Node
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.node import Node
 
 
 class Section(Node):

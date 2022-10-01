@@ -1,11 +1,11 @@
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.title import Title
-from inclusionreferenceskg.src.reference import Reference
-from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
+from document_parsing.node.article import Article
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.document import Document
+from document_parsing.node.paragraph import Paragraph
+from document_parsing.node.point import Point
+from document_parsing.node.title import Title
+from reference import Reference
+from reference_resolution.reference_resolver import ReferenceResolver
 
 
 def _references_eq_qualifiers(actual_references, expected_qualifiers):

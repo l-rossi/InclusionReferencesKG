@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
+from kg_creation.knowledge_graph import KnowledgeGraph
 
 
 class EntityLinker(ABC):

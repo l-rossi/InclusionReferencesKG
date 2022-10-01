@@ -2,7 +2,7 @@ from typing import Tuple, Generator
 
 from spacy.tokens import Doc, Span, Token
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
+from document_parsing.node.node import Node
 
 
 def pre_order(root: Node):

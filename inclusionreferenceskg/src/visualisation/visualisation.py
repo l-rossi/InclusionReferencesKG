@@ -1,7 +1,7 @@
 import graphviz
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.node_traversal import pre_order
 
 
 def main():

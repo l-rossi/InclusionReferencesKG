@@ -3,9 +3,9 @@ from typing import List, Optional
 
 from spacy.tokens import Span, Doc
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_subjects_of_verbs, \
+from document_parsing.node.node import Node
+from kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
+from kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_subjects_of_verbs, \
     get_objects_of_predicate_consider_preposition
 
 
@@ -13,7 +13,7 @@ def is_conditional(phrase: Phrase):
     """
     Primitive heuristic to determine if a phrase is a conditional.
 
-    :param phrase: THe phrase to be checked for conditionality.
+    :param phrase: The phrase to be checked for conditionality.
     """
 
     # examples of conditional phrases: provided that, if and to the extent that
@@ -37,8 +37,6 @@ class PhraseExtractor:
         phrases: List[Phrase] = [Phrase(predicate=[Predicate(token=verb) for verb in verb_group]) for verb_group in
                                  main_verbs_of_sent]
 
-        print("phrases", phrases)
-
         # used to mark phrases for deletion
         deletion_marks = set()
 
@@ -52,13 +50,17 @@ class PhraseExtractor:
             object_children = [child for obj in phrase.agent_objects + phrase.patient_objects for child in
                                obj.token.children]
 
-            verb_as_patient = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children) if
+            # link phrases
+            verb_as_patient = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children)
+                               if
                                tok.dep_ in {"ccomp", "advcl", "acl"}]
-            print("verb_as_patient", verb_as_patient)
 
             phrase_as_patient = []
             for vap in verb_as_patient:
                 for p in phrases:
+                    if p.id == phrase.id:
+                        continue
+
                     for pred in p.predicate:
                         if pred.token == vap:
                             phrase_as_patient.append(p)

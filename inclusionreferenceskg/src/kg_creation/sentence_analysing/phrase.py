@@ -73,10 +73,6 @@ class Predicate:
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
-    # attributes
-    negated: bool = False
-
-
 @dataclasses.dataclass
 class PhraseObject:
     """
@@ -84,8 +80,6 @@ class PhraseObject:
     """
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
-
-    _str: Optional[str] = None
 
     def pretty_str(self) -> str:
         coref_chain = self.token.doc._.coref_chains.resolve(self.token)

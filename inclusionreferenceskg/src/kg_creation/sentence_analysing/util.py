@@ -10,7 +10,7 @@ from spacy.tokens import Span, Token
 
 # https://stackoverflow.com/questions/39763091/how-to-extract-subjects-in-a-sentence-and-their-respective-dependent-phrases
 # Categories thanks to psr's answer on Stackoverflow https://stackoverflow.com/a/40014532/9885004
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase import Predicate
+from kg_creation.sentence_analysing.phrase import Predicate
 
 SUBJECTS = ["nsubj", "nsubjpass", "csubj", "csubjpass", "agent", "expl"]
 OBJECTS = ["dobj", "dative", "attr", "oprd"]
@@ -54,6 +54,24 @@ def get_objects_of_predicate_consider_preposition(predicate: List[Predicate]) ->
     return get_objects_of_verb_consider_preposition([p.token for p in predicate])
 
 
+def extract_prepositions(verb: Token):
+    """
+    Finds all children and children's children for which there is a direct path of prep/agent
+    dependencies to the root.
+    :param verb: The root from which to search for prepositions.
+    :return: A list of prepositions.
+    """
+    out = []
+    preps = [verb]
+    # Tree search for all paths of prepositions as to catch constructs with multiple prepositions.
+    while preps:
+        p = preps.pop()
+        new_preps = [tok for tok in p.rights if tok.dep_ in {"prep", "agent"}]
+        preps.extend(new_preps)
+        out.extend(new_preps)
+    return out
+
+
 def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
     """
     Adapted from 'get_objects_of_verb' from textacy.
@@ -64,7 +82,7 @@ def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
 
     objs = []
     for verb in verbs:
-        verb_and_prep = [verb] + [tok for tok in verb.rights if tok.dep_ in {"prep", "agent"}]
+        verb_and_prep = [verb] + extract_prepositions(verb)
         objs.extend(tok for v in verb_and_prep for tok in v.rights if tok.dep_ in OBJ_DEPS)
         objs.extend(tok for tok in verb.rights if tok.dep_ == "xcomp")
         objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod"})
@@ -94,4 +112,6 @@ def get_subjects_of_verbs(verbs: List[Predicate]):
     subjs = []
     for verb in verbs:
         subjs.extend(textacy.spacier.utils.get_subjects_of_verb(verb.token))
+        if verb.token.dep_ == "acl":
+            subjs.append(verb.token.head)
     return subjs

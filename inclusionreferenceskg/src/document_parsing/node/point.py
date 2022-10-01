@@ -1,9 +1,9 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
-from inclusionreferenceskg.src.util.util import alph_to_dec
+from document_parsing.node.node import Node
+from document_parsing.node.subparagraph import Subparagraph
+from util.util import alph_to_dec
 
 
 class Point(Node):

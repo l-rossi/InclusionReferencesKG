@@ -1,7 +1,7 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.preprocessing.block_preprocessor import \
+from document_parsing.preprocessing.block_preprocessor import \
     BlockPreprocessor
 
 

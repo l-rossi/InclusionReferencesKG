@@ -1,9 +1,9 @@
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.chapter import Chapter
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
-from inclusionreferenceskg.src.document_parsing.node.point import Point
-from inclusionreferenceskg.src.document_parsing.node.subparagraph import Subparagraph
+from document_parsing.node.article import Article
+from document_parsing.node.chapter import Chapter
+from document_parsing.node.document import Document
+from document_parsing.node.paragraph import Paragraph
+from document_parsing.node.point import Point
+from document_parsing.node.subparagraph import Subparagraph
 
 
 def _test_structure():

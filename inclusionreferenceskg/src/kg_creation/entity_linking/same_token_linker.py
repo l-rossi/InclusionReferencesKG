@@ -1,8 +1,8 @@
 from collections import defaultdict
 from functools import reduce
 
-from inclusionreferenceskg.src.kg_creation.entity_linking.entity_linker import EntityLinker
-from inclusionreferenceskg.src.kg_creation.knowledge_graph import KnowledgeGraph
+from kg_creation.entity_linking.entity_linker import EntityLinker
+from kg_creation.knowledge_graph import KnowledgeGraph
 
 
 class SameTokenLinker(EntityLinker):

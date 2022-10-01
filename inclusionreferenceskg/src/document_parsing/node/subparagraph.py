@@ -1,13 +1,13 @@
 import typing
 import warnings
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.paragraph import Paragraph
+from document_parsing.node.node import Node
+from document_parsing.node.paragraph import Paragraph
 
 
 class Subparagraph(Node):
     depth = Paragraph.depth + 1
-    
+
     @classmethod
     def accept_block(cls, block: str, parent: Node) -> typing.Tuple[bool, typing.Optional["Node"]]:
         if parent.__class__.depth >= Paragraph.depth:

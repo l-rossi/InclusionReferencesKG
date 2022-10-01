@@ -4,11 +4,11 @@ import textacy.spacier.utils
 from spacy import displacy
 from spacy.tokens import Token
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
-from inclusionreferenceskg.src.kg_creation.sentence_analysing.util import get_main_verbs_of_sent
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.article import Article
+from document_parsing.node.node_traversal import pre_order
+from kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
+from kg_creation.sentence_analysing.util import get_main_verbs_of_sent
 
 spacy.prefer_gpu()
 # We need to use coreferee so that PyCharm does not tidy up the reference.

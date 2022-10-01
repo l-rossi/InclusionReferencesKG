@@ -1,6 +1,7 @@
 """
 Unrefined GUI to quickly mark parts of a text and store the locations of the marks.
 """
+from __future__ import annotations
 
 import dataclasses
 import tkinter

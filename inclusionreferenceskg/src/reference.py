@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
+from document_parsing.node.node import Node
 
 
 @dataclass

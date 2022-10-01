@@ -1,8 +1,8 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.section import Section
+from document_parsing.node.node import Node
+from document_parsing.node.section import Section
 
 
 class Article(Node):

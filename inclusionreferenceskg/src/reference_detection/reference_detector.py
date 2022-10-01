@@ -3,7 +3,7 @@ from typing import Dict, List, Type
 
 from spacy.tokens import Span, Doc
 
-from inclusionreferenceskg.src.reference import Reference
+from reference import Reference
 
 
 class ReferenceDetector(ABC):

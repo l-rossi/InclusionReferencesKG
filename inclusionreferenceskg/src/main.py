@@ -1,14 +1,12 @@
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node_printer import print_nodes
-
+from document_parsing.node.article import Article
+from kg_creation.kg_renderer import create_graph
+from util.parser_util import gdpr_dependency_root
 
 if __name__ == "__main__":
+    gdpr, document_root = gdpr_dependency_root()
+    article6 = gdpr.resolve_loose([Article(number=30)])[0]
 
-    with open("./resources/gdpr.txt", "r") as gdpr_file:
-        gdpr_text = gdpr_file.read()
+    graph = create_graph(document_root, document_root, fast=True)
+    print(len(graph.nodes))
+    print(print(sum(len(x.adj) for x in graph.nodes.values())))
 
-    parser = DocumentTreeParser()
-    gdpr = parser.parse_document("GDPR", gdpr_text)
-    print_nodes(gdpr)
-
-    # print(PDFParser.parse_to_file("./resources/gdpr.pdf", "./resources/gdpr.txt"))

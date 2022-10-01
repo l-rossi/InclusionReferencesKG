@@ -1,12 +1,12 @@
 import json
 from typing import Dict, Tuple
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.node_traversal import pre_order
-from inclusionreferenceskg.src.reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
-from inclusionreferenceskg.src.reference_resolution.reference_resolver import ReferenceResolver
-from inclusionreferenceskg.src.util.parser_util import gdpr_dependency_root
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.node import Node
+from document_parsing.node.node_traversal import pre_order
+from reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
+from reference_resolution.reference_resolver import ReferenceResolver
+from util.parser_util import gdpr_dependency_root
 
 
 def main():

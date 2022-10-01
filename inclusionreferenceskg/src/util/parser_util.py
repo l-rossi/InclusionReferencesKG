@@ -1,8 +1,8 @@
 from typing import Tuple
 
-from inclusionreferenceskg.src.document_parsing.document_tree_parser import DocumentTreeParser
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.root import Root
+from document_parsing.document_tree_parser import DocumentTreeParser
+from document_parsing.node.document import Document
+from document_parsing.node.root import Root
 
 
 def gdpr_dependency_root(parser: DocumentTreeParser = None) -> Tuple[Document, Root]:

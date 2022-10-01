@@ -1,9 +1,9 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.node.document import Document
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.util.util import rom_to_dec
+from document_parsing.node.document import Document
+from document_parsing.node.node import Node
+from util.util import rom_to_dec
 
 
 class Title(Node):

@@ -1,8 +1,8 @@
 import re
 import typing
 
-from inclusionreferenceskg.src.document_parsing.node.article import Article
-from inclusionreferenceskg.src.document_parsing.node.node import Node
+from document_parsing.node.article import Article
+from document_parsing.node.node import Node
 
 
 class Paragraph(Node):

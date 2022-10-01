@@ -3,8 +3,8 @@ import warnings
 from typing import ClassVar
 from typing import Tuple, Optional
 
-from inclusionreferenceskg.src.document_parsing.node.node import Node
-from inclusionreferenceskg.src.document_parsing.node.point import Point
+from document_parsing.node.node import Node
+from document_parsing.node.point import Point
 
 
 class Indent(Node):
