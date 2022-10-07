@@ -13,5 +13,4 @@ class HeaderPreprocessor(BlockPreprocessor):
 
     @staticmethod
     def process(blocks: typing.List[str]):
-        # Heuristic for removing blocks based on removing those starting with a date. TODO: Discuss applicability
         return [block for block in blocks if not HeaderPreprocessor.date_pattern.match(block)]

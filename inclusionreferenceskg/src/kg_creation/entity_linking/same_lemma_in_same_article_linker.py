@@ -20,8 +20,6 @@ class SameLemmaInSameParagraphLinker(EntityLinker):
 
     def link(self, graph: KnowledgeGraph) -> KnowledgeGraph:
 
-        # TODO Do not merge nodes like 'which' (maybe only nouns)
-
         coref_chains = self.doc._.coref_chains if Doc.get_extension("coref_chains") else None
 
         group_by_paragraph = defaultdict(list)

@@ -4,6 +4,12 @@ from kg_creation.sentence_analysing.phrase import Predicate
 
 
 class PrepositionExtractor(AttributeExtractor):
+    """
+    Extractor to extract more information on labels, specifically
+    the preposition and in some cases the adjective complement.
+    """
+
+    prepositional_dependencies = {"prep", "acomp"}
 
     def accept(self, graph: KnowledgeGraph) -> KnowledgeGraph:
         for node in graph.nodes.values():
@@ -14,12 +20,13 @@ class PrepositionExtractor(AttributeExtractor):
                 if label != "agent" and label != "patient":
                     continue
 
-                if hasattr(adj.item, "token") and adj.item.token.head.dep_ == "prep":
+                if hasattr(adj.item,
+                           "token") and adj.item.token.head.dep_ in PrepositionExtractor.prepositional_dependencies:
                     if attributes.get("prepositions") is None:
                         attributes["prepositions"] = []
 
                     prep_chain = [adj.item.token.head]
-                    while prep_chain[0].head.dep_ == "prep":
+                    while prep_chain[0].head.dep_ in PrepositionExtractor.prepositional_dependencies:
                         prep_chain.insert(0, prep_chain[0].head)
 
                     attributes["prepositions"].extend(prep_chain)

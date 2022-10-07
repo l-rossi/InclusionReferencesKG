@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import uuid
-from typing import List, Optional
+from typing import List, Optional, Set
 
 import spacy.tokens
 
@@ -31,39 +31,52 @@ class Phrase:
 
     condition_phrases: List[Phrase] = dataclasses.field(default_factory=list)
 
-    # attributes
-    is_conditional: bool = False
-    origin_node_id: Optional[str] = None
+    def pprint(self, depth=0, visited: Set[str] = None):
+        """
+        Prints the phrase in a human readable form.
 
-    def pprint(self, depth=0):
+        :param depth: Indicates the current indent.
+        :param visited: Leeps track of which phrases have been visited to avoid recursion errors.
         """
-        Prints the phrase in a human readable form
-        """
+        if visited is None:
+            visited = set()
+
+        self_visited = self.id in visited
+        visited.add(self.id)
 
         indent = "    " * depth
+
         print(f"{indent}Phrase{{")
         print(f"{indent}  Agent:")
-        for p in self.agent_objects:
-            print(f"{indent}    {p.pretty_str()}")
+        if self_visited:
+            print(f"{indent}    ...")
+        else:
+            for p in self.agent_objects:
+                print(f"{indent}    {p.pretty_str()}")
 
-        for p in self.agent_phrases:
-            p.pprint(depth=depth + 1)
+            for p in self.agent_phrases:
+                p.pprint(depth=depth + 1, visited=visited)
 
         print(f"{indent}  Predicate:")
-
         for p in self.predicate:
             print(f"{indent}    {p.token} {p.token.lemma_} {p.token.tag_}")
 
-        print(f"{indent}  Patient:")
-        for p in self.patient_objects:
-            print(f"{indent}    {p.pretty_str()}")
+            print(f"{indent}  Patient:")
+        if self_visited:
+            print(f"{indent}    ...")
+        else:
+            for p in self.patient_objects:
+                print(f"{indent}    {p.pretty_str()}")
 
-        for p in self.patient_phrases:
-            p.pprint(depth=depth + 1)
+            for p in self.patient_phrases:
+                p.pprint(depth=depth + 1, visited=visited)
 
         print(f"{indent}  Conditions:")
-        for p in self.condition_phrases:
-            p.pprint(depth=depth + 1)
+        if self_visited:
+            print(f"{indent}    ...")
+        else:
+            for p in self.condition_phrases:
+                p.pprint(depth=depth + 1, visited=visited)
 
         print(f"{indent}}}")
 
@@ -73,6 +86,7 @@ class Predicate:
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
+
 @dataclasses.dataclass
 class PhraseObject:
     """
@@ -80,6 +94,11 @@ class PhraseObject:
     """
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
+
+    # Extensions. These attributes are not part of the main knowledge graph creation methods but are rather
+    # extensions as described by the evaluation section of the paper.
+    described_by: List[Phrase] = dataclasses.field(default_factory=list)
+    possessors: List[PhraseObject] = dataclasses.field(default_factory=list)
 
     def pretty_str(self) -> str:
         coref_chain = self.token.doc._.coref_chains.resolve(self.token)
@@ -90,6 +109,10 @@ class PhraseObject:
         return f"{self._proper_noun_str()}{coref_str}"
 
     def _proper_noun_str(self):
+        for chunk in self.token.doc.noun_chunks:
+            if self.token in chunk:
+                return chunk.text
+
         return " ".join(x.text for x in
                         sorted((self.token,) + tuple(tok for tok in self.token.children if tok.dep_ == "compound"),
                                key=lambda x: x.i))

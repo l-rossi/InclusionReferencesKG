@@ -22,7 +22,7 @@ def main():
 
     gdpr = DocumentTreeParser().parse_document("GDPR", gdpr_text)
 
-    article6 = gdpr.resolve_loose([Article(number=29)])[0]
+    article6 = gdpr.resolve_loose([Article(number=30)])[0]
 
     txt = ""
     for node in pre_order(article6):
@@ -41,7 +41,6 @@ def main():
     # nlp.add_pipe("noun_phrase_component", before="ner")
     # nlp.remove_pipe("ner")
 
-    # print(nlp.analyze_pipes(pretty=True))
 
     """
 The dog shall eat and digest the cat.

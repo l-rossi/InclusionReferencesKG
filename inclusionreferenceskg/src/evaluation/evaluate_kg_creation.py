@@ -50,5 +50,4 @@ if __name__ == "__main__":
     evaluate(stat_acc, actual29, "./resources/evaluation_data/kg_triplets/gdpr_article_29.csv")
     evaluate(stat_acc, actual30, "./resources/evaluation_data/kg_triplets/gdpr_article_30.csv")
 
-
-    print(f"Precision: {stat_acc.precision():4.2f}, Recall: {stat_acc.recall():4.2f}, F1: {stat_acc.f1():4.2f}")
+    print(f"Precision: {stat_acc.precision():4.3f}, Recall: {stat_acc.recall():4.3f}, F1: {stat_acc.f1():4.3f}")

@@ -86,7 +86,7 @@ class KnowledgeGraph:
                 "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept.")
 
         doc = u_node.item.token.doc
-        #print(
+        # print(
         #    f"merging '{doc[u_node.item.token.i - 5:u_node.item.token.i + 5]}' and '{doc[v_node.item.token.i - 5:v_node.item.token.i + 5]}'")
 
         # Replace edges pointing at v
@@ -131,9 +131,12 @@ class KnowledgeGraph:
         """
         out = []
 
+        def _format(n: KGNode) -> str:
+            return str(n) if isinstance(n.item, Node) else str(n.item.token)
+
         for node in self.nodes.values():
-            for other, label, _ in node.adj.values():
-                out.append(((node.id, str(node)), label, (node.id, str(other))))
+            for other, edge_label, _ in node.adj.values():
+                out.append(((node.id, _format(node)), edge_label, (node.id, _format(other))))
 
         return out
 
@@ -241,7 +244,6 @@ class KGNode:
         elif isinstance(self.item, Node):
             return str(self.item.immutable_view())
         elif self.item is None:
-            # TODO: Should probably raise an exception.
             return "NONE VALUE"
         else:
             raise ValueError(f"self.item has the wrong type. "

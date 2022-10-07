@@ -95,18 +95,6 @@ def _test_structure():
     ])
 
 
-def test_resolve():
-    test_structure = _test_structure()
-
-    # TODO: better tests.
-    assert len(test_structure.resolve([None, None, Article(number=-1)])) == 1
-    assert len(test_structure.resolve([None, None, Article(number=5)])) == 1
-    assert len(test_structure.resolve([None, None, Article(number=4)])) == 0
-    assert len(test_structure.resolve([None, None, None, Paragraph(number=-1)])) == 2
-    assert len(test_structure.resolve([None, None, None, None, Subparagraph(number=1)])) == 2
-    assert len(test_structure.resolve([None, None, None, None, Subparagraph(number=1), None])) == 6
-
-
 def test_resolve_loose():
     test_structure = _test_structure()
 

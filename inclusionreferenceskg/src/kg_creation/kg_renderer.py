@@ -1,15 +1,20 @@
 import itertools
 import uuid
 import warnings
-from typing import List, Tuple, Set
+from typing import List, Tuple, Set, Callable
 
 import coreferee
 import spacy
+from spacy import Language
+from spacy.tokens import Token, Doc
+
 from document_parsing.node.article import Article
 from document_parsing.node.node import Node
 from document_parsing.node.node_traversal import pre_order
+from kg_creation.attribute_extraction.attribute_extractor import AttributeExtractor
 from kg_creation.attribute_extraction.negation_extractor import NegationExtractor
 from kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
+from kg_creation.entity_linking.entity_linker import EntityLinker
 from kg_creation.entity_linking.proper_noun_linker import ProperNounLinker
 from kg_creation.entity_linking.reference_linker import ReferenceLinker
 from kg_creation.entity_linking.same_lemma_in_same_article_linker import \
@@ -20,9 +25,6 @@ from kg_creation.sentence_analysing.phrase import Phrase
 from kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 from reference_detection.regex_reference_detector import RegexReferenceDetector
 from reference_resolution.reference_resolver import ReferenceResolver
-from spacy import Language
-from spacy.tokens import Token, Doc
-from util.parser_util import gdpr_dependency_root
 from util.spacy_components import REFERENCE_QUALIFIER_RESOLVER_COMPONENT
 
 
@@ -31,7 +33,14 @@ class KGRenderer:
     Translates the graph from the internal format to a format used by external libraries for analysing and visualisation.
     """
 
-    def render(self, root: Node, phrases: List[Phrase]) -> KnowledgeGraph:
+    def render(self, root: Node, phrases: List[Phrase], include_extensions: bool = False) -> KnowledgeGraph:
+        """
+        Creates a graph from the a list of phrases and a document structure.
+
+        :param root: The root node to use for the document structure.
+        :param phrases: The phrases to be used to fill the content of the KG.
+        :param include_extensions: Determines if the extension relationships 'of' and 'described_by' should be added.
+        """
         graph = KnowledgeGraph()
 
         # We keep track of which phrases have already been added to avoid recursion errors.
@@ -46,11 +55,12 @@ class KGRenderer:
                 graph.add_edge(node.id, child.id, label="contains")
 
         for phrase in phrases:
-            self._add_phrase(graph, phrase, added_phrases)
+            self._add_phrase(graph, phrase, added_phrases, include_extensions)
 
         return graph
 
-    def _add_phrase(self, graph: KnowledgeGraph, phrase: Phrase, added_phrases: Set[str]):
+    def _add_phrase(self, graph: KnowledgeGraph, phrase: Phrase, added_phrases: Set[str],
+                    include_extensions: bool = False):
         if phrase.id in added_phrases:
             return
         added_phrases.add(phrase.id)
@@ -81,20 +91,37 @@ class KGRenderer:
                 for predicate in phrase.predicate:
                     graph.add_edge(predicate.id, agent_object.id, "agent")
 
+        if include_extensions:
+            possessor_stack = list(itertools.chain(phrase.agent_objects, phrase.patient_objects))
+            # We assume that there are no circular dependencies in possessors.
+            # This holds if possessors was created using PhraseExtractor.
+            while possessor_stack:
+                curr = possessor_stack.pop()
+                for possessor in curr.possessors:
+                    graph.add_node(possessor.id, possessor)
+                    graph.add_edge(curr.id, possessor.id, "of")
+                possessor_stack.extend(curr.possessors)
+
+            for phrase_object in itertools.chain(phrase.agent_objects, phrase.patient_objects):
+                for desc_by in phrase_object.described_by:
+                    self._add_phrase(graph, desc_by, added_phrases, include_extensions)
+                    for pred in desc_by.predicate:
+                        graph.add_edge(phrase_object.id, pred.id, "described_by")
+
         for patient_phrase in phrase.patient_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, patient_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "patient")
-            self._add_phrase(graph, patient_phrase, added_phrases)
+            self._add_phrase(graph, patient_phrase, added_phrases, include_extensions)
 
         for agent_phrase in phrase.agent_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, agent_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "agent")
-            self._add_phrase(graph, agent_phrase, added_phrases)
+            self._add_phrase(graph, agent_phrase, added_phrases, include_extensions)
 
         for conditional_phrase in phrase.condition_phrases:
             for my_pred, other_pred in itertools.product(phrase.predicate, conditional_phrase.predicate):
                 graph.add_edge(my_pred.id, other_pred.id, "conditional")
-            self._add_phrase(graph, conditional_phrase, added_phrases)
+            self._add_phrase(graph, conditional_phrase, added_phrases, include_extensions)
 
 
 def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
@@ -135,7 +162,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
     # We create an anonymous pipe to insert attributes into the doc right after creation.
     comp_name = "document_supplement_component_" + str(uuid.uuid4())
 
-    @Language.component(comp_name)
+    @Language.component(comp_name, assigns=["doc._.reference_base", "doc._.document_structure", "token._.node"])
     def comp(d):
         d._.document_structure = analyzed
         d._.reference_base = reference_base
@@ -152,33 +179,41 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
 
     nlp.add_pipe(comp_name, first=True)
 
-    doc = nlp(raw_text)
-
-    return doc
+    return nlp(raw_text)
 
 
-def create_graph(root: Node, analyzed: Node, fast: bool = False):
+def create_graph(root: Node, analyzed: Node, fast: bool = False,
+                 include_extensions: bool = False,
+                 attribute_extractors: List[AttributeExtractor] = None,
+                 entity_linker_supplier: Callable[[Doc], List[EntityLinker]] = None,
+                 ) -> KnowledgeGraph:
     """
-    Creates a knowledge graph from a parsed doucment.
+    Creates a knowledge graph from a parsed document.
 
     :param root: The document structure against which to resolve references.
     :param analyzed: The document structure from which to obtain the knowledge in the knowledge graph.
     :param fast: Determines if a faster spacy pipeline should be used.
-    :return:
+    :param include_extensions: Determines if the 'of' and 'described_by' relationships should be added.
+    :param attribute_extractors: A list of used attribute extractors. Defaults to negation and preposition extraction.
+    :param entity_linker_supplier: A function for supplying entity linkers from a given Doc object.
+    :return: The finished knowledge graph.
     """
 
-    # We need to use coreferee so that PyCharm does not tidy up the reference.
+    if attribute_extractors is None:
+        attribute_extractors = [NegationExtractor(), PrepositionExtractor()]
+
+    # We need to use coreferee so that PyCharm does not tidy up the import.
     if not coreferee:
         raise ModuleNotFoundError("Could not import coreferee for anaphora resolution.")
 
-    spacy.prefer_gpu()
-
     if Token.get_extension("reference") is None:
         Token.set_extension("reference", default=None)
+
     if fast:
         nlp = spacy.load("en_core_web_sm", disable=["ner"])
     else:
         nlp = spacy.load("en_core_web_trf", disable=["ner"])
+
     nlp.add_pipe("coreferee", config={}, after="parser")
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
     nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, config={},
@@ -193,25 +228,20 @@ def create_graph(root: Node, analyzed: Node, fast: bool = False):
     for sent in doc.sents:
         phrases.extend(phrase_extractor.extract_from_sentence(sent))
 
-    """for phrase in phrases:
-        for attribute_extractor in attribute_extractors:
-            attribute_extractor.accept_with_children(phrase)"""
+    graph = KGRenderer().render(root, phrases, include_extensions=include_extensions)
 
-    """graph, node_labels, edge_labels, node_colors = KGRenderer().render_to_networkx(root=analyzed, phrases=phrases)
+    for attribute_extractor in attribute_extractors:
+        graph = attribute_extractor.accept(graph)
 
-    pos = nx.drawing.nx_agraph.graphviz_layout(graph)
-    nx.draw(graph, pos=pos, labels=node_labels, with_labels=True, node_color=node_colors)
-    nx.draw_networkx_edge_labels(graph, pos=pos, edge_labels=edge_labels)"""
-
-    graph = KGRenderer().render(root, phrases)
-
-    graph = NegationExtractor().accept(graph)
-    graph = PrepositionExtractor().accept(graph)
+    entity_linkers = entity_linker_supplier(doc) if entity_linker_supplier is not None else [
+        SameTokenLinker(),
+        SameLemmaInSameParagraphLinker(doc),
+        ReferenceLinker(doc),
+        ProperNounLinker()
+    ]
 
     with BatchedMerge(graph) as proxy_kg:
-        SameTokenLinker().link(proxy_kg)
-        SameLemmaInSameParagraphLinker(doc).link(proxy_kg)
-        ReferenceLinker(doc).link(proxy_kg)
-        ProperNounLinker().link(proxy_kg)
+        for entity_linker in entity_linkers:
+            entity_linker.link(proxy_kg)
 
     return graph

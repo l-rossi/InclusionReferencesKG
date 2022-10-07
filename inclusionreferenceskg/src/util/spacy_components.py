@@ -1,4 +1,5 @@
 import warnings
+from multiprocessing import Pool
 
 from spacy import Language
 

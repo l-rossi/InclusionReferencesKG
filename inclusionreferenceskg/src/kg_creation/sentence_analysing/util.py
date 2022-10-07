@@ -66,7 +66,7 @@ def extract_prepositions(verb: Token):
     # Tree search for all paths of prepositions as to catch constructs with multiple prepositions.
     while preps:
         p = preps.pop()
-        new_preps = [tok for tok in p.rights if tok.dep_ in {"prep", "agent"}]
+        new_preps = [tok for tok in p.rights if tok.dep_ in {"prep", "agent", "acomp"}]
         preps.extend(new_preps)
         out.extend(new_preps)
     return out
@@ -84,8 +84,7 @@ def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
     for verb in verbs:
         verb_and_prep = [verb] + extract_prepositions(verb)
         objs.extend(tok for v in verb_and_prep for tok in v.rights if tok.dep_ in OBJ_DEPS)
-        objs.extend(tok for tok in verb.rights if tok.dep_ == "xcomp")
-        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod"})
+        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod", "xcomp"})
         objs.extend(tok for obj in objs for tok in get_conjuncts(obj, {obj.pos_}))
 
     return objs
@@ -95,12 +94,15 @@ def get_conjuncts(tok: Token, allowed_pos: Set[str] = None) -> List[Token]:
     """
     Adapted from '_get_conjuncts' from textacy.
 
+    We also treat appositions as conjunctions. Though technically not correct,
+    this helps with enumerations.
+
     Return conjunct dependents of the leftmost conjunct in a coordinated phrase,
     e.g. "Burton, [Dan], and [Josh] ...".
     """
 
     return [right for right in tok.rights if
-            right.dep_ == "conj" and (not allowed_pos or right.pos_ in allowed_pos)]
+            right.dep_ in {"conj", "appos"} and (not allowed_pos or right.pos_ in allowed_pos)]
 
 
 def get_subjects_of_verbs(verbs: List[Predicate]):
@@ -112,6 +114,4 @@ def get_subjects_of_verbs(verbs: List[Predicate]):
     subjs = []
     for verb in verbs:
         subjs.extend(textacy.spacier.utils.get_subjects_of_verb(verb.token))
-        if verb.token.dep_ == "acl":
-            subjs.append(verb.token.head)
     return subjs

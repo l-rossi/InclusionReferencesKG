@@ -80,15 +80,15 @@ class DocumentTreeParser:
 
         return regulation
 
-    def parse_from_eu_doc_file(self, name, file_name) -> Document:
+    def parse_from_eu_doc_file(self, title, file_name) -> Document:
         """
         Shorthand for opening a file in "./resources/eu_documents" and parsing it
         :param file_name: The filename of the document.
-        :param name: The name of the regulation.
+        :param title: The name of the regulation.
         :return: The Document node representing the document
         """
         with open(f"./resources/eu_documents/{file_name}", encoding="utf-8") as f:
-            return self.parse_document(name, f.read())
+            return self.parse_document(title, f.read())
 
     @staticmethod
     def _blockize(text) -> typing.List[str]:

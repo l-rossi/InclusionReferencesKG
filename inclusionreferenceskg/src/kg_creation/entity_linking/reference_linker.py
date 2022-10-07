@@ -1,8 +1,10 @@
+from collections import defaultdict
 from functools import reduce
 
 from spacy.matcher import Matcher
 from spacy.tokens import Doc, Token
 
+from document_parsing.node.document import Document
 from document_parsing.node.node import Node
 from document_parsing.node.node_traversal import pre_order
 from kg_creation.entity_linking.entity_linker import EntityLinker
@@ -37,40 +39,43 @@ class ReferenceLinker(EntityLinker):
         ]])
 
     def link(self, graph: KnowledgeGraph) -> KnowledgeGraph:
+        node_id_to_kg_nodes = defaultdict(list)
+        for kg_node in graph.nodes.values():
+            if not isinstance(kg_node.item, Node):
+                node_id_to_kg_nodes[kg_node.item.token._.node.id].append(kg_node)
 
-        n_resolved = 0
-        n_tackled = 0
-
-        for kg_node in list(graph.nodes.values()):
+        for kg_node in graph.nodes.values():
             if not isinstance(kg_node.item, PhraseObject):
                 continue
 
             ind = kg_node.item.token.i
             span = self.doc[ind: ind + self.max_lookahead]
+            # We only consider the first match as to avoid situations where a conjunction would lead to
+            # multiple matches
             matches = self.matcher(span)
+            if not matches:
+                continue
 
-            for _, start, end in matches:
-                ref = span[end - 1]
-                target_ids = set()
-                for target in ref._.reference.targets:
-                    for node in pre_order(target):
-                        target_ids.add(node.id)
+            _, start, end = matches[0]
 
-                kg_nodes_in_target = [node for node in graph.nodes.values() if
-                                      not isinstance(node.item, Node) and
-                                      node.item.token._.node.id in target_ids]
+            ref = span[end - 1]
+            target_ids = set()
+            for target in ref._.reference.targets:
+                for node in pre_order(target):
+                    target_ids.add(node.id)
 
-                nodes_to_be_merged = {n.id for n in kg_nodes_in_target if
-                                      self._equals(n.item.token, kg_node.item.token)}
+            kg_nodes_in_target = [kn for id_ in target_ids if id_ in node_id_to_kg_nodes for kn in
+                                  node_id_to_kg_nodes.get(id_)]
 
-                if kg_node.item.token._.node.title == "GDPR":
-                    n_tackled += 1
-                    if nodes_to_be_merged:
-                        n_resolved += 1
+            nodes_to_be_merged = {n.id for n in kg_nodes_in_target if
+                                  self._equals(n.item.token, kg_node.item.token)}
 
-                reduce(graph.merge, nodes_to_be_merged, kg_node.id)
+            containing_document = kg_node.item.token._.node
+            while containing_document.depth > Document.depth:
+                containing_document = containing_document.parent
 
-        print(n_resolved, n_tackled)
+            reduce(graph.merge, nodes_to_be_merged, kg_node.id)
+
         return graph
 
     def _equals(self, tok1: Token, tok2: Token) -> bool:

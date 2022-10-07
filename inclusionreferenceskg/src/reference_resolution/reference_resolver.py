@@ -482,7 +482,6 @@ class ReferenceResolver:
         reference_resolver = ReferenceResolver()
 
         for node, span in traverse_doc_by_node(doc):
-
             refs = [tok._.reference for tok in span if tok._.reference]
             if refs:
                 reference_resolver.resolve_single(node, refs)
