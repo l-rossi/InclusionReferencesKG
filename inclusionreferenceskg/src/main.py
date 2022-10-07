@@ -68,8 +68,10 @@ if __name__ == "__main__":
     # The fast flag indicates whether spaCy should optimize for performance or for accuracy.
     # Attribute extractors and entity linkers may also be specified here, though the
     # default array is recommended.
+    # The extensions, namely the 'of' relation and a 'described_by' relation for adnominal clauses can be added using
+    # the 'include_extensions' flag.
     graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=False, attribute_extractors=None,
-                         entity_linker_supplier=None)
+                         entity_linker_supplier=None, include_extensions=False)
 
     print("The knowledge graph has been created.")
 

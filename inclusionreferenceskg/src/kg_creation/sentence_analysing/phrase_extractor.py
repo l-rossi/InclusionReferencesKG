@@ -82,14 +82,12 @@ class PhraseExtractor:
         for phrase_object in phrase_objects:
             poss_stack = [phrase_object]
             while poss_stack:
-                print(poss_stack)
                 curr = poss_stack.pop()
-                print(curr)
-                print(curr, [x.text for x in curr.token.children if x.dep_ == "poss"])
 
                 genitives = [PhraseObject(x) for x in curr.token.children if x.dep_ == "poss"]
                 ofs = [PhraseObject(y) for x in curr.token.children if x.text == "of" for y in x.children if
                        y.dep_ == "pobj"]
+
                 curr.possessors.extend(genitives)
                 curr.possessors.extend(ofs)
                 poss_stack.extend(genitives)

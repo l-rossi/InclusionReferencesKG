@@ -21,7 +21,6 @@ class ProperNounLinker(EntityLinker):
             group_by[pn].append(id)
 
         for group in group_by.values():
-            if len(group) > 1:
-                reduce(graph.merge, group)
+            reduce(graph.merge, group)
 
         return graph
