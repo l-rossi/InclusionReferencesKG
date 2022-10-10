@@ -17,8 +17,8 @@ class ProperNounLinker(EntityLinker):
         ]
 
         group_by = defaultdict(list)
-        for id, pn in proper_nouns:
-            group_by[pn].append(id)
+        for id_, pn in proper_nouns:
+            group_by[pn].append(id_)
 
         for group in group_by.values():
             reduce(graph.merge, group)

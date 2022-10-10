@@ -15,7 +15,6 @@ referred,patient,transfer
 referred,agent,the second subparagraph of Article 49(1)
 contain,patient,description
 referred,agent,description
-referred,patient,Article 32(1)
 containing,patient,description
 referred,patient,description
 referred,agent,Article 32(1)
@@ -24,7 +23,7 @@ maintain,patient,record
 maintain,agent,processor
 containing,patient,name
 containing,patient,categories
-containing,patient,detailsW
+containing,patient,details
 containing,patient,transfers
 including,agent,transfers
 including,patient,identification
@@ -42,7 +41,6 @@ make,agent,controller
 make,agent,processor
 make,agent,representative
 make,patient,record
-referred,agent,paragraph 1 and 2
 referred,patient,obligations
 apply,agent,obligations
 apply,patient,enterprise

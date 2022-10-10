@@ -24,6 +24,9 @@ SUBJ_DEPS: Set[str] = {"agent", "csubj", "csubjpass", "expl", "nsubj", "nsubjpas
 OBJ_DEPS: Set[str] = {"attr", "dobj", "dative", "oprd", "pobj"}
 AUX_DEPS: Set[str] = {"aux", "auxpass", "neg"}
 
+NOMINAL_SUBJ_DEPS: Set[str] = {"agent", "expl", "nsubj", "nsubjpass"}
+CLAUSAL_SUBJ_DEPS: Set[str] = {"csubj", "csubjpass"}
+
 
 def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
     """
@@ -105,7 +108,24 @@ def get_conjuncts(tok: Token, allowed_pos: Set[str] = None) -> List[Token]:
             right.dep_ in {"conj", "appos"} and (not allowed_pos or right.pos_ in allowed_pos)]
 
 
-def get_subjects_of_verbs(verbs: List[Predicate]):
+def is_acl_without_subj(tok: Token):
+    """
+    Check if a phrase is an adnominal phrase without a subject (and thus the subject should be taken
+    from higher up)
+    """
+    return tok.dep_ == "acl" and not any(x.dep_ in SUBJECTS for x in tok.children)
+
+
+def get_clausal_subjects_of_verbs(verbs: List[Predicate]):
+    subjs = []
+    for verb in verbs:
+        subjs.extend([tok for tok in verb.token.lefts if tok.dep_ in CLAUSAL_SUBJ_DEPS])
+        subjs.extend(tok for subj in subjs for tok in get_conjuncts(subj))
+
+    return subjs
+
+
+def get_nominal_subjects_of_verbs(verbs: List[Predicate]):
     """
     Adapted from 'get_subjects_of_verb' from textacy.
 
@@ -113,5 +133,9 @@ def get_subjects_of_verbs(verbs: List[Predicate]):
     """
     subjs = []
     for verb in verbs:
-        subjs.extend(textacy.spacier.utils.get_subjects_of_verb(verb.token))
+        subjs.extend([tok for tok in verb.token.lefts if tok.dep_ in NOMINAL_SUBJ_DEPS])
+        subjs.extend(tok for subj in subjs for tok in get_conjuncts(subj))
+
+        if is_acl_without_subj(verb.token):
+            subjs.append(verb.token.head)
     return subjs

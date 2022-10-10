@@ -52,7 +52,7 @@ class ReferenceLinker(EntityLinker):
             span = self.doc[ind: ind + self.max_lookahead]
             # We only consider the first match as to avoid situations where a conjunction would lead to
             # multiple matches
-            matches = self.matcher(span)
+            matches = [x for x in self.matcher(span) if x[1] == 0]
             if not matches:
                 continue
 
@@ -67,7 +67,7 @@ class ReferenceLinker(EntityLinker):
             kg_nodes_in_target = [kn for id_ in target_ids if id_ in node_id_to_kg_nodes for kn in
                                   node_id_to_kg_nodes.get(id_)]
 
-            nodes_to_be_merged = {n.id for n in kg_nodes_in_target if
+            nodes_to_be_merged = {n.id for n in kg_nodes_in_target if n.id != kg_node.id and
                                   self._equals(n.item.token, kg_node.item.token)}
 
             containing_document = kg_node.item.token._.node

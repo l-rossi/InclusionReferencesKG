@@ -1,13 +1,13 @@
 from itertools import chain
 from tokenize import Token
-from typing import List, Iterable, Set
+from typing import List, Iterable, Set, Tuple
 
 from spacy.tokens import Span, Doc
 
 from document_parsing.node.node import Node
 from kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
-from kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_subjects_of_verbs, \
-    get_objects_of_predicate_consider_preposition
+from kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_nominal_subjects_of_verbs, \
+    get_objects_of_predicate_consider_preposition, is_acl_without_subj, CLAUSAL_SUBJ_DEPS
 
 
 def is_conditional(phrase: Phrase):
@@ -46,14 +46,15 @@ class PhraseExtractor:
         deletion_marks = set()
 
         for phrase in phrases:
-            phrase.agent_objects = [PhraseObject(tok) for tok in get_subjects_of_verbs(phrase.predicate)]
+            phrase.agent_objects = [PhraseObject(tok) for tok in get_nominal_subjects_of_verbs(phrase.predicate)]
             grammatical_object = get_objects_of_predicate_consider_preposition(phrase.predicate)
             phrase.patient_objects = [PhraseObject(tok) for tok in grammatical_object]
 
             object_children = [child for obj in chain(phrase.agent_objects, phrase.patient_objects) for child in
                                obj.token.children]
 
-            phrase.patient_phrases = self._link_phrases(deletion_marks, object_children, phrase, phrases)
+            phrase.patient_phrases, phrase.agent_phrases = self._link_phrases(deletion_marks, object_children, phrase,
+                                                                              phrases)
 
             self._switch_dependants_on_passive(phrase)
             self._resolve_relative_clauses(chain(phrase.agent_objects, phrase.patient_objects))
@@ -143,13 +144,15 @@ class PhraseExtractor:
 
         return patients, conditionals
 
-    def _link_phrases(self, deletion_marks, object_children, phrase, phrases):
+    def _link_phrases(self, deletion_marks, object_children, phrase, phrases) -> Tuple[List[Phrase], List[Phrase]]:
         """
         Links phrases based on the predicate of a phrase being used like an object in another sentence.
+
+        :return: A tuple consisting of the phrase's patient phrases and its agent phrases
         """
 
         verb_as_patient = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children)
-                           if tok.dep_ in {"ccomp", "advcl"}]
+                           if tok.dep_ in {"ccomp", "advcl"} or is_acl_without_subj(tok)]
         phrase_as_patient = []
         for vap in verb_as_patient:
             for p in phrases:
@@ -162,7 +165,21 @@ class PhraseExtractor:
                         deletion_marks.add(p.id)
                         break
 
-        return phrase_as_patient
+        verb_as_agent = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children)
+                         if tok.dep_ in CLAUSAL_SUBJ_DEPS]
+        phrase_as_agent = []
+        for vap in verb_as_agent:
+            for p in phrases:
+                if p.id == phrase.id:
+                    continue
+
+                for pred in p.predicate:
+                    if pred.token == vap:
+                        phrase_as_agent.append(p)
+                        deletion_marks.add(p.id)
+                        break
+
+        return phrase_as_patient, phrase_as_agent
 
 
 def extend_phrase_objects_by_coref(phrase_objects: List[PhraseObject]):

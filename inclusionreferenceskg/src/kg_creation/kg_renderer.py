@@ -17,7 +17,7 @@ from kg_creation.attribute_extraction.preposition_extractor import PrepositionEx
 from kg_creation.entity_linking.entity_linker import EntityLinker
 from kg_creation.entity_linking.proper_noun_linker import ProperNounLinker
 from kg_creation.entity_linking.reference_linker import ReferenceLinker
-from kg_creation.entity_linking.same_lemma_in_same_article_linker import \
+from kg_creation.entity_linking.same_lemma_in_same_paragraph_linker import \
     SameLemmaInSameParagraphLinker
 from kg_creation.entity_linking.same_token_linker import SameTokenLinker
 from kg_creation.knowledge_graph import KnowledgeGraph, BatchedMerge
