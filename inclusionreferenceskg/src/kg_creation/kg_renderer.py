@@ -131,16 +131,12 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
     The main reason for not using a pipe component for this process is that we need to create
     the Doc object from only the main text of the GDPR whilst ignoring titles and the likes.
 
-
     :param reference_base: The document root from which to resolve references.
     :param analyzed: The document root node to be applied to the nlp.
     :param nlp: The Language object/pipe to be used.
     :return: A Doc made of the text content of the document supplied by the analyzed parameter. Tokens are supplied \
     with the part of the document they are a part of and the document is supplied with the base root.
     """
-
-    if not Token.get_extension("node"):
-        Token.set_extension("node", default=None)
 
     if not Doc.get_extension("document_structure"):
         # The root of this document.
@@ -151,7 +147,8 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         Doc.set_extension("reference_base", default=None)
 
     raw_text = ""
-    # We keep a list of node content end positions in the text
+    # We keep a list of node content end positions in the text from which we derive which node each token
+    # originates from
     text_positions: List[Tuple[int, Node]] = []
 
     for node in pre_order(analyzed):
@@ -209,18 +206,27 @@ def create_graph(root: Node, analyzed: Node, fast: bool = False,
     if Token.get_extension("reference") is None:
         Token.set_extension("reference", default=None)
 
+    if not Token.get_extension("node"):
+        Token.set_extension("node", default=None)
+
     if fast:
         nlp = spacy.load("en_core_web_sm", disable=["ner"])
     else:
         nlp = spacy.load("en_core_web_trf", disable=["ner"])
 
+    # We setup spaCy with all the necessary pipe components, both custom and from other libaries.
+    # Resolves anaphoric references
     nlp.add_pipe("coreferee", config={}, after="parser")
+    # Detects references
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
+    # Creates reference qualifier
     nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, config={},
                  after=RegexReferenceDetector.SPACY_COMPONENT_NAME)
+    # Fully resolves references
     nlp.add_pipe(REFERENCE_QUALIFIER_RESOLVER_COMPONENT, config={},
                  after=ReferenceResolver.SPACY_COMPONENT_NAME)
 
+    # Does some ugly setup of the Doc object and applies nlp
     doc = nlp_doc(root, analyzed, nlp)
 
     phrases = []

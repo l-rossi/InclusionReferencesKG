@@ -67,9 +67,9 @@ You might need to restart your IDE after installation.
 
 ## Usage
 
-**We assume the workig directory to be '.\inclusionreferenceskg\'**
+**We assume the workig directory to be './inclusionreferenceskg/'**
 
-We recommend having a look at ``.\src\main.py`` for an overview of the capabilities of this codebase.
+We recommend having a look at ``./src/main.py`` for an overview of the capabilities of this codebase. It shows how a document can be selected for processing and a knowledge graph can be created.
 
 
 

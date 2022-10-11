@@ -11,6 +11,7 @@ from document_parsing.node.section import Section
 from document_parsing.node.subparagraph import Subparagraph
 from document_parsing.node.title import Title
 from document_parsing.preprocessing.footnote_delete_preprocessor import FootnoteDeletePreprocessor
+from document_parsing.preprocessing.pdf_parser import PDFParser
 from kg_creation.kg_renderer import create_graph
 from util.parser_util import gdpr_dependency_root
 
@@ -20,12 +21,17 @@ if __name__ == "__main__":
     # We begin by choosing the documents we want to analyse:
 
     # A document must be read from a text file and parsed into the tree structure as described in the paper.
-    # We begin by reading the file from disk
+    # We begin by reading the file from disk. More documents can be added in ./inclusionreferenceskg/resources/.
+    # Paragraphs or long preambles should ideally be removed.
     with open("./resources/eu_documents/gdpr.txt") as f:
         document_raw_text = f.read()
 
+    # The PDFParser file provides some utility for parsing PDF documents. Note that some manual preprocessing, such
+    # as the removal of unwanted preambles might be necessary:
+    # PDFParser.parse_to_file("./resources/eu_documents/gdpr.pdf", "./resources/eu_documents/gdpr.txt")
+
     # We then instantiate a parser. One may configure the parser to only detect certain nodes
-    # and only change the used preprocessors:
+    # and change the used preprocessors:
     # node_patterns = [Article, Paragraph, Subparagraph]
     # preprocessors = [FootnoteDeletePreprocessor]
     # parser = DocumentTreeParser(node_patterns=node_patterns, preprocessors=preprocessors)
@@ -69,12 +75,13 @@ if __name__ == "__main__":
     # default array is recommended.
     # The extensions, namely the 'of' relation and a 'described_by' relation for adnominal clauses can be added using
     # the 'include_extensions' flag.
+    # The create_graph function is a good place for further examination of the codebase.
     graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=True, attribute_extractors=None,
                          entity_linker_supplier=None, include_extensions=False)
     print("The knowledge graph has been created.")
 
     # The finished knowledge graph may then be exported into different formats, for example rendered
     # to a SVG file using graphviz. Note that this step is typically by far the most time intensive step for
-    # large knowledge graphs.
+    # large knowledge graphs. The visualized knowledge graph is stored in .\inclusionreferenceskg\output
     graph.as_graphviz_graph("Example_KG", engine="dot", format_="svg", attrs={"overlap": "true"}) \
         .render(directory='output/graphs', view=False)
