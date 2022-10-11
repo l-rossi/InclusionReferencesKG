@@ -72,7 +72,14 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    doc = nlp("1. Article 1(1) dictates that a company must pay a fine if it breaks a rule.")
+    words = ["I", "want", "to", "be", "in", "bed", "right", "now", "."]
+
+    doc = nlp(
+        " ".join(words)
+    )
+
+    for i, tok in enumerate(doc):
+        print(f'doc[{i}].head, doc[{i}].pos_, doc[{i}].dep_ = doc[{words.index(tok.head.text)}], "{tok.pos_}", "{tok.dep_}"')
 
     """for sent in doc.sents:
         phrases = PhraseExtractor().extract_from_sentence(sent)

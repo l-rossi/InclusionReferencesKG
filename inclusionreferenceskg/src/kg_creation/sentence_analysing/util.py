@@ -27,6 +27,11 @@ AUX_DEPS: Set[str] = {"aux", "auxpass", "neg"}
 NOMINAL_SUBJ_DEPS: Set[str] = {"agent", "expl", "nsubj", "nsubjpass"}
 CLAUSAL_SUBJ_DEPS: Set[str] = {"csubj", "csubjpass"}
 
+# Adapted from Mayfield Electronic Handbook of Technical & Scientific Writing
+# by Leslie C. Perelman, Edward Barrett, and James Paradis, available at
+# https://www.mit.edu/course/21/21.guide/cnj-sub.htm#:~:text=Some%20common%20subordinating%20conjunctions%20are,whereas%2C%20whether%2C%20and%20while.
+CONDITIONAL_SUBORDINATE_CONJUNCTIONS = {"if", "unless", "when", "where", "while"}
+
 
 def get_main_verbs_of_sent(sent: Span) -> List[List[Token]]:
     """
@@ -87,7 +92,8 @@ def get_objects_of_verb_consider_preposition(verbs: List[Token]) -> List[Token]:
     for verb in verbs:
         verb_and_prep = [verb] + extract_prepositions(verb)
         objs.extend(tok for v in verb_and_prep for tok in v.rights if tok.dep_ in OBJ_DEPS)
-        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod", "xcomp"})
+        objs.extend(tok for tok in verb.rights if tok.dep_ in {"acomp", "advmod"})
+        objs.extend(tok for tok in verb.rights if tok.dep_ == "xcomp" and tok.pos_ != "VERB")
         objs.extend(tok for obj in objs for tok in get_conjuncts(obj, {obj.pos_}))
 
     return objs

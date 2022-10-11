@@ -67,10 +67,11 @@ You might need to restart your IDE after installation.
 
 ## Usage
 
-**We assume the workig directory to be './inclusionreferenceskg/'**
+**We assume the working directory to be './inclusionreferenceskg/'**
 
 We recommend having a look at ``./src/main.py`` for an overview of the capabilities of this codebase. It shows how a document can be selected for processing and a knowledge graph can be created.
 
+The evaluation script can be found in the ``evaluation`` package. Each file with the prefix ``evaluation_`` should be run as its own script.
 
 
 

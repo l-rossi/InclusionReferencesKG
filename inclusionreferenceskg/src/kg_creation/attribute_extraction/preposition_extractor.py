@@ -7,6 +7,9 @@ class PrepositionExtractor(AttributeExtractor):
     """
     Extractor to extract more information on labels, specifically
     the preposition and in some cases the adjective complement.
+
+    Note: Something could be done about dative constructs and phrasal verb particles.
+    Though not strictly prepositions, they fulfill a similar role.
     """
 
     prepositional_dependencies = {"prep", "acomp"}
@@ -24,6 +27,7 @@ class PrepositionExtractor(AttributeExtractor):
                            "token") and adj.item.token.head.dep_ in PrepositionExtractor.prepositional_dependencies:
                     if attributes.get("prepositions") is None:
                         attributes["prepositions"] = []
+
 
                     prep_chain = [adj.item.token.head]
                     while prep_chain[0].head.dep_ in PrepositionExtractor.prepositional_dependencies:

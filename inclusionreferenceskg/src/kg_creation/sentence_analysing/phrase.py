@@ -83,6 +83,9 @@ class Phrase:
 
 @dataclasses.dataclass
 class Predicate:
+    """
+    Used either in a phrase or as the item of a Process Entity.
+    """
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))
 
@@ -91,6 +94,8 @@ class Predicate:
 class PhraseObject:
     """
     Effectively a wrapper for a Spacy token.
+
+    Used either in a phrase or as the item of an Object Entity.
     """
     token: spacy.tokens.Token
     id: str = dataclasses.field(default_factory=lambda: str(uuid.uuid4()))

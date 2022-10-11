@@ -1,13 +1,12 @@
 from itertools import chain
-from tokenize import Token
 from typing import List, Iterable, Set, Tuple
 
 from spacy.tokens import Span, Doc
 
-from document_parsing.node.node import Node
 from kg_creation.sentence_analysing.phrase import Predicate, Phrase, PhraseObject
 from kg_creation.sentence_analysing.util import get_main_verbs_of_sent, get_nominal_subjects_of_verbs, \
-    get_objects_of_predicate_consider_preposition, is_acl_without_subj, CLAUSAL_SUBJ_DEPS
+    get_objects_of_predicate_consider_preposition, is_acl_without_subj, CLAUSAL_SUBJ_DEPS, \
+    CONDITIONAL_SUBORDINATE_CONJUNCTIONS
 
 
 def is_conditional(phrase: Phrase):
@@ -18,7 +17,9 @@ def is_conditional(phrase: Phrase):
     """
 
     # examples of conditional phrases: provided that, if and to the extent that
-    return any(tok.pos_ == "SCONJ" for pred in phrase.predicate for tok in pred.token.children)
+    return any(
+        tok.pos_ == "SCONJ" and tok.text in CONDITIONAL_SUBORDINATE_CONJUNCTIONS for pred in phrase.predicate for tok in
+        pred.token.children)
 
 
 class PhraseExtractor:
@@ -152,7 +153,10 @@ class PhraseExtractor:
         """
 
         verb_as_patient = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children)
-                           if tok.dep_ in {"ccomp", "advcl"} or is_acl_without_subj(tok)]
+                           if tok.dep_ in {"ccomp", "advcl"} or is_acl_without_subj(tok) or (
+                               tok.dep_ == "xcomp" and tok.pos_ in {"VERB", "AUX"})]
+        print("verb_as_patient", verb_as_patient)
+
         phrase_as_patient = []
         for vap in verb_as_patient:
             for p in phrases:
