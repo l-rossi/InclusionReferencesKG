@@ -3,9 +3,6 @@ from tika import parser
 
 class PDFParser:
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def parse(file_location: str, auto_space=False) -> str:
         """

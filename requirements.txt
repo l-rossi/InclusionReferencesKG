@@ -16,3 +16,6 @@ numpy
 # Graphs
 graphviz
 python-graphviz
+
+# Testing
+pytest

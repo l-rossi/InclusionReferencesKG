@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # default array is recommended.
     # The extensions, namely the 'of' relation and a 'described_by' relation for adnominal clauses can be added using
     # the 'include_extensions' flag.
-    graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=False, attribute_extractors=None,
+    graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=True, attribute_extractors=None,
                          entity_linker_supplier=None, include_extensions=False)
 
     print("The knowledge graph has been created.")
