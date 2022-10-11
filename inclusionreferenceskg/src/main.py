@@ -1,4 +1,5 @@
 import spacy
+import torch.cuda
 
 from document_parsing.document_tree_parser import DocumentTreeParser
 from document_parsing.node.article import Article
@@ -55,8 +56,6 @@ if __name__ == "__main__":
     # We must now do some configuration based on the current system.
     # spaCy may run either on the GPU or the CPU. We found a marginal speed increase on the GPU but the
     # amount of available VRAM might become critical.
-    # Trying create a graph from the entire document_root when optimizing for accuracy was not
-    # possible on a GPU with 11GB of VRAM but posed no problem when using the CPU and regular RAM (32GB):
     spacy.prefer_gpu()
     # spacy.require_cpu()
 
@@ -72,7 +71,6 @@ if __name__ == "__main__":
     # the 'include_extensions' flag.
     graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=True, attribute_extractors=None,
                          entity_linker_supplier=None, include_extensions=False)
-
     print("The knowledge graph has been created.")
 
     # The finished knowledge graph may then be exported into different formats, for example rendered

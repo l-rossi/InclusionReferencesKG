@@ -10,7 +10,6 @@ textacy
 coreferee
 
 # Acceleration
-cupy
 numpy
 
 # Graphs
