@@ -64,10 +64,10 @@ class KnowledgeGraph:
     def merge(self, u: str, v: str):
         """
         Merges node v into node u. Edges from u to v or vice versa are lost.
+        The item of node v is lost and only that of node u is kept.
 
         :param u: The id of the first node.
         :param v: The id of the second node.
-        :param item: The new item of the merged node. If None, the item of vert u is used.
         :return: u (as to enable simple use of reduce).
         """
 
@@ -84,10 +84,6 @@ class KnowledgeGraph:
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
             warnings.warn(
                 "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept.")
-
-        doc = u_node.item.token.doc
-        # print(
-        #    f"merging '{doc[u_node.item.token.i - 5:u_node.item.token.i + 5]}' and '{doc[v_node.item.token.i - 5:v_node.item.token.i + 5]}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
@@ -109,9 +105,9 @@ class KnowledgeGraph:
             node.adj_in.remove(v)
             self.add_edge(u, id_, label, attributes)
 
+        u_node.item_history.append(v_node.item)
         self.nodes.pop(v)
 
-        # print(f"merged {u} and {v}")
         return u
 
     @staticmethod
@@ -235,6 +231,10 @@ class KGNode:
         self.id = id_
         self.item = item
         self.attributes: Dict[str, any] = dict()
+
+        # This is currently not used for anything but stores all PhraseObjects / Node / Predicates
+        # that have previously been associated with this node.
+        self.item_history: List[Union[Predicate, PhraseObject, Node]] = []
 
     def __str__(self) -> str:
         if isinstance(self.item, Predicate):
