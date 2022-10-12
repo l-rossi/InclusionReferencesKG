@@ -105,6 +105,10 @@ class Node(ABC):
         advance = 1 if self._pattern_match(pattern[pattern_depth]) else 0
 
         for child in self.children:
+            # Prune searches. Assumes that the node depth is adhered to.
+            if child.depth > pattern[pattern_depth + advance].depth:
+                continue
+
             matches.extend(child.resolve_loose(pattern, pattern_depth=pattern_depth + advance))
 
         return matches

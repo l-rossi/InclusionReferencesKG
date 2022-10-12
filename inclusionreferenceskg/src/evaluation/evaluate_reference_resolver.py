@@ -10,6 +10,7 @@ from util.parser_util import gdpr_dependency_root
 
 
 def main():
+    # We do not calculate the F1 score as we do not deem it necessary for such good results.
     resolver = ReferenceResolver()
 
     parser = DocumentTreeParser()
