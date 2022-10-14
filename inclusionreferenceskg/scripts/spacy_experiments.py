@@ -72,14 +72,14 @@ The dog that ate the cat is purple.
     #     The dog, the cat and the kid are red.
     # """)
 
-    words = ["I", "want", "to", "be", "in", "bed", "right", "now", "."]
+    #words = ["I", "want", "to", "be", "in", "bed", "right", "now", "."]
 
     doc = nlp(
-        " ".join(words)
+        "4.The controller or the processor and, where applicable, the controller's or the processor's representative, shall make the record available to the supervisory authority on request."
     )
 
-    for i, tok in enumerate(doc):
-        print(f'doc[{i}].head, doc[{i}].pos_, doc[{i}].dep_ = doc[{words.index(tok.head.text)}], "{tok.pos_}", "{tok.dep_}"')
+    #for i, tok in enumerate(doc):
+    #    print(f'doc[{i}].head, doc[{i}].pos_, doc[{i}].dep_ = doc[{words.index(tok.head.text)}], "{tok.pos_}", "{tok.dep_}"')
 
     """for sent in doc.sents:
         phrases = PhraseExtractor().extract_from_sentence(sent)

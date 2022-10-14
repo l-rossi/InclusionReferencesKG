@@ -55,18 +55,19 @@ class KGRenderer:
                 graph.add_edge(node.id, child.id, label="contains")
 
         for phrase in phrases:
-            self._add_phrase(graph, phrase, added_phrases, include_extensions)
+            self._add_phrase(graph, phrase, added_phrases, include_extensions, topmost=True)
 
         return graph
 
     def _add_phrase(self, graph: KnowledgeGraph, phrase: Phrase, added_phrases: Set[str],
-                    include_extensions: bool = False):
+                    include_extensions: bool = False, topmost=False):
         if phrase.id in added_phrases:
             return
         added_phrases.add(phrase.id)
 
-        for predicate in phrase.predicate:
-            graph.add_edge(predicate.token._.node.id, predicate.id, "defines")
+        if topmost:
+            for predicate in phrase.predicate:
+                graph.add_edge(predicate.token._.node.id, predicate.id, "defines")
 
         for predicate in phrase.predicate:
             graph.add_node(predicate.id, predicate)
@@ -75,7 +76,8 @@ class KGRenderer:
             if patient_object.token._.reference and (targets := patient_object.token._.reference.targets):
                 for target, predicate in itertools.product(targets, phrase.predicate):
                     graph.add_edge(predicate.id, target.id, "patient")
-                    graph.add_node(target.id, target)
+                    if target.id not in graph.nodes:
+                        graph.add_node(target.id, target)
             else:
                 graph.add_node(patient_object.id, patient_object)
                 for predicate in phrase.predicate:
@@ -85,7 +87,8 @@ class KGRenderer:
             if agent_object.token._.reference and (targets := agent_object.token._.reference.targets):
                 for target, predicate in itertools.product(targets, phrase.predicate):
                     graph.add_edge(predicate.id, target.id, "agent")
-                    graph.add_node(target.id, target)
+                    if target.id not in graph.nodes:
+                        graph.add_node(target.id, target)
             else:
                 graph.add_node(agent_object.id, agent_object)
                 for predicate in phrase.predicate:
@@ -94,7 +97,7 @@ class KGRenderer:
         if include_extensions:
             possessor_stack = list(itertools.chain(phrase.agent_objects, phrase.patient_objects))
             # We assume that there are no circular dependencies in possessors.
-            # This holds if possessors was created using PhraseExtractor.
+            # This holds if possessors were created using PhraseExtractor.
             while possessor_stack:
                 curr = possessor_stack.pop()
                 for possessor in curr.possessors:

@@ -49,6 +49,7 @@ class KnowledgeGraph:
         is usually undesirable.
         """
         if self.nodes.get(id_):
+            self.nodes[id_].item_history.append(self.nodes[id_].item)
             self.nodes[id_].item = item
         else:
             self.nodes[id_] = KGNode(id_=id_, item=item)

@@ -155,7 +155,6 @@ class PhraseExtractor:
         verb_as_patient = [tok for pred in phrase.predicate for tok in chain(pred.token.children, object_children)
                            if tok.dep_ in {"ccomp", "advcl"} or is_acl_without_subj(tok) or (
                                tok.dep_ == "xcomp" and tok.pos_ in {"VERB", "AUX"})]
-        print("verb_as_patient", verb_as_patient)
 
         phrase_as_patient = []
         for vap in verb_as_patient:
