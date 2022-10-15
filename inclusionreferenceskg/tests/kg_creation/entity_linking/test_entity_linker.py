@@ -13,7 +13,7 @@ from kg_creation.entity_linking.reference_linker import ReferenceLinker
 from kg_creation.entity_linking.same_lemma_in_same_paragraph_linker import SameLemmaInSameParagraphLinker
 from kg_creation.knowledge_graph import KnowledgeGraph
 from kg_creation.sentence_analysing.phrase import PhraseObject
-from reference import Reference
+from util.reference import Reference
 
 
 def test_reference_linker():

@@ -5,7 +5,7 @@ from document_parsing.node.document import Document
 from document_parsing.node.root import Root
 from kg_creation.kg_renderer import KGRenderer
 from kg_creation.sentence_analysing.phrase import Phrase, PhraseObject, Predicate
-from reference import Reference
+from util.reference import Reference
 
 
 def test_kg_renderer_add_phrase_object_once():

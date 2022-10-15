@@ -4,7 +4,7 @@ from document_parsing.node.document import Document
 from document_parsing.node.paragraph import Paragraph
 from document_parsing.node.point import Point
 from document_parsing.node.title import Title
-from reference import Reference
+from util.reference import Reference
 from reference_resolution.reference_resolver import ReferenceResolver
 
 

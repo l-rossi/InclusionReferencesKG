@@ -17,7 +17,7 @@ from document_parsing.node.node_traversal import traverse_doc_by_node
 from document_parsing.node.paragraph import Paragraph
 from document_parsing.node.point import Point
 from document_parsing.node.title import Title
-from reference import Reference
+from util.reference import Reference
 from reference_detection.regex_reference_detector import RegexReferenceDetector
 from util.regex_util import RegexUtil
 from util.util import rom_to_dec, alph_to_dec

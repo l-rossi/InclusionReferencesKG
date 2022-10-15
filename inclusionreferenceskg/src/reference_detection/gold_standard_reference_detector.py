@@ -3,7 +3,7 @@ from typing import List
 
 from spacy import Language
 
-from reference import Reference
+from util.reference import Reference
 from reference_detection.reference_detector import ReferenceDetector
 
 

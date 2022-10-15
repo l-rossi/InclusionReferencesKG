@@ -71,9 +71,40 @@ You might need to restart your IDE after installation.
 
 We recommend having a look at ``./src/main.py`` for an overview of the capabilities of this codebase. It shows how a document can be selected for processing and a knowledge graph can be created.
 
-The evaluation script can be found in the ``evaluation`` package. Each file with the prefix ``evaluation_`` should be run as its own script.
+Running ``./src/main.py`` will create a visual representation of a knowledge graph and save it to ``./output/graphs/ExampleKG.gv.svg`` Make sure the InclusionReferencesKG environment is active when running:
 
+```console
+conda activate InclusionReferencesKG
+python ./src/main.py
+```
 
+on Windows or
 
+```console
+conda activate InclusionReferencesKG
+python3 ./src/main.py
+```
+
+on Linux.
+
+The evaluation script can be found in the ``evaluation`` package. Each file with the prefix ``evaluate_`` should be run as its own script:
+
+```
+conda activate InclusionReferencesKG
+python ./src/evaluate_reference_detector.py
+python ./src/evaluate_reference_resolver.py
+python ./src/evaluate_kg_creation.py
+```
+
+on Windows or
+
+```
+conda activate InclusionReferencesKG
+python3 ./src/evaluate_reference_detector.py
+python3 ./src/evaluate_reference_resolver.py
+python3 ./src/evaluate_kg_creation.py
+```
+
+on Linux.
 
 
