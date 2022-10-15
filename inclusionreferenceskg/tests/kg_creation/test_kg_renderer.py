@@ -9,7 +9,10 @@ from util.reference import Reference
 
 
 def test_kg_renderer_add_phrase_object_once():
-    Token.set_extension("reference", default=None)
+    if not Token.get_extension("reference"):
+        Token.set_extension("reference", default=None)
+    if not Token.get_extension("node"):
+        Token.set_extension("node", default=None)
 
     doc = Doc(vocab=spacy.util.get_lang_class("en")().vocab, words=[f"t{i}" for i in range(3)])
     phrase_objects = [PhraseObject(tok) for tok in doc]
@@ -32,8 +35,10 @@ def test_kg_renderer_add_phrase_object_once():
 
 
 def test_kg_renderer_example():
-    Token.set_extension("reference", default=None)
-    Token.set_extension("node", default=None)
+    if not Token.get_extension("reference"):
+        Token.set_extension("reference", default=None)
+    if not Token.get_extension("node"):
+        Token.set_extension("node", default=None)
 
     doc = Doc(vocab=spacy.util.get_lang_class("en")().vocab, words=[f"t{i}" for i in range(13)])
     phrase_objects = [PhraseObject(tok) for tok in doc[:8]]
@@ -124,8 +129,10 @@ def test_kg_renderer_example():
 
 
 def test_kg_renderer_recursion():
-    Token.set_extension("reference", default=None)
-    Token.set_extension("node", default=None)
+    if not Token.get_extension("reference"):
+        Token.set_extension("reference", default=None)
+    if not Token.get_extension("node"):
+        Token.set_extension("node", default=None)
     root = Root()
 
     doc = Doc(vocab=spacy.util.get_lang_class("en")().vocab, words=[f"t{i}" for i in range(3)])

@@ -1,3 +1,4 @@
+import logging
 import warnings
 from functools import reduce
 from typing import Dict
@@ -32,8 +33,8 @@ class RelativeClauseLinker(EntityLinker):
 
                 if relative_pronoun_nodes:
                     if node.item.token.head not in token_to_node:
-                        warnings.warn(f"Tried to merge relative pronoun into an "
-                                      f"object node that does not exist: '{node.item.token.head}'.")
+                        logging.warning(f"Tried to merge relative pronoun into an "
+                                        f"object node that does not exist: '{node.item.token.head}'.")
                     else:
                         reduce(graph.merge, relative_pronoun_nodes, token_to_node[node.item.token.head].id)
 

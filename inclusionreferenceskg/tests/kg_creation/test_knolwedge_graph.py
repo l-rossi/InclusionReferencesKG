@@ -23,7 +23,6 @@ def test_batched_merge():
         proxy_graph.merge("5", "2")
         proxy_graph.merge("6", "3")
 
-    print(graph.nodes)
     assert len(graph.nodes) == 1
 
 

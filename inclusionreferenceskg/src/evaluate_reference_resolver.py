@@ -1,4 +1,5 @@
 import json
+import logging
 from typing import Dict, Tuple
 
 from document_parsing.document_tree_parser import DocumentTreeParser
@@ -27,58 +28,54 @@ def main():
     with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
 
-    print("Number of tested references:", len(expected_references))
-    print("Number of referenced nodes:", sum(map(lambda x: len(x["patterns"]), expected_references)))
+    logging.info("Number of tested references:", len(expected_references))
+    logging.info("Number of referenced nodes:", sum(map(lambda x: len(x["patterns"]), expected_references)))
 
     for actual_reference, expected_reference in zip(actual_references, expected_references):
         if (l := len(actual_reference.reference_qualifier)) == 0:
-            print(
+            logging.info(
                 f"ReferenceResolver produced {l} reference qualifiers for reference '{actual_reference.text_content}'. "
                 f"Expected 1.")
             continue
 
         if "patterns" not in expected_reference:
-            print(f"Skipping evaluation for '{expected_reference.get('text')}'. No patterns found.")
+            logging.warning(f"Skipping evaluation for '{expected_reference.get('text')}'. No patterns found.")
             continue
 
         resolved = []
         for reference_qualifier in actual_reference.reference_qualifier:
             resolved_single = document_root.resolve_loose(reference_qualifier)
             if len(resolved_single) == 0:
-                print(f"Could not resolve '{actual_reference.text_content}'. "
+                logging.info(f"Could not resolve '{actual_reference.text_content}'. "
                       f"Qualifier: '{actual_reference.reference_qualifier}'.")
                 continue
 
             if len(resolved_single) > 1:
-                print(
+                logging.info(
                     f"Found multiple solutions to reference '{actual_reference.text_content}'. Further testing is "
                     f"done only against the first resolved node.")
             resolved.append(resolved_single[0])
 
         if not expected_reference["patterns"]:
-            print(f"No patterns provided for reference '{actual_reference.text_content}'")
+            logging.info(f"No patterns provided for reference '{actual_reference.text_content}'")
             continue
 
         if len(expected_reference["patterns"]) != len(resolved):
-            print(
+            logging.info(
                 f"Expected {len(expected_reference['patterns'])} solutions for "
                 f"reference '{actual_reference.text_content}'. But found {len(resolved)}.")
-
-            if actual_reference.text_content == "Articles 15, 16, 18, 19, 20 and 21":
-                print("!!!")
-                print(actual_reference.reference_qualifier)
             continue
 
         for pattern, solution in zip(expected_reference["patterns"], resolved):
             valid, msg = validate(solution, pattern)
 
             if expected_reference["text"] != actual_reference.text_content:
-                print(f"Mismatch between reference text_content and "
+                logging.info(f"Mismatch between reference text_content and "
                       f"actual text_content. Expected '{expected_reference['text']}' "
                       f"was '{actual_reference.text_content}'")
 
             if not valid:
-                print(
+                logging.info(
                     f"Found solution for reference '{actual_reference.text_content}' was incorrect.", msg)
 
 
@@ -90,7 +87,7 @@ def validate(node: Node, pattern: Dict) -> Tuple[bool, str]:
     """
 
     if not set(pattern.keys()).issubset({"title", "number", "type", "starts_with", "has_child"}):
-        print(f"Unrecognized key(s) in pattern '{pattern}'")
+        logging.info(f"Unrecognized key(s) in pattern '{pattern}'")
 
     if pattern.get("title") and pattern["title"] != node.title:
         return False, f"Expected title '{pattern['title']}'. Got: '{node.title}'"

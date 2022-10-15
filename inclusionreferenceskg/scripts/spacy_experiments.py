@@ -1,3 +1,5 @@
+import warnings
+
 import coreferee
 import spacy
 import textacy.spacier.utils
@@ -13,7 +15,7 @@ from kg_creation.sentence_analysing.util import get_main_verbs_of_sent
 spacy.prefer_gpu()
 # We need to use coreferee so that PyCharm does not tidy up the reference.
 if not coreferee:
-    print("Could not import coreferee for anaphora resolution.")
+    warnings.warn("Could not import coreferee for anaphora resolution.")
 
 
 def main():

@@ -1,5 +1,5 @@
 import re
-import warnings
+import logging
 from typing import ClassVar
 from typing import Tuple, Optional
 
@@ -26,4 +26,4 @@ class Indent(Node):
                 self.number = i
                 break
         else:
-            warnings.warn(f"Could not find self in children of parent. For indent {self.immutable_view()}.")
+            logging.warning(f"Could not find self in children of parent. For indent {self.immutable_view()}.")

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import dataclasses
+import logging
 import uuid
-from typing import List, Optional, Set
+from typing import List, Set, Callable
 
 import spacy.tokens
 
@@ -31,12 +32,13 @@ class Phrase:
 
     condition_phrases: List[Phrase] = dataclasses.field(default_factory=list)
 
-    def pprint(self, depth=0, visited: Set[str] = None):
+    def pprint(self, depth=0, visited: Set[str] = None, output: Callable[[str], None] = logging.info):
         """
         Prints the phrase in a human readable form.
 
         :param depth: Indicates the current indent.
         :param visited: Leeps track of which phrases have been visited to avoid recursion errors.
+        :param output: the output channel to use.
         """
         if visited is None:
             visited = set()
@@ -46,39 +48,39 @@ class Phrase:
 
         indent = "    " * depth
 
-        print(f"{indent}Phrase{{")
-        print(f"{indent}  Agent:")
+        output(f"{indent}Phrase{{")
+        output(f"{indent}  Agent:")
         if self_visited:
-            print(f"{indent}    ...")
+            output(f"{indent}    ...")
         else:
             for p in self.agent_objects:
-                print(f"{indent}    {p.pretty_str()}")
+                output(f"{indent}    {p.pretty_str()}")
 
             for p in self.agent_phrases:
                 p.pprint(depth=depth + 1, visited=visited)
 
-        print(f"{indent}  Predicate:")
+        output(f"{indent}  Predicate:")
         for p in self.predicate:
-            print(f"{indent}    {p.token} {p.token.lemma_} {p.token.tag_}")
+            output(f"{indent}    {p.token} {p.token.lemma_} {p.token.tag_}")
 
-            print(f"{indent}  Patient:")
+            output(f"{indent}  Patient:")
         if self_visited:
-            print(f"{indent}    ...")
+            output(f"{indent}    ...")
         else:
             for p in self.patient_objects:
-                print(f"{indent}    {p.pretty_str()}")
+                output(f"{indent}    {p.pretty_str()}")
 
             for p in self.patient_phrases:
                 p.pprint(depth=depth + 1, visited=visited)
 
-        print(f"{indent}  Conditions:")
+        output(f"{indent}  Conditions:")
         if self_visited:
-            print(f"{indent}    ...")
+            output(f"{indent}    ...")
         else:
             for p in self.condition_phrases:
                 p.pprint(depth=depth + 1, visited=visited)
 
-        print(f"{indent}}}")
+        output(f"{indent}}}")
 
 
 @dataclasses.dataclass

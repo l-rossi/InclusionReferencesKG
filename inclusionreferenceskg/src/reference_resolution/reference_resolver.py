@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 import itertools
 import re
 import warnings
@@ -34,7 +36,7 @@ class ReferenceResolver:
         patterns = []
         for reference in references:
             if reference.reference_qualifier:
-                warnings.warn("Overriding exiting reference qualifier for reference.")
+                logging.warning("Overriding exiting reference qualifier for reference.")
                 reference.reference_qualifier = []
 
             split_references = reference.text_content.split(" of ")
@@ -72,7 +74,7 @@ class ReferenceResolver:
                 if pattern_for_split:
                     components_of_reference.extend(pattern_for_split)
                 else:
-                    print(f"Could not detect any component from split_string: '{split_reference}'")
+                    logging.warning(f"Could not detect any component from split_string: '{split_reference}'")
 
             # split patterns into multiple patterns so that each pattern only contains one node of a certain type:
             # [Paragraph(1), Paragraph(2), Article(3)] -> [], [Paragraph(2), Article(3)], [Paragraph(1), Article(3)]
@@ -291,7 +293,7 @@ class ReferenceResolver:
                 return []
 
             if not previous_references:
-                warnings.warn("Encountered reference containing that although no previous "
+                logging.warning("Encountered reference containing that although no previous "
                               "reference has been encountered in this node.")
                 return []
 
@@ -394,11 +396,11 @@ class ReferenceResolver:
 
         if text.lower().endswith("thereof"):
             if not previous_references:
-                print(f"Found use of thereof for text '{text}' although no previous references are present.")
+                logging.warning(f"Found use of thereof for text '{text}' although no previous references are present.")
                 return []
 
             if not current_parsed_reference:
-                print(f"Found use of thereof for text '{text}' with no node specifier."
+                logging.warning(f"Found use of thereof for text '{text}' with no node specifier."
                       f"Thereof requires the reference to be at least partially qualified.")
                 return []
 

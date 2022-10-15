@@ -1,4 +1,5 @@
 import csv
+import logging
 
 from document_parsing.node.article import Article
 from evaluation.stat_accumulator import StatAccumulator
@@ -27,12 +28,12 @@ def evaluate(stat_accumulator: StatAccumulator, graph: KnowledgeGraph, expected_
     for a in actual:
         if a not in expected:
             stat_accumulator.false_positives += 1
-            print(f"Produced unexpected '{a}'")
+            logging.info(f"Produced unexpected '{a}'")
 
     for e in expected:
         if e not in actual:
             stat_accumulator.false_negatives += 1
-            print(f"Did no find expected: '{e}'")
+            logging.info(f"Did no find expected: '{e}'")
 
     stat_accumulator.n_detected_references += len(actual)
     stat_accumulator.n_expected_references += len(expected)
@@ -50,4 +51,4 @@ if __name__ == "__main__":
     evaluate(stat_acc, actual29, "./resources/evaluation_data/kg_triplets/gdpr_article_29.csv")
     evaluate(stat_acc, actual30, "./resources/evaluation_data/kg_triplets/gdpr_article_30.csv")
 
-    print(f"Precision: {stat_acc.precision():4.3f}, Recall: {stat_acc.recall():4.3f}, F1: {stat_acc.f1():4.3f}")
+    logging.info(f"Precision: {stat_acc.precision():4.3f}, Recall: {stat_acc.recall():4.3f}, F1: {stat_acc.f1():4.3f}")

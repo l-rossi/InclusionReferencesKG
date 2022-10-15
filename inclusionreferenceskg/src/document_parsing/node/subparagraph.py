@@ -1,5 +1,5 @@
+import logging
 import typing
-import warnings
 
 from document_parsing.node.node import Node
 from document_parsing.node.paragraph import Paragraph
@@ -21,4 +21,4 @@ class Subparagraph(Node):
                 self.number = i
                 break
         else:
-            warnings.warn(f"Could not find self in children of parent. For subparagraph {self.immutable_view()}.")
+            logging.warning(f"Could not find self in children of parent. For subparagraph {self.immutable_view()}.")

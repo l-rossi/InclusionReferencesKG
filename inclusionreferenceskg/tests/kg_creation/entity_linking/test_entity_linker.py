@@ -17,6 +17,10 @@ from util.reference import Reference
 
 
 def test_reference_linker():
+    if Doc.get_extension("coref_chains"):
+        # We need to remove the coref chains if multiple tests are run in the same runtime.
+        Doc.remove_extension("coref_chains")
+
     if not Token.get_extension("node"):
         Token.set_extension("node", default=None)
 
@@ -236,11 +240,8 @@ def test_proper_noun_linker():
     linker = ProperNounLinker()
 
     closure_dict = {"merged": False}
-    print()
-    print(id_1, id_2, id_3)
 
     def mock_merge(u, v):
-        print(u, v)
         if (u, v) == (id_1, id_2) or (u, v) == (id_2, id_1):
             closure_dict["merged"] = True
         else:

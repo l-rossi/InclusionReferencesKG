@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import warnings
 from collections import defaultdict
 from functools import reduce
@@ -75,15 +76,15 @@ class KnowledgeGraph:
         u_node = self.nodes.get(u)
         v_node = self.nodes.get(v)
         if not u_node:
-            warnings.warn(f"Could not merge nodes with ids {u} and {v} as node with id {u} does not exist.")
+            logging.warning(f"Could not merge nodes with ids {u} and {v} as node with id {u} does not exist.")
             return v
 
         if not v_node:
-            warnings.warn(f"Could not merge nodes with ids {u} and {v} as node with id {v} does not exist.")
+            logging.warning(f"Could not merge nodes with ids {u} and {v} as node with id {v} does not exist.")
             return u
 
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
-            warnings.warn(
+            logging.warning(
                 "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept.")
 
         # Replace edges pointing at v
@@ -96,7 +97,7 @@ class KnowledgeGraph:
         v_node.adj_in = []
 
         if not u_node.attributes.keys().isdisjoint(v_node.attributes.keys()):
-            warnings.warn("Merging nodes with overlapping attributes. Conflicting attributes are resolved by using "
+            logging.warning("Merging nodes with overlapping attributes. Conflicting attributes are resolved by using "
                           "node u will be kept.")
         v_node.attributes.update(u_node.attributes)
         u_node.attributes = v_node.attributes.copy()

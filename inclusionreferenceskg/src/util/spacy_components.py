@@ -1,3 +1,4 @@
+import logging
 import warnings
 from multiprocessing import Pool
 
@@ -15,10 +16,10 @@ def reference_qualifier_resolver_component(doc):
                 # We choose the first possible node
                 targets = root.resolve_loose(qual)
                 if len(targets) > 1:
-                    warnings.warn(f"Got more than one possible target for reference {qual}")
+                    logging.warning(f"Got more than one possible target for reference {qual}")
 
                 if len(targets) < 1:
-                    warnings.warn(f"Got no possible target for reference {qual}")
+                    logging.warning(f"Got no possible target for reference {qual}")
 
                 if targets:
                     tok._.reference.targets.append(targets[0])

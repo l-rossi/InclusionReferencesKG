@@ -1,4 +1,5 @@
 import itertools
+import logging
 import uuid
 import warnings
 from typing import List, Tuple, Set, Callable
@@ -173,7 +174,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
                     tok._.node = node
                     break
             else:
-                warnings.warn(f"Could not assign a node to token '{tok}'. This is most likely caused by a bug.")
+                logging.warning(f"Could not assign a node to token '{tok}'. This is most likely caused by a bug.")
 
         return d
 

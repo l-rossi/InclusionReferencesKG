@@ -1,3 +1,4 @@
+import logging
 from abc import abstractmethod, ABC
 from typing import Dict, List, Type
 
@@ -27,7 +28,7 @@ class ReferenceDetector(ABC):
             def reference_to_span(reference: Reference):
                 s = doc.char_span(reference.start, reference.start + len(reference.text_content))
                 if not s:
-                    print(f"Could not create span for reference {reference}")
+                    logging.warning(f"Could not create span for reference {reference}")
                     return None
 
                 return Span(doc, start=s.start, end=s.end, label="REFERENCE")

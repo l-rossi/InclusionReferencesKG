@@ -1,3 +1,5 @@
+import logging
+
 import spacy
 import torch.cuda
 
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     # The create_graph function is a good place for further examination of the codebase.
     graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=True, attribute_extractors=None,
                          entity_linker_supplier=None, include_extensions=False)
-    print("The knowledge graph has been created.")
+    logging.info("The knowledge graph has been created.")
 
     # The finished knowledge graph may then be exported into different formats, for example rendered
     # to a SVG file using graphviz. Note that this step is typically by far the most time intensive step for
