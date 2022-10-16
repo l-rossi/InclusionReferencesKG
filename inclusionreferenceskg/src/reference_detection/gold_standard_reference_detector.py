@@ -3,8 +3,8 @@ from typing import List
 
 from spacy import Language
 
-from util.reference import Reference
 from reference_detection.reference_detector import ReferenceDetector
+from util.reference import Reference
 
 
 class GoldStandardReferenceDetector(ReferenceDetector):
@@ -37,7 +37,7 @@ class GoldStandardReferenceDetector(ReferenceDetector):
             total_offset = 0
 
             while self.expected_references and (
-            ind := text_inner.find(self.expected_references[0], total_offset)) != -1:
+                ind := text_inner.find(self.expected_references[0], total_offset)) != -1:
                 expected_ref = self.expected_references.pop(0)
                 yield Reference(start=ind, text_content=expected_ref)
                 # We assume non-overlapping references

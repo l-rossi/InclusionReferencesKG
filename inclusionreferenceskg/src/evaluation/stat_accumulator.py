@@ -2,6 +2,7 @@ class StatAccumulator:
     """
     A class for accumulating statistics and calculating the F1 score.
     """
+
     def __init__(self):
         self.false_negatives = 0
         self.false_positives = 0

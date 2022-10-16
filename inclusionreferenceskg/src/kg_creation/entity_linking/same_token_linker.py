@@ -16,4 +16,3 @@ class SameTokenLinker(EntityLinker):
             reduce(graph.merge, nodes)
 
         return graph
-

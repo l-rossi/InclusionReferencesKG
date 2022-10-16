@@ -5,7 +5,6 @@ library by name.
 """
 from typing import List, Set
 
-import textacy.spacier.utils
 from spacy.tokens import Span, Token
 
 # https://stackoverflow.com/questions/39763091/how-to-extract-subjects-in-a-sentence-and-their-respective-dependent-phrases

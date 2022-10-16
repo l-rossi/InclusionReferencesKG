@@ -1,20 +1,21 @@
 # InclusionReferencesKG
 
-This is the implementation for Lukas Rossi's Bachelor's Thesis
+This is the implementation for Lukas Rossi's bachelor's thesis
 "Inclusion of Reference Information in EU Regulations using Knowledge Graphs".
 
 
 ## Installation
 
 ### Requirements
-The project works best with a [CUDA](https://docs.nvidia.com/cuda/) installation
-for slightly improved performance. Alternatively,
-CPU exclusive packages can be used:
+The project works either using
+CPU exclusive packages or with a [CUDA](https://docs.nvidia.com/cuda/) installation
+for slightly improved performance or:
 
 ### Anaconda (GPU)
 
 It is recommended to use [Anaconda](https://www.anaconda.com/) to manage the dependencies.
-Simply use: 
+From the Anaconda Prompt or after
+adding Anaconda your Path, simply use: 
 
 ```console
 conda env create -f environment.yml
@@ -71,7 +72,7 @@ You might need to restart your IDE after installation.
 
 We recommend having a look at ``./src/main.py`` for an overview of the capabilities of this codebase. It shows how a document can be selected for processing and a knowledge graph can be created.
 
-Running ``./src/main.py`` will create a visual representation of a knowledge graph and save it to ``./output/graphs/ExampleKG.gv.svg`` Make sure the InclusionReferencesKG environment is active when running:
+Running ``./src/main.py`` will create a visual representation of a knowledge graph and save it to ``./output/graphs/ExampleKG.gv.svg``. Make sure the InclusionReferencesKG environment is active when running:
 
 ```console
 conda activate InclusionReferencesKG
@@ -86,6 +87,8 @@ python3 ./src/main.py
 ```
 
 on Linux.
+Doing so will print some warnings about references not being resolved. These
+can be dismissed.
 
 The evaluation script can be found in the ``evaluation`` package. Each file with the prefix ``evaluate_`` should be run as its own script:
 

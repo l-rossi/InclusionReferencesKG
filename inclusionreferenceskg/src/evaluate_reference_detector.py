@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import csv
-import logging
 from difflib import Differ, SequenceMatcher
 from typing import Optional
 
@@ -34,8 +33,8 @@ def evaluate_detector(detector: ReferenceDetector, origin_text: str, expected_fi
 
     detected_references_text = [x.text_content for x in detected_references]
     d = Differ()
-    logging.info("  ---DIFF--")
-    logging.info("\n".join(d.compare(detected_references_text, expected_references)))
+    print("  ---DIFF--")
+    print("\n".join(d.compare(detected_references_text, expected_references)))
 
     sm = SequenceMatcher(None, detected_references_text, expected_references)
 
@@ -49,10 +48,10 @@ def evaluate_detector(detector: ReferenceDetector, origin_text: str, expected_fi
         false_positives += i2 - i1
         false_negatives += j2 - j1
 
-    logging.info("Number of detected references", len(detected_references))
-    logging.info("Number of expected references", len(expected_references))
-    logging.info("Number of false positives", false_positives)
-    logging.info("Number of false negatives", false_negatives)
+    print("Number of detected references", len(detected_references))
+    print("Number of expected references", len(expected_references))
+    print("Number of false positives", false_positives)
+    print("Number of false negatives", false_negatives)
 
     true_positives = len(expected_references) - false_negatives
 
@@ -60,11 +59,11 @@ def evaluate_detector(detector: ReferenceDetector, origin_text: str, expected_fi
     recall = true_positives / len(expected_references)
     f1 = 2 / (1 / recall + 1 / precision)
 
-    logging.info("Precision:", precision)
-    logging.info("Recall:", recall)
-    logging.info("F1:", f1)
+    print("Precision:", precision)
+    print("Recall:", recall)
+    print("F1:", f1)
 
-    logging.info("Ratio:", sm.ratio())
+    print("Ratio:", sm.ratio())
 
     if stat_accumulator:
         stat_accumulator.n_detected_references += len(detected_references)
@@ -135,6 +134,6 @@ if __name__ == "__main__":
     evaluate_regex_reference_detector_on_directive_2002_58_ec(accumulator)
     evaluate_regex_reference_detector_on_directive_2000_31_ec(accumulator)
     evaluate_regex_reference_detector_on_gdpr(accumulator)
-    logging.info("Total false positives:", accumulator.false_positives)
-    logging.info("Total false negatives:", accumulator.false_negatives)
-    logging.info("Total F1 score:", accumulator.f1())
+    print("Total false positives:", accumulator.false_positives)
+    print("Total false negatives:", accumulator.false_negatives)
+    print("Total F1 score:", accumulator.f1())

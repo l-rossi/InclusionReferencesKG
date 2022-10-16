@@ -1,7 +1,6 @@
 import itertools
 import logging
 import uuid
-import warnings
 from typing import List, Tuple, Set, Callable
 
 import coreferee
@@ -9,7 +8,6 @@ import spacy
 from spacy import Language
 from spacy.tokens import Token, Doc
 
-from document_parsing.node.article import Article
 from document_parsing.node.node import Node
 from document_parsing.node.node_traversal import pre_order
 from kg_creation.attribute_extraction.attribute_extractor import AttributeExtractor

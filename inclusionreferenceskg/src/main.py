@@ -1,24 +1,20 @@
 import logging
 
 import spacy
-import torch.cuda
 
 from document_parsing.document_tree_parser import DocumentTreeParser
 from document_parsing.node.article import Article
-from document_parsing.node.chapter import Chapter
 from document_parsing.node.document import Document
 from document_parsing.node.paragraph import Paragraph
 from document_parsing.node.point import Point
-from document_parsing.node.section import Section
-from document_parsing.node.subparagraph import Subparagraph
-from document_parsing.node.title import Title
-from document_parsing.preprocessing.footnote_delete_preprocessor import FootnoteDeletePreprocessor
-from document_parsing.preprocessing.pdf_parser import PDFParser
 from kg_creation.kg_renderer import create_graph
 from util.parser_util import gdpr_dependency_root
 
 if __name__ == "__main__":
     # This is the main entry point to the knowledge graph creation algorithm.
+
+    # (basic logging)
+    logging.basicConfig(level=logging.INFO)
 
     # We begin by choosing the documents we want to analyse:
 
@@ -80,10 +76,11 @@ if __name__ == "__main__":
     # The create_graph function is a good place for further examination of the codebase.
     graph = create_graph(root=gdpr_article30, analyzed=gdpr_article30, fast=True, attribute_extractors=None,
                          entity_linker_supplier=None, include_extensions=False)
-    logging.info("The knowledge graph has been created.")
+    logging.info("The knowledge graph has been created. Now saving...")
 
     # The finished knowledge graph may then be exported into different formats, for example rendered
     # to a SVG file using graphviz. Note that this step is typically by far the most time intensive step for
     # large knowledge graphs. The visualized knowledge graph is stored in .\inclusionreferenceskg\output
     graph.as_graphviz_graph("Example_KG", engine="dot", format_="svg", attrs={"overlap": "true"}) \
         .render(directory='output/graphs', view=False)
+    logging.info("The knowledge graph has been visualized and saved.")

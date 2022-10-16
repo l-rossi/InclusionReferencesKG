@@ -28,7 +28,6 @@ class PrepositionExtractor(AttributeExtractor):
                     if attributes.get("prepositions") is None:
                         attributes["prepositions"] = []
 
-
                     prep_chain = [adj.item.token.head]
                     while prep_chain[0].head.dep_ in PrepositionExtractor.prepositional_dependencies:
                         prep_chain.insert(0, prep_chain[0].head)

@@ -1,13 +1,11 @@
 from __future__ import annotations
 
 import logging
-import warnings
 from collections import defaultdict
 from functools import reduce
 from typing import Dict, Tuple, Union, Optional, Set, List
 
 import graphviz
-import networkx as nx
 
 from document_parsing.node.node import Node
 from kg_creation.sentence_analysing.phrase import PhraseObject, Predicate
@@ -85,7 +83,8 @@ class KnowledgeGraph:
 
         if not set.isdisjoint(u_node.adj_in, v_node.adj_in):
             logging.warning(
-                "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept.")
+                "Merging nodes with non-disjoint in-neighbours. The labels associated with node u will be kept. "
+                f"Affected: '{u_node.item.pretty_str()}' and '{u_node.item.pretty_str()}'")
 
         # Replace edges pointing at v
         for ref in v_node.adj_in:
@@ -98,7 +97,7 @@ class KnowledgeGraph:
 
         if not u_node.attributes.keys().isdisjoint(v_node.attributes.keys()):
             logging.warning("Merging nodes with overlapping attributes. Conflicting attributes are resolved by using "
-                          "node u will be kept.")
+                            f"node u will be kept. Affected: '{u_node.item.pretty_str()}' and '{u_node.item.pretty_str()}'")
         v_node.attributes.update(u_node.attributes)
         u_node.attributes = v_node.attributes.copy()
 

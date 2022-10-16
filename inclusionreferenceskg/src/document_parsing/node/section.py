@@ -7,7 +7,6 @@ from document_parsing.node.node import Node
 
 
 class Section(Node):
-
     depth = Chapter.depth + 1
     ignore_when_forming_full_qualifier = True
     _pattern: typing.ClassVar[re.Pattern] = re.compile(r"Section\s*([1-9][0-9]*)", re.I)
@@ -26,5 +25,3 @@ class Section(Node):
     def finalize(self):
         self.title = self.content.strip()
         self.content = ""
-
-

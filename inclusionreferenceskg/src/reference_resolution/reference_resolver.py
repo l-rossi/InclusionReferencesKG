@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import logging
-
 import itertools
+import logging
 import re
-import warnings
 from collections import defaultdict
 from typing import List, Type
 
@@ -19,8 +17,8 @@ from document_parsing.node.node_traversal import traverse_doc_by_node
 from document_parsing.node.paragraph import Paragraph
 from document_parsing.node.point import Point
 from document_parsing.node.title import Title
-from util.reference import Reference
 from reference_detection.regex_reference_detector import RegexReferenceDetector
+from util.reference import Reference
 from util.regex_util import RegexUtil
 from util.util import rom_to_dec, alph_to_dec
 
@@ -294,7 +292,7 @@ class ReferenceResolver:
 
             if not previous_references:
                 logging.warning("Encountered reference containing that although no previous "
-                              "reference has been encountered in this node.")
+                                "reference has been encountered in this node.")
                 return []
 
             for prev_ref in reversed(previous_references[-1]):
@@ -401,7 +399,7 @@ class ReferenceResolver:
 
             if not current_parsed_reference:
                 logging.warning(f"Found use of thereof for text '{text}' with no node specifier."
-                      f"Thereof requires the reference to be at least partially qualified.")
+                                f"Thereof requires the reference to be at least partially qualified.")
                 return []
 
             last_reference = previous_references[-1]
