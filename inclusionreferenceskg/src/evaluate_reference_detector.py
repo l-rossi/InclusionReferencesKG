@@ -66,8 +66,8 @@ def evaluate_detector(detector: ReferenceDetector, origin_text: str, expected_fi
     print("Ratio:", sm.ratio())
 
     if stat_accumulator:
-        stat_accumulator.n_detected_references += len(detected_references)
-        stat_accumulator.n_expected_references += len(expected_references)
+        stat_accumulator.n_detected += len(detected_references)
+        stat_accumulator.n_expected += len(expected_references)
         stat_accumulator.false_negatives += false_negatives
         stat_accumulator.false_positives += false_positives
 

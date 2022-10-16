@@ -5,6 +5,7 @@ from typing import Dict, Tuple
 from document_parsing.document_tree_parser import DocumentTreeParser
 from document_parsing.node.node import Node
 from document_parsing.node.node_traversal import pre_order
+from evaluation.stat_accumulator import StatAccumulator
 from reference_detection.gold_standard_reference_detector import GoldStandardReferenceDetector
 from reference_resolution.reference_resolver import ReferenceResolver
 from util.parser_util import gdpr_dependency_root
@@ -13,6 +14,7 @@ from util.parser_util import gdpr_dependency_root
 def main():
     # We do not calculate the F1 score as we do not deem it necessary for such good results.
     resolver = ReferenceResolver()
+    stat_acc = StatAccumulator()
 
     parser = DocumentTreeParser()
     reference_detector = GoldStandardReferenceDetector("./resources/evaluation_data/gdpr_references.csv")
@@ -28,18 +30,21 @@ def main():
     with open("./resources/evaluation_data/gdpr_resolved.json", encoding="utf-8") as f:
         expected_references = json.load(f)
 
+    stat_acc.n_expected = sum(map(lambda x: len(x["patterns"]), expected_references))
     print("Number of tested references:", len(expected_references))
     print("Number of referenced nodes:", sum(map(lambda x: len(x["patterns"]), expected_references)))
 
     for actual_reference, expected_reference in zip(actual_references, expected_references):
+        stat_acc.n_detected += len(actual_reference.reference_qualifier)
+        if "patterns" not in expected_reference:
+            logging.warning(f"Skipping evaluation for '{expected_reference.get('text')}'. No patterns found.")
+            continue
+
         if (l := len(actual_reference.reference_qualifier)) == 0:
             print(
                 f"ReferenceResolver produced {l} reference qualifiers for reference '{actual_reference.text_content}'. "
                 f"Expected 1.")
-            continue
-
-        if "patterns" not in expected_reference:
-            logging.warning(f"Skipping evaluation for '{expected_reference.get('text')}'. No patterns found.")
+            stat_acc.false_negatives += len(expected_reference["patterns"])
             continue
 
         resolved = []
@@ -48,12 +53,15 @@ def main():
             if len(resolved_single) == 0:
                 print(f"Could not resolve '{actual_reference.text_content}'. "
                       f"Qualifier: '{actual_reference.reference_qualifier}'.")
+                stat_acc.false_negatives += len(expected_reference["patterns"])
                 continue
 
             if len(resolved_single) > 1:
                 print(
                     f"Found multiple solutions to reference '{actual_reference.text_content}'. Further testing is "
                     f"done only against the first resolved node.")
+                stat_acc.false_positives += len(resolved_single)
+                stat_acc.false_negatives += len(expected_reference["patterns"])
             resolved.append(resolved_single[0])
 
         if not expected_reference["patterns"]:
@@ -64,6 +72,8 @@ def main():
             print(
                 f"Expected {len(expected_reference['patterns'])} solutions for "
                 f"reference '{actual_reference.text_content}'. But found {len(resolved)}.")
+            stat_acc.false_positives += len(resolved)
+            stat_acc.false_negatives += len(expected_reference["patterns"])
             continue
 
         for pattern, solution in zip(expected_reference["patterns"], resolved):
@@ -73,10 +83,17 @@ def main():
                 print(f"Mismatch between reference text_content and "
                       f"actual text_content. Expected '{expected_reference['text']}' "
                       f"was '{actual_reference.text_content}'")
+                stat_acc.false_negatives += 1
+                stat_acc.false_positives += 1
+                continue
 
             if not valid:
                 print(
                     f"Found solution for reference '{actual_reference.text_content}' was incorrect.", msg)
+                stat_acc.false_negatives += 1
+                stat_acc.false_positives += 1
+
+    print(f"Precision: {stat_acc.precision():4.3f}, Recall: {stat_acc.recall():4.3f}, F1: {stat_acc.f1():4.3f}")
 
 
 def validate(node: Node, pattern: Dict) -> Tuple[bool, str]:

@@ -7,21 +7,19 @@ This is the implementation for Lukas Rossi's bachelor's thesis
 ## Installation
 
 ### Requirements
-The project works either using
-CPU exclusive packages or with a [CUDA](https://docs.nvidia.com/cuda/) installation
-for slightly improved performance or:
+The project works either using the CPU exclusive packages or with a [CUDA](https://docs.nvidia.com/cuda/) installation for marginally improved performance:
 
 ### Anaconda (GPU)
 
 It is recommended to use [Anaconda](https://www.anaconda.com/) to manage the dependencies.
-From the Anaconda Prompt or after
-adding Anaconda your Path, simply use: 
+From the Anaconda prompt or after
+adding Anaconda to your Path, use: 
 
 ```console
 conda env create -f environment.yml
 ```
 
-to create the environment from the environment file. This will install all requirements and activate the correct environment.
+to create the environment from the environment file. This will install all required packages.
 
 Make sure the correct **environment is activated** by using:
 ```console
@@ -51,7 +49,7 @@ conda activate InclusionReferencesKG
 
 ### spaCy
 
-Spacy and coreferee require additional downloads which can be done from the console (with an active Anaconda environment):
+SpaCy and coreferee require additional downloads which can be done from the console (with an active Anaconda environment):
 
 ```console
 python -m spacy download en_core_web_lg
@@ -68,8 +66,9 @@ You might need to restart your IDE after installation.
 
 ## Usage
 
-**We assume the working directory to be './inclusionreferenceskg/'**
+**We assume the working directory to be '/inclusionreferenceskg/'**
 
+Navigate to ``./inclusionreferenceskg/``.
 We recommend having a look at ``./src/main.py`` for an overview of the capabilities of this codebase. It shows how a document can be selected for processing and a knowledge graph can be created.
 
 Running ``./src/main.py`` will create a visual representation of a knowledge graph and save it to ``./output/graphs/ExampleKG.gv.svg``. Make sure the InclusionReferencesKG environment is active when running:
@@ -90,7 +89,7 @@ on Linux.
 Doing so will print some warnings about references not being resolved. These
 can be dismissed.
 
-The evaluation script can be found in the ``evaluation`` package. Each file with the prefix ``evaluate_`` should be run as its own script:
+The evaluation scripts can also be found in ``./src/``. Each file with the prefix ``evaluate_`` should be run as its own script:
 
 ```
 conda activate InclusionReferencesKG
@@ -109,5 +108,7 @@ python3 ./src/evaluate_kg_creation.py
 ```
 
 on Linux.
+
+The evaluation files will print the F<sub>1</sub> score to the console alongside some additional information on how the score was achieved. 
 
 

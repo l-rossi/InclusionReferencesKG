@@ -34,8 +34,8 @@ def evaluate(stat_accumulator: StatAccumulator, graph: KnowledgeGraph, expected_
             stat_accumulator.false_negatives += 1
             print(f"Did no find expected: '{e}'")
 
-    stat_accumulator.n_detected_references += len(actual)
-    stat_accumulator.n_expected_references += len(expected)
+    stat_accumulator.n_detected += len(actual)
+    stat_accumulator.n_expected += len(expected)
 
 
 if __name__ == "__main__":
