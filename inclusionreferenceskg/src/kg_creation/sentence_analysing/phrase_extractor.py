@@ -33,8 +33,7 @@ class PhraseExtractor:
         Extracts the phrases from a sentence.
 
         :param sent: The sentence to be checked for nodes.
-        :param node: Optionally add the node from which the sentence originates from.
-        :return:
+        :return: A list of top-level phrases extracted from the sentence.
         """
 
         main_verbs_of_sent = get_main_verbs_of_sent(sent)

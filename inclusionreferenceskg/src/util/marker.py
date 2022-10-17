@@ -26,8 +26,8 @@ class Mark:
     def from_line(line: str) -> Optional["Mark"]:
         if not line:
             return None
-        id, tag_start, tag_end, start, end, *selection = line.split(" ")
-        return Mark(id, tag_start, tag_end, int(start), int(end), " ".join(selection))
+        id_, tag_start, tag_end, start, end, *selection = line.split(" ")
+        return Mark(id_, tag_start, tag_end, int(start), int(end), " ".join(selection))
 
     def to_line(self) -> str:
         return f"{self.id} {self.tag_start} {self.tag_end} {self.start} {self.end} {self.selection}"

@@ -167,9 +167,9 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         d._.reference_base = reference_base
 
         for tok in d:
-            for pos, node in text_positions:
+            for pos, parent_node in text_positions:
                 if tok.idx < pos:
-                    tok._.node = node
+                    tok._.node = parent_node
                     break
             else:
                 logging.warning(f"Could not assign a node to token '{tok}'. This is most likely caused by a bug.")

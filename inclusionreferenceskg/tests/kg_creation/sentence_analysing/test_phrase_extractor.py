@@ -1,5 +1,5 @@
 import spacy
-from spacy.tokens import Doc, Span, Token
+from spacy.tokens import Doc, Span
 
 from kg_creation.sentence_analysing.phrase_extractor import PhraseExtractor
 

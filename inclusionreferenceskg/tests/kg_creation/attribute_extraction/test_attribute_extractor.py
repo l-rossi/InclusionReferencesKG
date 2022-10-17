@@ -3,7 +3,7 @@ from spacy.tokens import Doc
 
 from kg_creation.attribute_extraction.negation_extractor import NegationExtractor
 from kg_creation.attribute_extraction.preposition_extractor import PrepositionExtractor
-from kg_creation.knowledge_graph import KnowledgeGraph, KGNode
+from kg_creation.knowledge_graph import KnowledgeGraph
 from kg_creation.sentence_analysing.phrase import Predicate, PhraseObject
 
 
