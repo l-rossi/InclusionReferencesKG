@@ -6,6 +6,10 @@ from kg_creation.sentence_analysing.phrase import Predicate
 
 
 class NegationExtractor(AttributeExtractor):
+    """
+    Tries to determine if a predicate is negated. Double negations cancel each other out.
+    (This fails for some colloquial expressions, see the use of 'ain't')
+    """
 
     def accept(self, graph: KnowledgeGraph) -> KnowledgeGraph:
         for node in graph.nodes.values():

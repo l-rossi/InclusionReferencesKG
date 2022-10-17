@@ -31,6 +31,13 @@ class ReferenceResolver:
     SPACY_COMPONENT_NAME = "reference_resolver"
 
     def resolve_single(self, node: Node, references: List[Reference]):
+        """
+        Creates reference qualifiers for a list of references.
+
+        :param node: The node from which the references originate from.
+        :param references: The references in the node.
+        """
+
         patterns = []
         for reference in references:
             if reference.reference_qualifier:

@@ -29,7 +29,7 @@ from util.spacy_components import REFERENCE_QUALIFIER_RESOLVER_COMPONENT
 
 class KGRenderer:
     """
-    Translates the graph from the internal format to a format used by external libraries for analysing and visualisation.
+    Assembles an instance of KnowledgeGraph.
     """
 
     def render(self, root: Node, phrases: List[Phrase], include_extensions: bool = False) -> KnowledgeGraph:
@@ -158,7 +158,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         raw_text += "\n"
         text_positions.append((len(raw_text), node))
 
-    # We create an anonymous pipe to insert attributes into the doc right after creation.
+    # We create an anonymous pipe to insert infromation about the structure into the doc right after creation.
     comp_name = "document_supplement_component_" + str(uuid.uuid4())
 
     @Language.component(comp_name, assigns=["doc._.reference_base", "doc._.document_structure", "token._.node"])
@@ -216,12 +216,12 @@ def create_graph(root: Node, analyzed: Node, fast: bool = False,
     else:
         nlp = spacy.load("en_core_web_trf", disable=["ner"])
 
-    # We setup spaCy with all the necessary pipe components, both custom and from other libaries.
+    # We setup spaCy with all the necessary pipe components, both custom and from other libraries.
     # Resolves anaphoric references
     nlp.add_pipe("coreferee", config={}, after="parser")
     # Detects references
     nlp.add_pipe(RegexReferenceDetector.SPACY_COMPONENT_NAME, config={}, after="parser")
-    # Creates reference qualifier
+    # Creates reference qualifiers
     nlp.add_pipe(ReferenceResolver.SPACY_COMPONENT_NAME, config={},
                  after=RegexReferenceDetector.SPACY_COMPONENT_NAME)
     # Fully resolves references
@@ -231,16 +231,20 @@ def create_graph(root: Node, analyzed: Node, fast: bool = False,
     # Does some ugly setup of the Doc object and applies nlp
     doc = nlp_doc(root, analyzed, nlp)
 
+    # Phrase Extraction
     phrases = []
     phrase_extractor = PhraseExtractor()
     for sent in doc.sents:
         phrases.extend(phrase_extractor.extract_from_sentence(sent))
 
+    # Assembly
     graph = KGRenderer().render(root, phrases, include_extensions=include_extensions)
 
+    # Attribute Extraction
     for attribute_extractor in attribute_extractors:
         graph = attribute_extractor.accept(graph)
 
+    # Entity Linking
     entity_linkers = entity_linker_supplier(doc) if entity_linker_supplier is not None else [
         SameTokenLinker(),
         SameLemmaInSameParagraphLinker(doc),
