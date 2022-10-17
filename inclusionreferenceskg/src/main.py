@@ -13,7 +13,7 @@ from util.parser_util import gdpr_dependency_root
 if __name__ == "__main__":
     # This is the main entry point to the knowledge graph creation algorithm.
 
-    # (basic logging)
+    # (setup logging)
     logging.basicConfig(level=logging.INFO)
 
     # We begin by choosing the documents we want to analyse:
