@@ -58,7 +58,7 @@ python -m spacy download en_core_web_sm
 python -m coreferee install en
 ```
 
-(``en_core_web_sm`` is not required if the fast option for creating knoweldge graphs is not used.)
+(``en_core_web_sm`` is not required if the fast option for creating knowledge graphs is not used.)
 
 
 You might need to restart your IDE after installation.

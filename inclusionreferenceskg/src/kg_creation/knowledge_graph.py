@@ -225,7 +225,7 @@ class KGNode:
         more items may be added.
         """
 
-        # The adjacency list (dictionary) stores a set of tuples of Node, edge label and attributtes
+        # The adjacency list (dictionary) stores a set of tuples of Node, edge label and attributes
         self.adj: Dict[str, Tuple[KGNode, str, Dict[str, any]]] = dict()
         # A KGNode keeps a set of references of nodes that point to it (in-neighbours). This speeds up merging of nodes.
         self.adj_in: Set[str] = set()

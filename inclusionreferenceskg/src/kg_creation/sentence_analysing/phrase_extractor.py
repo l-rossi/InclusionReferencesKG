@@ -77,7 +77,7 @@ class PhraseExtractor:
 
     def _extract_possessors(self, phrase_objects: Iterable[PhraseObject]):
         """
-        Extracts possessive constructs, for example 'of' and genetive cases.
+        Extracts possessive constructs, for example 'of' and genitive cases.
         """
 
         # Go through all and create new Phrase Objects along the way.

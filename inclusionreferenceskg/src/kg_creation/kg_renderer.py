@@ -158,7 +158,7 @@ def nlp_doc(reference_base: Node, analyzed: Node, nlp: Language) -> Doc:
         raw_text += "\n"
         text_positions.append((len(raw_text), node))
 
-    # We create an anonymous pipe to insert infromation about the structure into the doc right after creation.
+    # We create an anonymous pipe to insert information about the structure into the doc right after creation.
     comp_name = "document_supplement_component_" + str(uuid.uuid4())
 
     @Language.component(comp_name, assigns=["doc._.reference_base", "doc._.document_structure", "token._.node"])

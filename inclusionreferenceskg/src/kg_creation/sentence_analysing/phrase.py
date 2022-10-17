@@ -37,7 +37,7 @@ class Phrase:
         Prints the phrase in a human readable form.
 
         :param depth: Indicates the current indent.
-        :param visited: Leeps track of which phrases have been visited to avoid recursion errors.
+        :param visited: Keeps track of which phrases have been visited to avoid recursion errors.
         :param output: the output channel to use.
         """
         if visited is None:

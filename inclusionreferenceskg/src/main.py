@@ -39,7 +39,7 @@ if __name__ == "__main__":
     # We can then parse the text to the target tree structure.
     _ = parser.parse_document(title="GDPR", text=document_raw_text)
 
-    # Alternatively, we can use the parser to directly load a file in ./resources/eu_ducoments using:
+    # Alternatively, we can use the parser to directly load a file in ./resources/eu_documents using:
     # gdpr = parser.parse_from_eu_doc_file(title="GDPR", file_name="gdpr.txt")
 
     # Instead we will use a utility function that provides us with the parsed GDPR, as well as a root node containing

@@ -9,7 +9,7 @@ class FootnoteDeletePreprocessor(BlockPreprocessor):
     """
     Class to resolve footnotes in a EU regulation text body.
 
-    Detected footnotes aredeleted.
+    Detected footnotes are deleted.
     """
 
     @staticmethod
